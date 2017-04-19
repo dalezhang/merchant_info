@@ -1,0 +1,32 @@
+<!-- /.login-logo -->
+<div class="login-box-body">
+  <p class="login-box-msg">Sign in to start your session</p>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <%= render :partial => "/shared/flash" %>
+    <div class="form-group has-feedback">
+      <%= f.email_field :email, autofocus: true, class:"form-control", placeholder: "Email" %>
+    </div>
+    <div class="form-group has-feedback">
+      <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+    </div>
+    <div class="row">
+      <div class="col-xs-8">
+        <div class="checkbox icheck">
+          <label>
+            <%= f.check_box :remember_me %>
+            Remember Me
+          </label>
+        </div>
+      </div>
+      <!-- /.col -->
+      <div class="col-xs-4">
+        <%= f.submit "Log in", class: "btn btn-primary btn-block btn-flat" %>
+      </div>
+      <!-- /.col -->
+    </div>
+  <% end %>
+  <!-- /.social-auth-links -->
+  <%= render "devise/shared/links" %>
+</div>
+<!-- /.login-box-body -->

@@ -1,0 +1,82 @@
+<div class="filter-wrap row collapsed">
+  <div class="col-sm-12">
+    <div class="input-group index-filter-button">
+      <span class="input-group-btn">
+        <button class="btn btn-default js-show-index-filters" type="button">
+          <span class="icon icon-chevron-right icon-chevron-down"></span>
+          Filter
+        </button>
+      </span>
+      <form id="quick-search" action="/examine_product_drafts" accept-charset="UTF-8" method="get">
+				<input name="utf8" type="hidden" value="✓">
+        <input type="text" name="quick_search" id="quick_search" class="form-control js-quick-search"
+																																 placeholder="Quick search..">
+      </form>
+		</div>
+		<div id="table-filter" class="well filter-well" >
+			<div data-hook="admin_products_sidebar">
+
+        <%= search_form_for [ @search] do |f| %>
+          <%= hidden_field_tag :per_page, params[:per_page] %>
+          <%- locals = {:f => f} %>
+          <div  class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :name_cont, :name %>
+                <%= f.text_field :name_cont, :value => params[:q][:name_cont], :size => 15, class: "form-control js-quick-search-target" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :product_code_eq, :product_code %>
+                <%= f.text_field :product_code_eq, :value => params[:q][:product_code_eq], :size => 15, class: "form-control" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :category_cont, :category %>
+                <%= f.text_field :category_cont, :value => params[:q][:category_cont], :size => 15, class: "form-control" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :brand_cont, :brand %>
+                <%= f.text_field :brand_cont, :value => params[:q][:brand_cont], :size => 15, class: "form-control" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :buyer_cont, :buyer %>
+                <%= f.text_field :buyer_cont, :value => params[:q][:buyer_cont], :size => 15, class: "form-control" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :origin_cont, :origin %>
+                <%= f.text_field :origin_cont, :value => params[:q][:origin_cont], :size => 15, class: "form-control" %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="field checkbox">
+                <label>
+                  <%= f.check_box :only_examined, {:checked => params[:q][:only_examined] == '0'}, '0', '1' %>
+                  Only Examined
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+						<div class="form-actions">
+							<button name="button" type="submit" class="btn btn-primary "><span class="icon icon-search"></span> Search</button>
+						</div>
+          </div>
+        <% end %>
+
+
+      </div>
+
+    </div>
+	</div>
+</div>

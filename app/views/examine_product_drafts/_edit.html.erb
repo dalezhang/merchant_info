@@ -1,0 +1,56 @@
+<div class="modal fade" id="product_<%= product.id %>" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: auto;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">
+          Edit Product
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <% ['delivery_left_bound','link', 'remark'].each do |attr| %>
+              <div class="form-group">
+                <%= label attr, attr.titlecase %>
+                <%= text_field_tag attr, product.send(attr),
+                  class: "form-control update_item #{ product.validation_errors[attr] ? 'bg-red' : '' }",
+                  data:{url: "/product_drafts/#{product.id}/update_attr", attrname: attr } %>
+            </div>
+          <% end %>
+          </div>
+          <div class="col-md-6">
+            <% ['delivery_right_bound','warehouse'].each do |attr| %>
+              <div class="form-group">
+                <%= label attr, attr.titlecase %>
+                <%= text_field_tag attr, product.send(attr),
+                  class: "form-control update_item #{ product.validation_errors[attr] ? 'bg-red' : '' }",
+                  data:{url: "/product_drafts/#{product.id}/update_attr", attrname: attr } %>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <%= label :validation_errors, 'validation_errors'.titlecase %>
+            <%= text_field_tag '', product.validation_errors, readonly: true, class: "form-control" %>
+          </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <%= label "description", "description".titlecase %>
+              <%= text_area "description", product.description,
+                class: "form-control update_item #{ product.validation_errors['description'] ? 'bg-red' : '' }",
+                data:{url: "/product_drafts/#{product.id}/update_attr", attrname: 'description' } %>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div>
+</div>
