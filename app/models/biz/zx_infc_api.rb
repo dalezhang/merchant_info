@@ -1,6 +1,16 @@
 require 'zip'
 module Biz
   class ZxIntfcApi < IntfcBase
+
+    attr_accessor :merchant, :zx_mct_info
+
+    def initialize(mch_id)
+      @merchant = Merchant.find(mch_id)
+      @zx_mct_info = Biz::ZxMctInfo.new(@merchant)
+    end
+
+    #appl_typ =>  新增：0；变更：1；停用：2
+    # zx_mct 中信需要的相关商户资料
     def send_intfc(zx_mct,appl_typ)
       set_mct(zx_mct)
       xml = prepare_request(appl_typ)
@@ -90,13 +100,8 @@ module Biz
 
       lics = @zx_mct_info.lics
       return log_error(nil, "请先上传营业执照") unless lics
-      stringio = Zip::OutputStream.write_buffer do |zio|
-        zio.put_next_entry(lics.attach_asset_identifier)
-        zio.write File.read("#{Rails.root}/public#{URI.decode(lics.attach_asset.url)}")
-      end
-      lics_file = stringio.string
-      lics_md5 = Digest::MD5.hexdigest(lics_file)
-      lics_file = Base64.encode64(lics_file)
+      lics_file = get_lics_file # 获取营业执照
+
       trancode = '0100SDC1'
       # appl_typ = 0 #新增：0；变更：1；停用：2
 
@@ -182,7 +187,7 @@ module Biz
       builder.to_xml
     end
     def send_zx_query(data)
-      url = Channel.find_by(channel_code: 'zx').clr_url
+      url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc_query', url, data)
       return if @has_error
 
@@ -203,25 +208,17 @@ module Biz
     end
 
     def post_xml_gbk(method, url, data)
-      @txt_request = CommonTools.xml_del_tag data.encode('utf-8', 'gbk'), "Biz_Lics Msg_Sign"
-      @web_log = Logs::WebLog.new(
-        sender_name: method, sender: @zx_mct,
-        sent_url: url, input_data: @txt_request
-      )
       begin
         resp = HTTParty.post(url, body: data, headers: {"Content-Type": 'text/xml'}, verify: false)
       rescue => e
-        @web_log.save
         return log_error(nil, "HTTP错误: #{e.message}")
       end
       ret = nil
       if resp.success?
         ret = resp.body
-        @web_log.output_data = @txt_response = CommonTools.xml_del_tag ret.encode('utf-8', 'gbk'), "Msg_Sign"
       else
         log_error(nil, "中信服务器错误:" + resp.inspect)
       end
-      @web_log.save!
       ret
     end
   end
