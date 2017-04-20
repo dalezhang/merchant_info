@@ -83,13 +83,12 @@ module Biz
 
     #appl_typ =>  新增：0；变更：1；停用：2
     def prepare_request(appl_typ)
-      return log_error(nil, "org,sub_mct,merchat都不能为空") unless @org && @sub_mct && @merchant
-      bank_account = @sub_mct.bank_account
-      return log_error(nil, "@sub_mct.bank_account不能为空") unless bank_account
+      bank_account = @zx_mct_info.bank_account
+      return log_error(nil, "bank_account不能为空") unless bank_account
       mabs = []
       missed_require_fields = []
 
-      lics = @org.attachments.find_by(tag_name: 'lics')
+      lics = @zx_mct_info.lics
       return log_error(nil, "请先上传营业执照") unless lics
       stringio = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry(lics.attach_asset_identifier)
@@ -104,7 +103,7 @@ module Biz
       builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
         xml.ROOT {
           CSV.foreach("#{Rails.root}/db/init_data/zx_reg_fields.csv", headers: true) do |r|
-            val = r['f_name'] ? eval(r['f_name']) : @zx_mct[r['regn_en_nm'].downcase]
+            val = r['f_name'] ? eval(r['f_name']) : @zx_mct_info[r['regn_en_nm'].downcase]
             unless val == "NO_VALUE"
               xml.send r['regn_en_nm'], val
               if val
@@ -123,6 +122,17 @@ module Biz
       else
         log_error(nil, "缺少必须的字段：\n" + missed_require_fields.join("\n"))
       end
+    end
+
+    def get_lics_file # 获取营业执照
+      stringio = Zip::OutputStream.write_buffer do |zio|
+        zio.put_next_entry(lics.attach_asset_identifier)
+        zio.write File.read("#{Rails.root}/public#{URI.decode(lics.attach_asset.url)}")
+      end
+      lics_file = stringio.string
+      lics_md5 = Digest::MD5.hexdigest(lics_file)
+      lics_file = Base64.encode64(lics_file)
+      return lics_file
     end
     def contr_info_list(xml, mabs)
       xml.Contr_Info_List {

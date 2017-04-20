@@ -55,3 +55,7 @@ gem 'cancancan'
 gem 'ransack'
 gem 'will_paginate', github: 'jonatack/will_paginate'
 gem 'will_paginate-bootstrap'
+
+gem 'pgate_model', git: 'git@git.coding.net:pgate/pgate_model.git'
+#gem 'pgate_model', path: '../pgate_model'
+gem 'rubyzip'
