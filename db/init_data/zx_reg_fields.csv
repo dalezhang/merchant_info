@@ -2,8 +2,8 @@ trancode,msg_typ,regn_en_nm,regn_cn_nm,sort_num,regn_data_typ,regn_nt_null,is_si
 0100SDC1,0,Chnl_Id,渠道编号,10,CHAR(8),1,1,1
 0100SDC1,0,Chnl_Mercht_Id,渠道商户编号,20,VARCHAR(40),1,1,1
 0100SDC1,0,Pay_Chnl_Encd,支付渠道编号,30,VARCHAR(10),1,1,1
-0100SDC1,0,Mercht_Belg_Chnl_Id,商户归属渠道编号,40,CHAR(8),0,0,1,@zx_mct.chnl_id
-0100SDC1,0,Mercht_Full_Nm,商户全名称,50,VARCHAR(200),0,1,1,@merchant.full_name
+0100SDC1,0,Mercht_Belg_Chnl_Id,商户归属渠道编号,40,CHAR(8),0,0,1,@zx_mct_info.chnl_id
+0100SDC1,0,Mercht_Full_Nm,商户全名称,50,VARCHAR(200),0,1,1,@zx_mct_info.full_name
 0100SDC1,0,Mercht_Sht_Nm,商户简称,60,VARCHAR(128),0,1,1,@org.name
 0100SDC1,0,Cust_Serv_Tel,客户服务电话,70,VARCHAR(64),0,0,1,@merchant.contact_tel
 0100SDC1,0,Contcr_Nm,联系人名称,80,VARCHAR(128),0,0,1,@merchant.contact_name

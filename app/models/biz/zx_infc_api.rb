@@ -5,83 +5,31 @@ module Biz
     attr_accessor :merchant, :zx_mct_info
 
     def initialize(mch_id)
-      @merchant = Merchant.find(mch_id)
+      @has_error = false
+      @messages = []
+      if mch_id.class == Merchant
+        @merchant = mch_id
+      elsif merchant = Merchant.find(mch_id)
+        @merchant = merchant
+      else
+        return log_error(nil, 'Merchant require')
+      end
       @zx_mct_info = Biz::ZxMctInfo.new(@merchant)
+
     end
 
     #appl_typ =>  新增：0；变更：1；停用：2
-    # zx_mct 中信需要的相关商户资料
-    def send_intfc(zx_mct,appl_typ)
-      set_mct(zx_mct)
+    def send_intfc(appl_typ)
       xml = prepare_request(appl_typ)
       send_zx_intfc(xml) unless @has_error
     end
     def send_query(zx_mct)
-      set_mct(zx_mct)
       xml = prepare_query
       send_zx_query(xml)
     end
 
-    def confirmation(dt, chl_code, chl_id)
-      trancode = '0200SDC5'
-      mab_query = []
-      mab_query << chl_id
-      mab_query << chl_code
-      mab_query << '1'
-      mab_query << trancode
-      builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
-        xml.ROOT {
-          xml.Chnl_Id chl_id
-          xml.Pay_Chnl_Encd chl_code # 支付渠道编号,支付宝：0001；微信支付：0002
-          xml.Clr_Dt dt # 清分日期
-          xml.Clr_OK '1'
-          xml.trancode trancode #交易代码
-          xml.Msg_Sign sign(mab_query)
-        }
-      end
-      url = Channel.find_by(channel_code: 'zx').clr_url
-      post_xml_gbk('zxqf', url, builder.to_xml)
-    end
-
-    def download_dz_file(dt, chl_code, chl_id)
-      trancode = '0100SDC4'
-
-      mab_query = []
-      mab_query << chl_id
-      mab_query << chl_code
-      mab_query << dt
-      mab_query << trancode
-      builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
-        xml.ROOT {
-          xml.Chnl_Id chl_id
-          xml.Pay_Chnl_Encd chl_code # 支付渠道编号,支付宝：0001；微信支付：0002
-          xml.Clr_Dt dt # 清分日期
-          xml.trancode trancode #交易代码
-          xml.Msg_Sign sign(mab_query)
-        }
-      end
-      data = builder.to_xml
-      url = Channel.find_by(channel_code: 'zx').clr_url
-      ret = post_xml_gbk('zxdz', url, builder.to_xml)
-      return unless ret
-      hash = Hash.from_xml ret
-      zip_str = hash["ROOT"]["Clr_Dtl"]
-      if zip_str
-        File.open("tmp/zx_#{chl_code}_#{dt}.zip",'wb') do |f|
-          f.write Base64.decode64(zip_str)
-        end
-      end
-    end
 
     private
-    def set_mct(zx_mct)
-      @zx_mct = zx_mct
-      @sub_mct = zx_mct.sub_mct
-      @org = @sub_mct.org
-      @merchant = @org.merchant
-      @has_error = false
-      @messages = []
-    end
     def sign(mabs)
       @mab = mabs.join().encode('GBK', 'UTF-8')
       key = OpenSSL::PKey::RSA.new(File.read("#{AppConfig.get('pooul', 'keys_path')}/zx_prod_key.pem"))
@@ -139,21 +87,7 @@ module Biz
       lics_file = Base64.encode64(lics_file)
       return lics_file
     end
-    def contr_info_list(xml, mabs)
-      xml.Contr_Info_List {
-        @zx_mct.zx_contr_info_lists.each do |cl|
-          xml.Contrinfo {
-            xml.Pay_Typ_Encd cl.pay_typ_encd
-            xml.Pay_Typ_Fee_Rate cl.pay_typ_fee_rate
-            xml.Start_Dt cl.start_dt
-          }
-          mabs << cl.pay_typ_encd
-          mabs << cl.start_dt
-          mabs << cl.pay_typ_fee_rate
-        end
-      }
-      "NO_VALUE"
-    end
+
     def send_zx_intfc(data)
       return unless !has_error && data
       url = Channel.find_by(channel_code: 'zx').clr_url
@@ -162,8 +96,7 @@ module Biz
 
       xml = Nokogiri::XML(ret)
       if xml.xpath("//rtncode").text == '00000000'
-        @org.zx_mct.status = 1
-        @org.zx_mct.save!
+        @merchant.update!(status: 1)
       else
         log_error(nil, "返回中没有rtninfo:" + xml.xpath("//rtninfo").text)
       end
@@ -171,15 +104,15 @@ module Biz
 
     def prepare_query
       mab_query = []
-      mab_query << @zx_mct.chnl_id
-      mab_query << @zx_mct.chnl_mercht_id
-      mab_query << @zx_mct.pay_chnl_encd
+      mab_query << @zx_mct_info.chnl_id
+      mab_query << @zx_mct_info.chnl_mercht_id
+      mab_query << @zx_mct_info.pay_chnl_encd
       mab_query << '0100SDC0'
       builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
         xml.ROOT {
-          xml.Chnl_Id @zx_mct.chnl_id
-          xml.Chnl_Mercht_Id @zx_mct.chnl_mercht_id
-          xml.Pay_Chnl_Encd @zx_mct.pay_chnl_encd
+          xml.Chnl_Id @zx_mct_info.chnl_id
+          xml.Chnl_Mercht_Id @zx_mct_info.chnl_mercht_id
+          xml.Pay_Chnl_Encd @zx_mct_info.pay_chnl_encd
           xml.trancode '0100SDC0'
           xml.Msg_Sign sign(mab_query)
         }
@@ -193,14 +126,14 @@ module Biz
 
       xml = Nokogiri::XML(ret)
       if xml.xpath("//Chnl_Id").text == '10000022'
-        @sub_mct.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
-        @sub_mct.status = 1 if @sub_mct.status < 1
-        if @sub_mct.changed?
+        @merchant.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
+        @merchant.status = 1 if @merchant.status < 1
+        if @merchant.changed?
           if @sent_post
-            @sent_post.result_message = @sub_mct.changes.to_s
+            @sent_post.result_message = @merchant.changes.to_s
             @sent_post.save
           end
-          @sub_mct.save
+          @merchant.save
         end
       else
         log_error(nil, "返回记录没有对应资料")
