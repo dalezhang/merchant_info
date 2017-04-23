@@ -1,0 +1,8 @@
+.row
+  .col-md-6
+    .form-group
+      = label 'user', 'User'
+      = text_field_tag '', current_user.email, readonly: true, class: "form-control"
+    .form-group
+      = label :roles, 'roles'.titlecase
+      = text_field_tag '', current_user.role.pluck(:name).join('--'), readonly: true, class: "form-control"

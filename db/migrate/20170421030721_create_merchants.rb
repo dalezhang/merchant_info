@@ -20,9 +20,17 @@ class CreateMerchants < ActiveRecord::Migration[5.0]
 	    t.string  "app_id"
 	    t.string  "merchant_type"
 	    t.string  "contact_mobile"
-	    t.integer :status
+	    t.integer :status, default: 0
 	    t.string :mch_id
 	    t.string :chnl_id
-	end
+		t.string :bank_account
+		t.string :lics
+		t.string :name
+		t.string :owner_name
+		t.string :bank_name
+		t.string :bank_sub_code
+		t.string :account_num
+		t.integer :user_id
+    end
   end
 end

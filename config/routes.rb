@@ -7,14 +7,10 @@ Rails.application.routes.draw do
 
   root to: "home#index"
 
-  resources :product_drafts do
-    resources :variants do
-    end
-    get :csv, on: :collection
-    post :import, :import_from_google_docs, on: :collection
+  resources :merchants do
+    
   end
-  resources :examine_product_drafts do
-    post :toggle_examine, on: :member
+  resources :inspect_merchants do
   end
 
 end

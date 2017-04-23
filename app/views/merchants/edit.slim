@@ -1,0 +1,4 @@
+= form_for @merchant do |f|
+  - Merchant.attr_arr.each do |attr|
+    = f.input attr
+

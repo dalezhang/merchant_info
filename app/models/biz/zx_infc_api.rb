@@ -48,7 +48,7 @@ module Biz
 
       lics = @zx_mct_info.lics
       return log_error(nil, "请先上传营业执照") unless lics
-      lics_file = get_lics_file # 获取营业执照
+      lics_file = get_lics_file(lics) # 获取营业执照
 
       trancode = '0100SDC1'
       # appl_typ = 0 #新增：0；变更：1；停用：2
@@ -56,7 +56,7 @@ module Biz
       builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
         xml.ROOT {
           CSV.foreach("#{Rails.root}/db/init_data/zx_reg_fields.csv", headers: true) do |r|
-            val = r['f_name'] ? eval(r['f_name']) : @zx_mct_info[r['regn_en_nm'].downcase]
+            val = r['f_name'] ? eval(r['f_name']) : @zx_mct_info.send(r['regn_en_nm'].downcase)
             unless val == "NO_VALUE"
               xml.send r['regn_en_nm'], val
               if val
@@ -77,7 +77,7 @@ module Biz
       end
     end
 
-    def get_lics_file # 获取营业执照
+    def get_lics_file(lics) # 获取营业执照
       stringio = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry(lics.attach_asset_identifier)
         zio.write File.read("#{Rails.root}/public#{URI.decode(lics.attach_asset.url)}")
@@ -90,7 +90,7 @@ module Biz
 
     def send_zx_intfc(data)
       return unless !has_error && data
-      url = Channel.find_by(channel_code: 'zx').clr_url
+      url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc', url, data)
       return if has_error
 

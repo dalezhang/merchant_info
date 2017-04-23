@@ -10,17 +10,17 @@
     <ul class="sidebar-menu">
       <li class="header">HEADER</li>
       <!-- Optionally, you can add icons to the links -->
-      <% if can?(:index, ProductDraft) %>
-      <li class="<%= controller_name == 'product_drafts' ? 'active' : '' %>">
-        <%= link_to product_drafts_path do %>
-          <i class="fa fa-link"></i> <span>ProductDraft</span>
+      <% if can?(:index, Merchant) %>
+      <li class="<%= controller_name == 'merchants' ? 'active' : '' %>">
+        <%= link_to merchants_path do %>
+          <i class="fa fa-link"></i> <span>商户信息</span>
         <% end %>
       </li>
       <% end %>
-      <% if can?(:index, ExamineProductDraft) %>
-      <li class="<%= controller_name == 'examine_product_drafts' ? 'active' : '' %>">
-        <%= link_to examine_product_drafts_path do %>
-          <i class="fa fa-link"></i> <span>ExamineProductDraft</span>
+      <% if can?(:index, :inspect_merchants) %>
+      <li class="<%= controller_name == 'inspect_merchants' ? 'active' : '' %>">
+        <%= link_to inspect_merchants_path do %>
+          <i class="fa fa-link"></i> <span>审核</span>
         <% end %>
       </li>
       <% end %>

@@ -35,5 +35,9 @@ class Ability
   end
 
   def grant_general_permission(user)
+    can :index, Merchant
+    can :manage, Merchant do |merchant|
+      merchant.user_id == user.id
+    end
   end
 end

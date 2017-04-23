@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,42 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118022816) do
+ActiveRecord::Schema.define(version: 20170421030721) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "product_drafts", force: :cascade do |t|
-    t.integer  "user_id",                              null: false
-    t.string   "product_code",         default: ""
-    t.string   "name",                 default: "",    null: false
-    t.string   "category",             default: ""
-    t.string   "shop_by_room",         default: ""
-    t.string   "brand_name",           default: ""
-    t.string   "brand_origin",         default: ""
-    t.integer  "delivery_left_bound"
-    t.integer  "delivery_right_bound"
-    t.string   "bio",                  default: ""
-    t.text     "description",          default: ""
-    t.string   "link",                 default: ""
-    t.integer  "base_followers_count", default: 0
-    t.string   "buyer",                default: ""
-    t.string   "warehouse",            default: ""
-    t.string   "remark",               default: ""
-    t.boolean  "examine",              default: false
-    t.jsonb    "validation_errors",    default: {}
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+  create_table "merchants", force: :cascade do |t|
+    t.string  "full_name"
+    t.string  "short_name"
+    t.string  "service_tel"
+    t.string  "business_category"
+    t.text    "memo"
+    t.string  "lic_number"
+    t.string  "jp_name"
+    t.string  "jp_id_number"
+    t.string  "contact_name"
+    t.string  "contact_tel"
+    t.string  "contact_email"
+    t.string  "province"
+    t.string  "urbn"
+    t.string  "city_area"
+    t.text    "address"
+    t.string  "channel_code"
+    t.string  "app_id"
+    t.string  "merchant_type"
+    t.string  "contact_mobile"
+    t.integer "status",            default: 0
+    t.string  "mch_id"
+    t.string  "chnl_id"
+    t.string  "bank_account"
+    t.string  "lics"
+    t.string  "name"
+    t.string  "owner_name"
+    t.string  "bank_name"
+    t.string  "bank_sub_code"
+    t.string  "account_num"
+    t.integer "user_id"
   end
 
-  add_index "product_drafts", ["brand_name"], name: "index_product_darfts_on_brand_name", using: :btree
-  add_index "product_drafts", ["category"], name: "index_product_darfts_on_category", using: :btree
-  add_index "product_drafts", ["user_id"], name: "index_product_darfts_on_user_id", using: :btree
-
   create_table "roles", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",       default: ""
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "roles_users", force: :cascade do |t|
@@ -74,32 +76,8 @@ ActiveRecord::Schema.define(version: 20161118022816) do
     t.datetime "locked_at"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-
-  create_table "variants", force: :cascade do |t|
-    t.integer  "product_draft_id"
-    t.integer  "user_id"
-    t.string   "sku"
-    t.decimal  "retail_price"
-    t.decimal  "price"
-    t.decimal  "cost_price"
-    t.string   "color"
-    t.string   "size"
-    t.decimal  "weight"
-    t.decimal  "height"
-    t.decimal  "width"
-    t.decimal  "depth"
-    t.jsonb    "sku_attributes"
-    t.jsonb    "validation_errors", default: {}
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "variants", ["product_draft_id"], name: "index_variants_on_product_draft_id", using: :btree
-  add_index "variants", ["sku"], name: "index_variants_on_sku", using: :btree
-  add_index "variants", ["user_id"], name: "index_variants_on_user_id", using: :btree
 
 end
