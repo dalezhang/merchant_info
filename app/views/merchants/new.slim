@@ -1,0 +1,31 @@
+= horizon_form_for @object do |f|
+	= f.input :bank_account
+	= f.input :lics, hint:"(点击图片进行替换)"  do
+    	= f.input_field :avatar, type: :hidden, as: :file
+		    .fileinput-button
+		        - if @object.image_url.blank?
+		          <%= image_tag("no-img.png") %>
+		        <% else %>
+		          <%= image_tag(@object.image_url(:thumb))%>
+		        <% end %>
+		      <%= file_field_tag "image", class: "upyun_file" %>
+		      <b class="loading"><i class="fa fa-spinner"></i></b>
+		    </p>
+		<% end %>
+		<%= upyun_meta_tags prefix: 'asset_img/avatar' %>
+  </div>
+	= f.input :chnl_id
+	= f.input :full_name
+	= f.input :name
+	= f.input :contact_tel
+	= f.input :contact_name
+	= f.input :service_tel
+	= f.input :contact_email
+	= f.input :memo
+	= f.input :province
+	= f.input :urbn
+	= f.input :address
+	= f.input :owner_name
+	= f.input :bank_name,
+	= f.input :bank_sub_code
+	= f.input :account_num

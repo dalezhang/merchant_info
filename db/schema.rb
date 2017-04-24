@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170421030721) do
+ActiveRecord::Schema.define(version: 20170424035345) do
+
+  create_table "asset_images", force: :cascade do |t|
+    t.string   "filename"
+    t.string   "avatar"
+    t.string   "content_type"
+    t.string   "resource_type", limit: 50
+    t.integer  "resource_id"
+    t.string   "thumbnail"
+    t.datetime "created_at"
+    t.string   "alt"
+    t.string   "url"
+    t.string   "image_type"
+  end
 
   create_table "merchants", force: :cascade do |t|
     t.string  "full_name"
