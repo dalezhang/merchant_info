@@ -50,9 +50,9 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'devise'
+# gem 'devise'
 gem 'cancancan'
-gem 'ransack'
+# gem 'ransack'
 gem 'will_paginate', github: 'jonatack/will_paginate'
 gem 'will_paginate-bootstrap'
 
@@ -61,6 +61,7 @@ gem 'rubyzip'
 gem 'carrierwave-qiniu'
 gem 'slim'
 gem 'simple_form'
-gem "mongo_mapper"
-gem 'bson_ext'
-gem 'activemodel-serializers-xml'
+# gem "mongo_mapper"
+# gem 'bson_ext'
+# gem 'activemodel-serializers-xml'
+gem 'mongoid'

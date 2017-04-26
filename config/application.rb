@@ -23,7 +23,7 @@ module MerchantInfo
 
     # use mongodb
     config.generators do |g|
-	  g.orm :mongo_mapper
+	  g.orm :mongoid
 	end
   end
 end
