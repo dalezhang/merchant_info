@@ -12,5 +12,12 @@ Rails.application.routes.draw do
   end
   resources :inspect_merchants do
   end
+  namespace :user do
+  	resources :sessions
+    resources :password
+    resources :confirmation
+    resources :unlock
+    resources :registrations
+  end
 
 end

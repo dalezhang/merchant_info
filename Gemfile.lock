@@ -56,6 +56,9 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    carrierwave-mongoid (0.1.0)
+      carrierwave
+      mongoid
     carrierwave-qiniu (1.1.0)
       carrierwave (~> 1.0)
       qiniu (~> 6.8, >= 6.8.0)
@@ -225,6 +228,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   cancancan
+  carrierwave-mongoid
   carrierwave-qiniu
   coffee-rails (~> 4.1.0)
   factory_girl_rails

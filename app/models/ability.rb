@@ -15,7 +15,7 @@ class Ability
 
     user ||= User.new
     grant_general_permission(user)
-    user.role.each do |role|
+    user.roles.each do |role|
       begin
         grant_method = "grant_permissions_to_#{role.name}"
         __send__ grant_method, user

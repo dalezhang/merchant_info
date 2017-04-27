@@ -5,4 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-User.create(email: 'example@mail.com', password: '111111', password_confirmation: '111111')
+user1 = User.find_by(email: 'example@mail.com')
+user1.destroy if user1.present?
+
+user = User.create(email: 'example@mail.com', password: '111111', password_confirmation: '111111')
+role1 = Role.find_or_create_by(name: 'admin')
+user.roles << role1

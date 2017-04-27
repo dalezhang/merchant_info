@@ -1,6 +1,6 @@
 class ResourcesController < AdminController
 
-	respond_to :html, :js, :json
+
 	before_action :authenticate_user!
 
 
@@ -23,7 +23,7 @@ class ResourcesController < AdminController
 		end
 	end
 	def edit
-		byebug
+
 		load_object
 	end
 	def new
@@ -74,22 +74,7 @@ class ResourcesController < AdminController
 
 	protected
 	def load_collection
-		params[:q] ||= {}
-		if object_name.camelize.constantize.respond_to? :show_order
-			@q = object_name.camelize.constantize.show_order.ransack(params[:q])
-		else
-			@q = object_name.camelize.constantize.ransack(params[:q])
-		end
-		pages = 100
-		result = @q.result
-		if params[:d]
-			params[:d].each do |d|
-				dy = Time.zone.parse(d[1])
-				result = result.where(d[0] => [dy.beginning_of_day..dy.end_of_day])
-		  end
-		end
-		@all_data = result
-		@collection = @all_data.page(params[:page]).per(pages)
+		@collection = object_name.camelize.constantize.all.page(params[:page]).per(pages)
 	end
 	def load_object
 		@object = object_name.classify.constantize.find_by_id(params[:id])

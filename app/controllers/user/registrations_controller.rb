@@ -1,4 +1,4 @@
-class Users::RegistrationsController < Devise::RegistrationsController
+class User::RegistrationsController < AdminController
 # before_action :configure_sign_up_params, only: [:create]
 # before_action :configure_account_update_params, only: [:update]
 
@@ -15,14 +15,24 @@ class Users::RegistrationsController < Devise::RegistrationsController
    end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    @user = current_user
+  end
 
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    if current_user && current_user.verify!(params[:user][:current_password])
+      current_user.password = params[:user][:password]
+      current_user.password_confirmation = params[:user][:password_confirmation]
+      current_user.generate_password
+      session[:user_id] = current_user.id.to_s
+      flash[:success] = '信息修改成功。'
+    else
+      params[:user][:password].clear
+      flash[:error] = '请输入正确的用户名和密码。'
+    end
+    redirect_to action: :edit, id: current_user.id.to_s
+  end
 
   # DELETE /resource
    def destroy

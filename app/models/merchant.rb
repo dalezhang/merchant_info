@@ -1,8 +1,9 @@
 class Merchant < ApplicationRecord
+	include Mongoid::Document
 	include Imagable
 
 
-	has_one_image name: :lics, autosave: true
+  has_one :lice, class_name: 'AssetImg'
 	delegate :image_url, to: :lics, allow_nil: true
   delegate :avatar=, :avatar, to: :lics
 

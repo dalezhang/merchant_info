@@ -1,4 +1,5 @@
 module ApplicationHelper
+	include Authentication
 	def horizon_form_for(record, options = {}, &block)
 		options = options.merge(
 		html: { class: 'form-horizontal' },

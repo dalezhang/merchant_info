@@ -59,6 +59,7 @@ gem 'will_paginate-bootstrap'
 
 gem 'rubyzip'
 gem 'carrierwave-qiniu'
+gem 'carrierwave-mongoid'
 gem 'slim'
 gem 'simple_form'
 # gem "mongo_mapper"

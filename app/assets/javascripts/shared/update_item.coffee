@@ -23,5 +23,3 @@ $(document).on 'change', '.update_item', ->
       alert("操作错误")
 
 
-ß
-

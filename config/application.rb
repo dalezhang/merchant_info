@@ -25,5 +25,6 @@ module MerchantInfo
     config.generators do |g|
 	  g.orm :mongoid
 	end
+	Mongoid.raise_not_found_error = false
   end
 end

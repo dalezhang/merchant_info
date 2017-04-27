@@ -21,13 +21,13 @@ module Imagable
 
     def has_one_image(options = {})
       name = options.delete(:name) || :asset_img
-      image_type = options.delete(:image_type) || name != :asset_img && "#{self.table_name}_#{name}"
+      image_type = options.delete(:image_type) || name != :asset_img && "#{self.name.downcase}_#{name}"
       options = { class_name: 'AssetImg', as: :resource }.merge(options)
 
       if image_type
-        has_one name, -> { where(image_type: image_type) }, options
+        has_one name, -> { where(image_type: image_type) }
       else
-        has_one name, options
+        has_one name
       end
     end
 
