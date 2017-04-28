@@ -20,6 +20,7 @@ zh-CN:
         bank_name: '开户行（中文名）'
         bank_sub_code: '支付联行号'
         account_num: '账号'
+        mch_type: '商户类型'
     placeholders:
       merchant:
         bank_account: '银行账号'

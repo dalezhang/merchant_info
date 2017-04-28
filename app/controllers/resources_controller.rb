@@ -74,7 +74,7 @@ class ResourcesController < AdminController
 
 	protected
 	def load_collection
-		@collection = object_name.camelize.constantize.all.page(params[:page]).per(pages)
+		@collection = object_name.camelize.constantize.all
 	end
 	def load_object
 		@object = object_name.classify.constantize.find_by_id(params[:id])

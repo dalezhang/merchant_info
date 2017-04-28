@@ -31,14 +31,14 @@ header.main-header
             <!-- Menu Toggle Button -->
             a.dropdown-toggle data-toggle="dropdown"
               <!-- The user image in the navbar-->
-              img.user-image src="dist/img/user2-160x160.jpg"  alt="User Image"
+              = image_tag 'no-img.png', class: 'user-image'
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               span.hidden-xs
                 = current_user.email
             ul.dropdown-menu
               <!-- The user image in the menu -->
               li.user-header
-                img.img-circle src="dist/img/user2-160x160.jpg" alt="User Image"
+                = image_tag 'no-img.png', class: 'user-circle'
                 p
                   b
                     = current_user.email

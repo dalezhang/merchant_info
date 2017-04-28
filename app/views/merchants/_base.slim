@@ -1,0 +1,58 @@
+= horizon_form_for object do |f|
+  .row
+    .col-xs-6
+      h4 基本信息
+      = f.input :full_name
+      = f.input :name
+      = f.input :mch_type
+      = f.input :memo
+      = f.input :mch_type do
+        = f.select :mch_type, ['个体','企业'], include_blank: true
+      = f.input :province
+      = f.input :urbn
+      = f.input :address
+      = f.input :appid
+    .col-xs-6
+      h4 公司信息
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 联系人电话
+        .col-sm-9
+          = text_field_tag 'merchant[company][contact_tel]', @object.legal_person[:contact_tel], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 联系人姓名
+        .col-sm-9
+          = text_field_tag 'merchant[company][contact_name]', @object.legal_person[:contact_name], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 客服电话
+        .col-sm-9
+          = text_field_tag 'merchant[company][service_tel]', @object.legal_person[:service_tel], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 联系人邮箱
+        .col-sm-9
+          = text_field_tag 'merchant[company][contact_email]', @object.legal_person[:contact_email], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 营业执照编码
+        .col-sm-9
+          = text_field_tag 'merchant[company][license_code]', @object.legal_person[:license_code], class: "form-control string optional"
+    
+      h4 法人信息
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 法人姓名
+        .col-sm-9
+          = text_field_tag 'merchant[legal_person][name]', @object.legal_person[:name], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 法人电话
+        .col-sm-9
+          = text_field_tag 'merchant[legal_person][tel]', @object.legal_person[:tel], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 法人email
+        .col-sm-9
+          = text_field_tag 'merchant[legal_person][email]', @object.legal_person[:email], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 法人身份证号
+        .col-sm-9
+          = text_field_tag 'merchant[legal_person][identity_card_num]', @object.legal_person[:identity_card_num], class: "form-control string optional"
+    .row
+      .col-xs-11.text-right
+        = f.submit '保存', class: 'btn btn-lg btn-success'
+    

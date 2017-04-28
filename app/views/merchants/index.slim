@@ -1,0 +1,21 @@
+= link_to '添加商户', new_merchant_path, class: 'btn btn-primary'
+table.table
+  tr
+    th 商户编号
+    th 商户类型
+    th 商户名称
+    th 商户状态
+    th 代理商
+    th 操作
+  - @collection.each do |obj|
+    tr
+      td= obj.merchant_id
+      td= obj.mch_type
+      td= obj.name
+      td= Merchant::STATUS_DATA[obj.status]
+      td= obj.user.name
+      td
+        = link_to '查看', obj, class: 'btn btn-sm btn-success'
+        - if obj.status <= 5
+          = link_to '编辑', edit_merchant_path(obj.id.to_s), class: 'btn btn-sm btn-default'
+          = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger'
