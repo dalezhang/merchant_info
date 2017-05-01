@@ -17,7 +17,7 @@ class User::SessionsController < ApplicationController
       else
         params[:user][:password].clear
         flash[:error] = '请输入正确的用户名和密码。'
-        render 'new'
+        redirect_to action: :new
       end
     end
   end

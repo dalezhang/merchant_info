@@ -1,0 +1,5 @@
+- unless @object.new_record?
+  .row
+    = file_field_tag 'file', data: {url: 'upload_picture', attrname: 'company/license'}, class: 'fileupload', :multiple=>true
+    = image_tag @object.company.license.url, class: 'image-preview'
+

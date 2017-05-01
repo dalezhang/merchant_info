@@ -2,7 +2,7 @@
 <div class="login-box-body">
   <p class="login-box-msg">请登录</p>
 
-  <%= form_for(@user, url: url_for(controller: 'users/sessions', action: :create), method: :post) do |f| %>
+  <%= form_for(@user, url: url_for(controller: 'user/sessions', action: :create), method: :post) do |f| %>
     <%= render :partial => "/shared/flash" %>
     <div class="form-group has-feedback">
       <%= f.email_field :email, autofocus: true, class:"form-control", placeholder: "Email" %>
@@ -27,6 +27,6 @@
     </div>
   <% end %>
   <!-- /.social-auth-links -->
-  <%= render "users/shared/links" %>
+  <%= render "user/shared/links" %>
 </div>
 <!-- /.login-box-body -->

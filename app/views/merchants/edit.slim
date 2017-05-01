@@ -1,4 +1,2 @@
-= form_for @merchant do |f|
-  - Merchant.attr_arr.each do |attr|
-    = f.input attr
-
+= render 'base', object: @object
+= render 'relate_pictures', object: @object

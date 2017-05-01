@@ -4,7 +4,6 @@
       h4 基本信息
       = f.input :full_name
       = f.input :name
-      = f.input :mch_type
       = f.input :memo
       = f.input :mch_type do
         = f.select :mch_type, ['个体','企业'], include_blank: true
@@ -34,7 +33,7 @@
         label.col-sm-3.control-label.string.optional 营业执照编码
         .col-sm-9
           = text_field_tag 'merchant[company][license_code]', @object.legal_person[:license_code], class: "form-control string optional"
-    
+
       h4 法人信息
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 法人姓名

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   resources :merchants do
+    post :upload_picture, on: :member
     
   end
   resources :inspect_merchants do

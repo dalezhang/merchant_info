@@ -16,13 +16,14 @@ class Merchant < ApplicationRecord
   field :industry, type: String # 经营行业
 
   field :bank_info, type: Hash, default:{} # 银行信息
-  # field :legal_person, type: Hash, default:{} # 法人信息
-  # field :company, type: Hash, default:{} # 公司信息
+  field :legal_person # 法人信息
+  field :company # 公司信息
   field :request_and_response, type: Hash, default:{} # 发送和返回
   field :channel_data, type: Hash, default:{} # 渠道信息
   belongs_to :user
-  has_one :legal_person, autosave: true
-  has_one :company, autosave: true
+  embeds_one :legal_person, autobuild: true
+  embeds_one :company, autobuild: true
+  accepts_nested_attributes_for :company, :legal_person
 
   STATUS_DATA = {0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功'}
 
@@ -34,20 +35,19 @@ class Merchant < ApplicationRecord
 		:bank_sub_code, :account_num
     ]
   end
-  def legal_person
-    LegalPerson.find_or_initialize_by(merchant: self)
-  end
-  def Company
-    Company.find_or_initialize_by(merchant: self)
-  end
+  # def legal_person
+  #   self.legal_person = LegalPerson.new(merchant: self) if new_record
+  # end
+  # def company
+  #   self.company = Company.new(merchant: self) if new_record
+  # end
 end
 
 class LegalPerson < ApplicationRecord
   include Mongoid::Document
-  include Imagable
-  has_one :identity_card_front, class_name: 'AssetImg'    # 身份证正面
-  has_one :identity_card_back , class_name: 'AssetImg'    # 身份证反面
-  belongs_to :merchant
+  mount_uploader :identity_card_front, ImageUploader    # 身份证正面
+  mount_uploader :identity_card_back , ImageUploader    # 身份证反面
+  embedded_in :merchant
   field :tel, type: String               # 联系人电话
   field :name, type: String              # 联系人名称
   field :email, type: String             # 联系人邮箱
@@ -56,10 +56,9 @@ end
 
 class Company < ApplicationRecord
   include Mongoid::Document
-  include Imagable
-  has_one :license, class_name: 'AssetImg' # 营业执照
-  has_one :shop_picture, class_name: 'AssetImg' # 店铺门头照
-  belongs_to :merchant
+  embedded_in :merchant
+  mount_uploader :shop_picture, ImageUploader  # 店铺照
+  mount_uploader :license, ImageUploader  # 营业执照
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话

@@ -77,7 +77,7 @@ class ResourcesController < AdminController
 		@collection = object_name.camelize.constantize.all
 	end
 	def load_object
-		@object = object_name.classify.constantize.find_by_id(params[:id])
+		@object = object_name.classify.constantize.find_by(id: params[:id])
 	end
 	def object_name
 		controller_name.singularize

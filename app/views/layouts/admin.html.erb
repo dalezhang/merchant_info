@@ -6,9 +6,9 @@
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/plugins/font-awesome/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
 		<!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -27,6 +27,7 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
     <%= javascript_tag "window._token = '#{form_authenticity_token}'" %>
+    
   </head>
 	<!--
 	BODY TAG OPTIONS:
@@ -89,5 +90,10 @@
 		     Both of these plugins are recommended to enhance the
 		     user experience. Slimscroll is required when using the
 		     fixed layout. -->
+    <!-- file_upload -->
+    <script src="/plugins/file_upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/plugins/file_upload/js/jquery.iframe-transport.js"></script>
+    <script src="/plugins/file_upload/js/jquery.fileupload.js"></script>
+    <script src="/plugins/file_upload/my_fileuploader.js"></script>
   </body>
 </html>

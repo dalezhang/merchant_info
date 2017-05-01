@@ -26,7 +26,7 @@ module MerchantInfo
   	  g.orm :mongoid
   	end
     
-    config.i18n.default_locale = :'zh-CN'
+    # config.i18n.default_locale = :'zh-CN'
   end
 end
 Mongoid.raise_not_found_error = false

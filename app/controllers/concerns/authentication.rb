@@ -5,7 +5,7 @@ module Authentication
   	if current_user
   		return true
   	else
-  		redirect_to new_users_session_path
+  		redirect_to controller: 'user/sessions', action: :new
   	end
   end
 
@@ -16,6 +16,6 @@ module Authentication
 
   def logout
     session.clear
-    redirect_to :action => 'login'
+    redirect_to controller: 'user/sessions', action: :new
   end
 end
