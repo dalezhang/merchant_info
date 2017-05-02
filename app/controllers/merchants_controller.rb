@@ -15,7 +15,6 @@ class MerchantsController < ResourcesController
   def upload_picture
     @error = nil
     call_stacks = params[:resource_attrname].split('/')
-    last = call_stacks.delete(call_stacks[-1])
     load_object
     target = @object
     begin
@@ -23,13 +22,13 @@ class MerchantsController < ResourcesController
       call_stacks.each do |method|
         target = target.__send__(method)
       end
-      target.__send__("#{last}=", params[:file].tempfile)
+      target.avatar = params[:file].tempfile
       target.save!
+      @object.save!
     rescue => e
-      @error = e.errors.messages.join(';')
+      @error = e.messages.join(';')
     end
-    url = target.__send__(last).url rescue nil
+    url = target.avatar.url rescue nil
     render json: {error: @error , url: url}.to_json
   end
-
 end

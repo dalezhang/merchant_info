@@ -16,23 +16,23 @@
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 联系人电话
         .col-sm-9
-          = text_field_tag 'merchant[company][contact_tel]', @object.legal_person[:contact_tel], class: "form-control string optional"
+          = text_field_tag 'merchant[company][contact_tel]', @object.company[:contact_tel], class: "form-control string optional"
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 联系人姓名
         .col-sm-9
-          = text_field_tag 'merchant[company][contact_name]', @object.legal_person[:contact_name], class: "form-control string optional"
+          = text_field_tag 'merchant[company][contact_name]', @object.company[:contact_name], class: "form-control string optional"
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 客服电话
         .col-sm-9
-          = text_field_tag 'merchant[company][service_tel]', @object.legal_person[:service_tel], class: "form-control string optional"
+          = text_field_tag 'merchant[company][service_tel]', @object.company[:service_tel], class: "form-control string optional"
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 联系人邮箱
         .col-sm-9
-          = text_field_tag 'merchant[company][contact_email]', @object.legal_person[:contact_email], class: "form-control string optional"
+          = text_field_tag 'merchant[company][contact_email]', @object.company[:contact_email], class: "form-control string optional"
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 营业执照编码
         .col-sm-9
-          = text_field_tag 'merchant[company][license_code]', @object.legal_person[:license_code], class: "form-control string optional"
+          = text_field_tag 'merchant[company][license_code]', @object.company[:license_code], class: "form-control string optional"
 
       h4 法人信息
       .form-group.string.optional.merchant_address

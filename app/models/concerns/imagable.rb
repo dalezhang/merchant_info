@@ -3,45 +3,12 @@ require 'active_support/concern'
 module Imagable
   extend ActiveSupport::Concern
 
-  module ClassMethods
-    def compatible_with_form_api_images(*columns)
-      columns.each do |column|
-        define_method "#{column}=" do |file|
-          if file.present?
-            if file.is_a?(String)
-              write_uploader _mounter(column).serialization_column, file
-            else
-              super(file)
-            end
-          end
-          __send__(column)
-        end
-      end
+  def get_asset_img(key_word)
+    @img = AssetImg.find_by(token: self.send("#{key_word}_token") ) if self.send("#{key_word}_token")
+    unless @img
+      @img = AssetImg.new
+      self.send("#{key_word}_token=", @img.generate_token)
     end
-
-    def has_one_image(options = {})
-      name = options.delete(:name) || :asset_img
-      image_type = options.delete(:image_type) || name != :asset_img && "#{self.name.downcase}_#{name}"
-      options = { class_name: 'AssetImg', as: :resource }.merge(options)
-
-      if image_type
-        has_one name, -> { where(image_type: image_type) }
-      else
-        has_one name
-      end
-    end
-
-    def has_many_images(options = {})
-      name = options.delete(:name) || :images
-      image_type = options.delete(:image_type) || "#{self.table_name}_#{name}"
-      accepts_nested = options.delete(:accepts_nested)
-      options = { class_name: 'AssetImg', as: :resource }.merge(options)
-
-      has_many name, -> { where(image_type: image_type) }, options
-
-      if accepts_nested
-        accepts_nested_attributes_for name
-      end
-    end
+    @img
   end
 end

@@ -33,7 +33,7 @@ class ResourcesController < AdminController
 		load_object
 		params.permit!
 		@object.attributes = params[object_name.singularize.parameterize('_')]
-		if @object.changed_for_autosave?
+		if @object.changed_for_autosave?(@object)
 			#@changes = @object.all_changes
 			if @object.save
 			else
@@ -41,11 +41,11 @@ class ResourcesController < AdminController
 				@no_log = 1
 			end
 		end
-    respond_to do |format|
-      format.html { redirect_to :action => :show }
-      format.json { respond_with_bip(@object) }
-      format.js
-    end
+	    respond_to do |format|
+	      format.html { redirect_to :action => :show }
+	      format.json { respond_with_bip(@object) }
+	      format.js
+	    end
 	end
 	def create
 		params.permit!

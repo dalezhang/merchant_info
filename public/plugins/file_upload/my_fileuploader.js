@@ -16,6 +16,7 @@ $(function () {
 		],
         done: function (e, data) {
         	$this = $(this);
+        	console.log(data.result);
         	$this.siblings('img.image-preview').attr('src', data.result.url)
             $.each(data.result.files, function (index, file) {
                 $('<p/>').text(file.name).appendTo(document.body);
