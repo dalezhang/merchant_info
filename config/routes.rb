@@ -20,5 +20,10 @@ Rails.application.routes.draw do
     resources :unlock
     resources :registrations
   end
+  namespace :api do
+    resources :merchants do
+      post :upload_picture, on: :collection
+    end
+  end
 
 end

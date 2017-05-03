@@ -12,11 +12,12 @@ class User < ApplicationRecord
   field :encrypted_password, type: String
   field :salt, type: String
   field :last_signed_in, type: Time
+  field :token, type: String
 
   has_and_belongs_to_many :roles
   has_many :merchants
 
-  before_create :generate_password
+  before_create :generate_password, :generate_token
 
 
   def verify!(password)
@@ -36,11 +37,11 @@ class User < ApplicationRecord
         self.encrypted_password = cryt_func(self.salt, self.password)
       else
         raise '两次输入密码不一致！'
-
       end
     end
   end
-
-
+  def generate_token
+    self.token = UUID.new.generate unless self.token
+  end
 
 end

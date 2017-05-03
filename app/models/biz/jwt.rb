@@ -1,5 +1,6 @@
 module Biz
   module Jwt
+    extend self
     # h5 接口加签
     def hsh_encode(payload, ttl_in_minutes = 60 * 24 * 30)
       secrets_base = "$secretshello"

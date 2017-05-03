@@ -14,7 +14,7 @@ class Merchant < ApplicationRecord
   field :industry, type: String # 经营行业
 
   field :bank_info, type: Hash, default:{} # 银行信息
-  field :legal_person # 法人信息
+  field :person # 人员信息
   field :company # 公司信息
   field :request_and_response, type: Hash, default:{} # 发送和返回
   field :channel_data, type: Hash, default:{} # 渠道信息
@@ -25,35 +25,70 @@ class Merchant < ApplicationRecord
 
   STATUS_DATA = {0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功'}
 
-  def self.attr_arr
-    [
-		:bank_account, :lics, :chnl_id, :full_name, :name, :contact_tel,
-		:contact_name, :service_tel, :contact_email, :memo,
-		:province, :urbn, :address, :owner_name, :bank_name,
-		:bank_sub_code, :account_num
+  def self.attr_writeable
+    [    
+  		:full_name, :name, :appid, :mch_type, :industry, :memo,
+  		:province, :urbn, :address, 
+      :bank_info, :legal_person, :company, 
     ]
+  end
+  def self.attr_readable
+    [
+      :merchant_id, :id,
+      :full_name, :name, :appid, :mch_type, :industry, :memo,
+      :province, :urbn, :address, 
+      :bank_info, :legal_person, :company, 
+    ]
+  end
+  def inspect
+    {
+      id: id,
+      merchant_id: merchant_id,
+      status: STATUS_DATA[status],
+      full_name: full_name,
+      name: name,
+      memo: memo,
+      province: province,
+      urbn: urbn,
+      address: address,
+      appid: appid,
+      mch_type: mch_type,
+      industry: industry,
+      bank_info: bank_info.attributes,
+      legal_person: legal_person.inspect,
+      company: company.inspect
+    }
   end
 end
 
 class LegalPerson < ApplicationRecord
   include Imagable
   embedded_in :merchant
+  attr_readonly :identity_card_front_token, :identity_card_back_token
+  
   field :identity_card_front_token, type: String    # 身份证正面
   field :identity_card_back_token, type: String    # 身份证反面  
   field :tel, type: String               # 联系人电话
   field :name, type: String              # 联系人名称
   field :email, type: String             # 联系人邮箱
   field :identity_card_num, type: String # 身份证号
-  before_save :save_relate_asset_img
-  def save_relate_asset_img
-    @license.save
-    @shop_picture.save
+  def inspect
+    {
+      identity_card_front_token: identity_card_front_token,
+      identity_card_back_token: identity_card_back_token,
+      tel: tel,
+      name: name,
+      email: email,
+      identity_card_num: identity_card_num,
+    }
   end
 end
 
 class Company < ApplicationRecord
   include Imagable
   embedded_in :merchant
+  attr_readonly :shop_picture_token, :license_token
+
   field :shop_picture_token, type: String  # 店铺照
   field :license_token, type: String   # 营业执照
   field :contact_tel, type: String  # 联系人电话
@@ -61,16 +96,16 @@ class Company < ApplicationRecord
   field :service_tel, type: String  # 客服电话
   field :contact_email, type: String# 联系人邮箱
   field :license_code, type: String # 营业执照编码
-  before_save :save_relate_asset_img
-  def license
-    get_asset_img('license')
-  end
-  def shop_picture
-    get_asset_img('shop_picture')
-  end
-  def save_relate_asset_img
-    @license.save if @license
-    @shop_picture.save if @shop_picture
+  def inspect
+    {
+      shop_picture_token: shop_picture_token,
+      license_token: license_token,
+      contact_tel: contact_tel,
+      contact_name: contact_name,
+      service_tel: service_tel,
+      contact_email: contact_email,
+      license_code: license_code,
+    }
   end
 end
 
