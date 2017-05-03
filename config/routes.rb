@@ -9,7 +9,6 @@ Rails.application.routes.draw do
 
   resources :merchants do
     post :upload_picture, on: :member
-    
   end
   resources :inspect_merchants do
   end
@@ -20,6 +19,7 @@ Rails.application.routes.draw do
     resources :unlock
     resources :registrations
   end
+  resources :upload_img, only: [:index]
   namespace :api do
     resources :merchants do
       post :upload_picture, on: :collection

@@ -1,0 +1,5 @@
+<form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
+  <%= text_field_tag 'token', @uptoken, type: 'hidden'%>
+  <input name="file" type="file" />
+  <%= submit_tag '提交' %>
+</form>

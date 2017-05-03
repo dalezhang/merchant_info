@@ -26,7 +26,7 @@ class Merchant < ApplicationRecord
   STATUS_DATA = {0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功'}
 
   def self.attr_writeable
-    [    
+    [
   		:full_name, :name, :appid, :mch_type, :industry, :memo,
   		:province, :urbn, :address, 
       :bank_info, :legal_person, :company, 
@@ -36,8 +36,8 @@ class Merchant < ApplicationRecord
     [
       :merchant_id, :id,
       :full_name, :name, :appid, :mch_type, :industry, :memo,
-      :province, :urbn, :address, 
-      :bank_info, :legal_person, :company, 
+      :province, :urbn, :address,
+      :bank_info, :legal_person, :company,
     ]
   end
   def inspect
@@ -64,8 +64,6 @@ end
 class LegalPerson < ApplicationRecord
   include Imagable
   embedded_in :merchant
-  attr_readonly :identity_card_front_token, :identity_card_back_token
-  
   field :identity_card_front_token, type: String    # 身份证正面
   field :identity_card_back_token, type: String    # 身份证反面  
   field :tel, type: String               # 联系人电话
@@ -74,8 +72,8 @@ class LegalPerson < ApplicationRecord
   field :identity_card_num, type: String # 身份证号
   def inspect
     {
-      identity_card_front_token: identity_card_front_token,
-      identity_card_back_token: identity_card_back_token,
+      identity_card_front_key: identity_card_front_key,
+      identity_card_back_key: identity_card_back_key,
       tel: tel,
       name: name,
       email: email,
@@ -87,10 +85,9 @@ end
 class Company < ApplicationRecord
   include Imagable
   embedded_in :merchant
-  attr_readonly :shop_picture_token, :license_token
 
-  field :shop_picture_token, type: String  # 店铺照
-  field :license_token, type: String   # 营业执照
+  field :shop_picture_key, type: String  # 店铺照
+  field :license_key, type: String   # 营业执照
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话
@@ -98,8 +95,8 @@ class Company < ApplicationRecord
   field :license_code, type: String # 营业执照编码
   def inspect
     {
-      shop_picture_token: shop_picture_token,
-      license_token: license_token,
+      shop_picture_key: shop_picture_key,
+      license_key: license_key,
       contact_tel: contact_tel,
       contact_name: contact_name,
       service_tel: service_tel,

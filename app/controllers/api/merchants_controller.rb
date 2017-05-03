@@ -10,7 +10,7 @@ class Api::MerchantsController < ActionController::API
 		data.deep_symbolized_keys!
 		@user = User.find_by(token: data[:token])
 		unless @user
-			render json: {error: 'invalid token'}
+      render json: {error: 'invalid token'}.to_json
 			return
 		end
 		case data[:method]
@@ -20,8 +20,27 @@ class Api::MerchantsController < ActionController::API
 			keys.each do |key|
 				@merchant.send("#{key}=", data[1][key])
 			end
-		when 'update'
-			@merchant = Merchant.find
+    when 'merchant.update'
+			@merchant = Merchant.find(data[:id])
+      unless @merchant
+        render json: {error: 'invalid id'}.to_json
+         return
+      end
+			keys = data.keys & Merchant.attr_writeable
+			keys.each do |key|
+				@merchant.send("#{key}=", data[1][key])
+			end
+    when 'merchant.query'
+			@merchant = Merchant.find(data[:id])
+      unless @merchant
+        render json: {error: 'invalid id'}.to_json
+      else
+        render json: @merchant.inspect.to_json
+      end
+      return
+    else
+      render json: {error: 'invalid method, should be one of ["merchant.create","merchant.update","merchant.query"]'}.to_json
+      return
 		end
 		if @merchant.save
 			render json: @merchant.inspect.to_json
