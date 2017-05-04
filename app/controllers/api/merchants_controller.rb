@@ -2,12 +2,11 @@ class Api::MerchantsController < ActionController::API
 	def create
 		jwt = params[:jwt]
 		arr = Biz::Jwt.h5_verify? jwt
-		unless data[0]
+		unless arr[0]
 			render json: {error: 'invalid jwt'}
 			return
 		end
-		data = arr[1]
-		data.deep_symbolized_keys!
+		data = arr[1].deep_symbolize_keys
 		@user = User.find_by(token: data[:token])
 		unless @user
       render json: {error: 'invalid token'}.to_json
@@ -28,7 +27,7 @@ class Api::MerchantsController < ActionController::API
       end
 			keys = data.keys & Merchant.attr_writeable
 			keys.each do |key|
-				@merchant.send("#{key}=", data[1][key])
+				@merchant.send("#{key}=", data[key])
 			end
     when 'merchant.query'
 			@merchant = Merchant.find(data[:id])

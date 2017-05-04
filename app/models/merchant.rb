@@ -9,27 +9,32 @@ class Merchant < ApplicationRecord
   field :province, type: String # 省份
   field :urbn, type: String # 城市
   field :address, type: String # 详细地址
-  field :appid, type: Integer # 公众号
+  field :appid, type: String # 公众号
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
+  field :wechat_channel_type, type: String # 微信渠道类目
+  field :alipay_channel_type, type: String # 支付宝渠道类目
 
   field :bank_info, type: Hash, default:{} # 银行信息
-  field :person # 人员信息
+  field :legal_person # 法人信息
   field :company # 公司信息
   field :request_and_response, type: Hash, default:{} # 发送和返回
   field :channel_data, type: Hash, default:{} # 渠道信息
   belongs_to :user
   embeds_one :legal_person, autobuild: true
   embeds_one :company, autobuild: true
-  accepts_nested_attributes_for :company, :legal_person
+  embeds_one :bank_info, autobuild: true
+  accepts_nested_attributes_for :company, :legal_person, :bank_info
+  embeds_one :request_and_response
 
   STATUS_DATA = {0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功'}
 
   def self.attr_writeable
     [
   		:full_name, :name, :appid, :mch_type, :industry, :memo,
-  		:province, :urbn, :address, 
-      :bank_info, :legal_person, :company, 
+      :wechat_channel_type, :alipay_channel_type,
+  		:province, :urbn, :address,
+      :bank_info, :legal_person, :company,
     ]
   end
   def self.attr_readable
@@ -42,7 +47,7 @@ class Merchant < ApplicationRecord
   end
   def inspect
     {
-      id: id,
+      id: id.to_s,
       merchant_id: merchant_id,
       status: STATUS_DATA[status],
       full_name: full_name,
@@ -54,9 +59,10 @@ class Merchant < ApplicationRecord
       appid: appid,
       mch_type: mch_type,
       industry: industry,
-      bank_info: bank_info.attributes,
+      bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
-      company: company.inspect
+      company: company.inspect,
+      request_and_response: request_and_response.inspect,
     }
   end
 end
@@ -64,8 +70,8 @@ end
 class LegalPerson < ApplicationRecord
   include Imagable
   embedded_in :merchant
-  field :identity_card_front_token, type: String    # 身份证正面
-  field :identity_card_back_token, type: String    # 身份证反面  
+  field :identity_card_front_key, type: String    # 身份证正面
+  field :identity_card_back_key, type: String    # 身份证反面  
   field :tel, type: String               # 联系人电话
   field :name, type: String              # 联系人名称
   field :email, type: String             # 联系人邮箱
@@ -106,3 +112,43 @@ class Company < ApplicationRecord
   end
 end
 
+class BankInfo < ApplicationRecord
+  embedded_in :merchant
+  field :owner_name, type: String # 账户名称（账号名）
+  # field :bank_name, type: String # 开户行检称（中文名）
+  field :bank_sub_code, type: String # 支付联行号
+  field :account_num, type: String # 账号
+  field :account_type, type: String # 账户类型(个人，企业)
+  field :owner_idcard, type: String # 持卡人身份证号码
+  field :province, type: String # 开户省
+  field :urbn, type: String # 开户市
+  field :zone, type: String # 开户区
+  field :bank_full_name, type: String # 银行全称
+
+  def inspect
+    {
+      owner_name: owner_name, # 账户名称（账号名）
+      # bank_name: bank_name, # 开户行检称（中文名）
+      bank_sub_code: bank_sub_code, # 支付联行号
+      account_num: account_num, # 账号
+      account_type: account_type, # 账户类型(个人，企业)
+      owner_idcard: owner_idcard, # 持卡人身份证号码
+      province: province, # 开户省
+      urbn: urbn, # 开户市
+      zone: zone, # 开户区
+      bank_full_name: bank_full_name, # 银行全称
+    }
+  end
+end
+
+class RequestAndResponse < ApplicationRecord
+  embedded_in :merchant
+  field :zx_request, type: Hash # 中信进件内容
+  field :zx_reponse, type: Hash # 中信进件内容
+  def inspect
+    {
+      zx_request: zx_request,
+      zx_reponse: zx_reponse,
+    }
+  end
+end

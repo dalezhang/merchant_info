@@ -1,0 +1,10 @@
+- unless @object.new_record?
+  /.row
+    /= file_field_tag 'file', data: {url: 'upload_picture', attrname: 'company/license'}, class: 'fileupload', :multiple=>true
+    /= image_tag @object.company.license.avatar.url || '', class: 'image-preview'
+  <form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
+    = text_field_tag 'key', @picture_name, type: 'hidden'
+    = text_field_tag 'token', @uptoken, type: 'hidden'
+    = file_field_tag 'file'
+    = submit_tag '提交'
+  </form>
