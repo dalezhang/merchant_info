@@ -154,5 +154,20 @@ module Biz
       end
       ret
     end
+    def contr_info_list(xml, mabs)
+      xml.Contr_Info_List {
+        @zx_mct.zx_contr_info_lists.each do |cl|
+          xml.Contrinfo {
+            xml.Pay_Typ_Encd cl.pay_typ_encd
+            xml.Pay_Typ_Fee_Rate cl.pay_typ_fee_rate
+            xml.Start_Dt cl.start_dt
+          }
+          mabs << cl.pay_typ_encd
+          mabs << cl.start_dt
+          mabs << cl.pay_typ_fee_rate
+        end
+      }
+      "NO_VALUE"
+    end
   end
 end

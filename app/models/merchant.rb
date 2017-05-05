@@ -12,8 +12,7 @@ class Merchant < ApplicationRecord
   field :appid, type: String # 公众号
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
-  field :wechat_channel_type, type: String # 微信渠道类目
-  field :alipay_channel_type, type: String # 支付宝渠道类目
+  field :zx_channel_type, type: String # 中信经营类目，见附件《经营类目》中的经营类目明细编码
 
   field :bank_info, type: Hash, default:{} # 银行信息
   field :legal_person # 法人信息
