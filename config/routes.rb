@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     post :upload_picture, on: :member
   end
   resources :inspect_merchants do
+    post :change_status, on: :member
   end
   namespace :user do
   	resources :sessions

@@ -29,6 +29,7 @@ class Ability
   end
   def grant_permissions_to_admin(user)
     grant_general_permission(user)
+    can :manage, :inspect_merchants
   end
 
   def grant_permissions_to_super_admin(user)

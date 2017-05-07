@@ -44,8 +44,8 @@ class Merchant < ApplicationRecord
       :bank_info, :legal_person, :company,
     ]
   end
-  def inspect
-    {
+  def inspect(all = false)
+    hash = {
       id: id.to_s,
       merchant_id: merchant_id,
       status: STATUS_DATA[status],
@@ -61,8 +61,11 @@ class Merchant < ApplicationRecord
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
       company: company.inspect,
-      request_and_response: request_and_response.inspect,
     }
+    if all
+      hash[:request_and_response] = request_and_response.inspect
+    end
+    return hash
   end
 end
 
