@@ -24,6 +24,11 @@
         <% end %>
       </li>
       <% end %>
+      <li class="<%= controller_name == 'upload_img' ? 'active' : '' %>">
+        <%= link_to upload_img_index_path, target: '_blank' do %>
+          <i class="fa fa-link"></i> <span>上传图片</span>
+        <% end %>
+      </li>
       <%#<li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>%>
       <%#<li class="treeview">%>
         <%#<a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>%>

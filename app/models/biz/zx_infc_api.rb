@@ -1,6 +1,6 @@
 require 'zip'
 module Biz
-  class ZxIntfcApi < IntfcBase
+  class ZxInfcApi < IntfcBase
 
     attr_accessor :merchant, :zx_mct_info
 
@@ -9,10 +9,13 @@ module Biz
       @messages = []
       if mch_id.class == Merchant
         @merchant = mch_id
-      elsif merchant = Merchant.find(mch_id)
+      elsif merchant = Merchant.find_by(merchant_id: mch_id)
         @merchant = merchant
       else
-        return log_error(nil, 'Merchant require')
+
+        log_error(nil, 'Merchant require')
+        raise 'Merchant require'
+
       end
       @zx_mct_info = Biz::ZxMctInfo.new(@merchant)
 
@@ -23,7 +26,7 @@ module Biz
       xml = prepare_request(appl_typ)
       send_zx_intfc(xml) unless @has_error
     end
-    def send_query(zx_mct)
+    def send_query
       xml = prepare_query
       send_zx_query(xml)
     end
@@ -104,15 +107,15 @@ module Biz
 
     def prepare_query
       mab_query = []
-      mab_query << @zx_mct_info.chnl_id
-      mab_query << @zx_mct_info.chnl_mercht_id
-      mab_query << @zx_mct_info.pay_chnl_encd
+      mab_query << @zx_mct_info.inspect[:chnl_id]
+      mab_query << @zx_mct_info.inspect[:chnl_mercht_id]
+      mab_query << @zx_mct_info.inspect[:pay_chnl_encd]
       mab_query << '0100SDC0'
       builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
         xml.ROOT {
-          xml.Chnl_Id @zx_mct_info.chnl_id
-          xml.Chnl_Mercht_Id @zx_mct_info.chnl_mercht_id
-          xml.Pay_Chnl_Encd @zx_mct_info.pay_chnl_encd
+          xml.Chnl_Id @zx_mct_info.inspect[:chnl_id]
+          xml.Chnl_Mercht_Id @zx_mct_info.inspect[:chnl_mercht_id]
+          xml.Pay_Chnl_Encd @zx_mct_info.inspect[:pay_chnl_encd]
           xml.trancode '0100SDC0'
           xml.Msg_Sign sign(mab_query)
         }
@@ -126,15 +129,15 @@ module Biz
 
       xml = Nokogiri::XML(ret)
       if xml.xpath("//Chnl_Id").text == '10000022'
-        @merchant.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
-        @merchant.status = 1 if @merchant.status < 1
-        if @merchant.changed?
-          if @sent_post
-            @sent_post.result_message = @merchant.changes.to_s
-            @sent_post.save
-          end
-          @merchant.save
-        end
+        # @merchant.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
+        # @merchant.status = 1 if @merchant.status < 1
+        # if @merchant.changed?
+        #   if @sent_post
+        #     @sent_post.result_message = @merchant.changes.to_s
+        #     @sent_post.save
+        #   end
+        #   @merchant.save
+        # end
       else
         log_error(nil, "返回记录没有对应资料")
       end

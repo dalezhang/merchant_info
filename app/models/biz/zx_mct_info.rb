@@ -5,6 +5,7 @@ class Biz::ZxMctInfo
     	:bank_sub_code, :account_num,
     :pay_chnl_encd
   def initialize(merchant)
+    raise "merchant require" unless merchant
     @merchant = merchant
     @chnl_id = '10000022' # 商户归属渠道编号 ?
     @chnl_mercht_id = @merchant.merchant_id # 商户编号

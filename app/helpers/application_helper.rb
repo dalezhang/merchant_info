@@ -13,4 +13,13 @@ module ApplicationHelper
 		)
 		simple_form_for(record, options, &block)
 	end
+
+  def qiniu_or_noimage(bucket_url,key)
+    if key
+      return "#{current_user.bucket_url}/#{@object.company[:license_key]}"
+    else
+      return 'no-img.png'
+    end
+  end
+
 end
