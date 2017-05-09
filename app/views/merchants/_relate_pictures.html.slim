@@ -1,10 +1,18 @@
-- unless @object.new_record?
-  /.row
-    /= file_field_tag 'file', data: {url: 'upload_picture', attrname: 'company/license'}, class: 'fileupload', :multiple=>true
-    /= image_tag @object.company.license.avatar.url || '', class: 'image-preview'
-  <form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
-    = text_field_tag 'key', @picture_name, type: 'hidden'
-    = text_field_tag 'token', @uptoken, type: 'hidden'
-    = file_field_tag 'file'
-    = submit_tag '提交'
-  </form>
+= horizon_form_for object do |f|
+  .row
+    .col-xs-3
+      h4 营业执照token
+      = text_field_tag 'merchant[company][license_key]', @object.company.license_key
+      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.license_key), class: 'image'
+    .col-xs-3
+      h4 店铺照token
+      = text_field_tag 'merchant[company][shop_picture_key]', @object.company.shop_picture_key
+      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.shop_picture_key), class: 'image'
+    .col-xs-3
+      h4 法人身份证正面token
+      = text_field_tag 'merchant[legal_person][identity_card_front_key]', @object.legal_person.identity_card_front_key
+      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
+    .col-xs-3
+      h4 法人身份证反面token
+      = text_field_tag 'merchant[legal_person][identity_card_back_key]', @object.legal_person.identity_card_back_key
+      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
