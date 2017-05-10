@@ -15,7 +15,7 @@ module ApplicationHelper
 	end
 
   def qiniu_or_noimage(bucket_url,key)
-    if key
+    if key.present?
       return "#{current_user.bucket_url}/#{@object.company[:license_key]}"
     else
       return 'no-img.png'

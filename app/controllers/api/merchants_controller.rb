@@ -8,7 +8,7 @@ class Api::MerchantsController < ActionController::API
 		end
 		data = arr[1].deep_symbolize_keys
 		@user = User.find_by(token: data[:token])
-		unless @user
+    unless @user.present?
       render json: {error: 'invalid token'}.to_json
 			return
 		end
@@ -20,8 +20,8 @@ class Api::MerchantsController < ActionController::API
 				@merchant.send("#{key}=", data[1][key])
 			end
     when 'merchant.update'
-			@merchant = Merchant.find(data[:id])
-      unless @merchant
+      @merchant = @user.merchant.find_by(out_merchant_id: data[:out_merchant_id])
+      unless @merchant.present?
         render json: {error: 'invalid id'}.to_json
          return
       end
@@ -30,8 +30,8 @@ class Api::MerchantsController < ActionController::API
 				@merchant.send("#{key}=", data[key])
 			end
     when 'merchant.query'
-			@merchant = Merchant.find(data[:id])
-      unless @merchant
+      @merchant = @user.merchant.find_by(out_merchant_id: data[:out_merchant_id])
+      unless @merchant.present?
         render json: {error: 'invalid id'}.to_json
       else
         render json: @merchant.inspect.to_json
@@ -46,8 +46,5 @@ class Api::MerchantsController < ActionController::API
 		else
 			render json: {error: @merchant.errors.messages}.to_json
 		end
-	end
-	def upload_picture
-		render json: {url: @img.avatar.url, token: @img.token}.to_json
 	end
 end

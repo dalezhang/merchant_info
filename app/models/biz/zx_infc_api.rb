@@ -56,7 +56,7 @@ module Biz
 
       lics = @zx_mct_info.lics
       return log_error(nil, "请先上传营业执照") unless lics
-      lics_file = get_lics_file(lics) # 获取营业执照
+      return log_error(nil, "请先上传营业执照") unless get_lics_file(lics) # 获取营业执照
 
       trancode = '0100SDC1'
       # appl_typ = 0 #新增：0；变更：1；停用：2
@@ -86,14 +86,17 @@ module Biz
     end
 
     def get_lics_file(lics_key) # 获取营业执照
+      return false unless lices_key.present?
+      file_url = "#{@merchant.user.bucket_url}/#{lics_key}"
+      web_contents  = open(file_url) {|f| f.read }
       stringio = Zip::OutputStream.write_buffer do |zio|
-        zio.put_next_entry(lics.attach_asset_identifier)
-        zio.write File.read("#{Rails.root}/public#{URI.decode(lics.attach_asset.url)}")
+        zio.put_next_entry(lics_key)
+        zio.write web_contents
       end
       lics_file = stringio.string
-      lics_md5 = Digest::MD5.hexdigest(lics_file)
-      lics_file = Base64.encode64(lics_file)
-      return lics_file
+      @lics_md5 = Digest::MD5.hexdigest(lics_file)
+      @lics_file = Base64.encode64(lics_file)
+      return true
     end
 
     def send_zx_intfc(data)

@@ -24,6 +24,13 @@
         <% end %>
       </li>
       <% end %>
+      <% if can?(:index, User) %>
+      <li class="<%= controller_name == 'uses' ? 'active' : '' %>">
+        <%= link_to users_path do %>
+          <i class="fa fa-link"></i> <span>管理用户</span>
+        <% end %>
+      </li>
+      <% end %>
       <li class="<%= controller_name == 'upload_img' ? 'active' : '' %>">
         <%= link_to upload_img_index_path, target: '_blank' do %>
           <i class="fa fa-link"></i> <span>上传图片</span>

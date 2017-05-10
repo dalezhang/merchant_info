@@ -30,6 +30,7 @@ class Ability
   def grant_permissions_to_admin(user)
     grant_general_permission(user)
     can :manage, :inspect_merchants
+    can :manage, User
   end
 
   def grant_permissions_to_super_admin(user)
@@ -37,8 +38,9 @@ class Ability
 
   def grant_general_permission(user)
     can :index, Merchant
-    can :manage, Merchant do |merchant|
-      merchant.user_id == user.id
-    end
+    can :manage, Merchant 
+    # do |merchant|
+    #   merchant.user_id == user.id.to_s
+    # end
   end
 end

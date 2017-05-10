@@ -1,5 +1,11 @@
-<form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
-  <%= text_field_tag 'token', @uptoken, type: 'hidden'%>
-  <input name="file" type="file" />
-  <%= submit_tag '提交' %>
-</form>
+<h4>当前用户图片空间: <%= current_user.bucket_name %></h4>
+<% if current_user.bucket_name.present? %>
+	<form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
+	  <%= text_field_tag 'token', @uptoken, type: 'hidden'%>
+	  <input name="file" type="file" />
+	  <%= submit_tag '提交' %>
+	</form>
+<% else %>
+	<br>
+	<h2>请先找管理员开通图片上传空间</h2>
+<% end %>	

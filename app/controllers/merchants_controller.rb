@@ -1,5 +1,5 @@
 class MerchantsController < ResourcesController
-
+  authorize_resource
 	def create
 		params.permit!
 		@object = current_user.merchants.new(params[object_name.singularize.parameterize('_')])
@@ -30,5 +30,12 @@ class MerchantsController < ResourcesController
     end
     url = target.avatar.url rescue nil
     render json: {error: @error , url: url}.to_json
+  end
+  def load_collection
+    @collection = current_user.merchants
+  end
+  def load_object
+    load_collection
+    @object = @collection.find(params[:id])
   end
 end

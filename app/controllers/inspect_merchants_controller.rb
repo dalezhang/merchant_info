@@ -1,4 +1,5 @@
 class InspectMerchantsController < ResourcesController
+  authorize_resource class: 'Merchant'
 
   def change_status
     load_object
@@ -46,9 +47,9 @@ class InspectMerchantsController < ResourcesController
       flash[:error] = "未知的请求类型"
     end
     redirect_to action: :show, id: @object.id.to_s
-  rescue Exception => e
-    flash[:error] = e.message
-    redirect_to action: :show, id: @object.id.to_s
+  # rescue Exception => e
+  #   flash[:error] = e.message
+  #   redirect_to action: :show, id: @object.id.to_s
   end
 
   def object_name

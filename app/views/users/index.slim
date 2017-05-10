@@ -1,0 +1,14 @@
+table.table
+  tr
+    th 登录名
+    th 图片空间
+    th 角色
+    th 操作
+  - @collection.each do |obj|
+    tr
+      td= obj.email
+      td= obj.bucket_name
+      td= obj.roles.pluck(:name).join('--')
+      td
+        = link_to '查看', obj, class: 'btn btn-sm btn-success'
+        = link_to '编辑', edit_user_path(obj.id.to_s), class: 'btn btn-sm btn-default'

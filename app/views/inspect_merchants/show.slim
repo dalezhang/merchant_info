@@ -28,7 +28,7 @@
 .row
   .col-xs-12.text-center
     h4 中信微信
-    = link_to '进件', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '进件', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-warning'
+    = link_to '进件', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-warning'
     | &nbsp
     = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-primary'
     | &nbsp
@@ -38,7 +38,7 @@
 .row
   .col-xs-12.text-center
     h4 中信支付宝
-    = link_to '进件', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '进件', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-warning'
+    = link_to '进件', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-warning'
     | &nbsp
     = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-primary'
     | &nbsp

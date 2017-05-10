@@ -1,0 +1,16 @@
+.row
+  .col-md-6
+    .form-group
+      = label 'user', '登录名'
+      = text_field_tag '', @object.email, readonly: true, class: "form-control"
+    .form-group
+      = label :roles, '角色'
+      = text_field_tag '', @object.roles.pluck(:name).join('--'), readonly: true, class: "form-control"
+    .form-group
+      = label :bucket_name, '图片上传空间名'
+      = text_field_tag '', @object.bucket_name, readonly: true, class: "form-control"
+    .form-group
+      = label :bucket_url, '图片上传空间链接'
+      = text_field_tag '', @object.bucket_url, readonly: true, class: "form-control"
+    .text-right
+      = link_to '编辑', edit_user_path(@object.id.to_s), class: 'btn btn-lg btn-success'

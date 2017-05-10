@@ -2,6 +2,7 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
+  field :out_merchant_id, type: String  # 代理商自定义的merchant唯一标识
   field :status, type: Integer, default: 0 # 状态
   field :full_name, type: String # 商户全名称
   field :name, type: String # 商户简称
@@ -30,6 +31,7 @@ class Merchant < ApplicationRecord
 
   def self.attr_writeable
     [
+      :out_merchant_id,
   		:full_name, :name, :appid, :mch_type, :industry, :memo,
       :wechat_channel_type, :alipay_channel_type,
   		:province, :urbn, :address,
@@ -38,7 +40,7 @@ class Merchant < ApplicationRecord
   end
   def self.attr_readable
     [
-      :merchant_id, :id,
+      :merchant_id, :id, :out_merchant_id
       :full_name, :name, :appid, :mch_type, :industry, :memo,
       :province, :urbn, :address,
       :bank_info, :legal_person, :company,
@@ -47,7 +49,7 @@ class Merchant < ApplicationRecord
   def inspect(all = false)
     hash = {
       id: id.to_s,
-      merchant_id: merchant_id,
+      out_merchant_id: out_merchant_id,
       status: STATUS_DATA[status],
       full_name: full_name,
       name: name,
@@ -63,6 +65,7 @@ class Merchant < ApplicationRecord
       company: company.inspect,
     }
     if all
+      hash[:merchant_id] = merchant_id
       hash[:request_and_response] = request_and_response.inspect
     end
     return hash

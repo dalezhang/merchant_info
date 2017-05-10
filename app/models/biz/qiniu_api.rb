@@ -3,13 +3,13 @@ module Biz
   module QiniuApi
     extend self
 
-    def generate_token
+    def generate_token(bucket = "merchant-info")
 
       # 构建鉴权对象
       Qiniu.establish_connection! access_key: Rails.application.secrets.qiniuyun['qiniu_access_key'],
         secret_key: Rails.application.secrets.qiniuyun['qiniu_secret_key']
       # 要上传的空间
-      bucket = "merchant-info"
+      
       # 上传到七牛后保存的文件名
       key = nil
       # 构建上传策略，上传策略的更多参数请参照 http://developer.qiniu.com/article/developer/security/put-policy.html

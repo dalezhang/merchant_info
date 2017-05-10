@@ -27,8 +27,8 @@ trancode,msg_typ,regn_en_nm,regn_cn_nm,sort_num,regn_data_typ,regn_nt_null,is_si
 0100SDC1,0,Comm_Fee_Bank_Nm,手续费银行名称,260,VARCHAR(200),0,0,1,
 0100SDC1,0,Ibank_Num,网点号/联行号,270,VARCHAR(12),0,0,1,
 0100SDC1,0,Comm_Fee_Acct_Num,手续费账号,280,VARCHAR(50),0,0,1,
-0100SDC1,0,Biz_Lics,营业证照压缩文件,290,FILE,0,0,1,lics_file
-0100SDC1,0,Dtl_Memo,文件摘要（MD5）,300,VARCHAR(100),0,1,1,lics_md5
+0100SDC1,0,Biz_Lics,营业证照压缩文件,290,FILE,0,0,1,@lics_file
+0100SDC1,0,Dtl_Memo,文件摘要（MD5）,300,VARCHAR(100),0,1,1,@lics_md5
 0100SDC1,0,Contr_Info_List,签约信息列表,310,LIST,0,1,1,"contr_info_list(xml, mabs)"
 0100SDC1,0,Appl_Typ,申请类型(0=新增；1=修改；2=停用),320,CHAR(1),1,1,1,appl_typ
 0100SDC1,0,trancode,交易代码（固定：0100SDC1）,330,CHAR(8),1,1,1,trancode

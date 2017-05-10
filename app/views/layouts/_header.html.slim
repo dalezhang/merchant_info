@@ -51,4 +51,4 @@ header.main-header
                 .pull-left
                   = link_to "Profile", edit_user_registration_path(session[:user_id]),  class: "btn btn-default btn-flat"
                 .pull-right
-                  = link_to "Sign out", "user/sessions/#{session[:user_id]}", :method => :delete, class: "btn btn-default btn-flat"
+                  = link_to "Sign out", "/user/sessions/#{session[:user_id]}", :method => :delete, class: "btn btn-default btn-flat"
