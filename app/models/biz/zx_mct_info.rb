@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 class Biz::ZxMctInfo
-	attr_accessor :bank_account, :lics, :chnl_id, :full_name, :name, :contact_tel, 
-		:contact_name, :service_tel, :contact_email, :memo, 
-		:province, :urbn, :address, :owner_name, :bank_name,
-    	:bank_sub_code, :account_num,
-    :pay_chnl_encd
+  attr_accessor :bank_account, :lics, :chnl_id, :full_name, :name, :contact_tel,
+                :contact_name, :service_tel, :contact_email, :memo,
+                :province, :urbn, :address, :owner_name, :bank_name,
+                :bank_sub_code, :account_num,
+                :pay_chnl_encd
   def initialize(merchant)
-    raise "merchant require" unless merchant.class == Merchant
+    raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
     @chnl_id = '10000022' # 商户归属渠道编号 ?
     @chnl_mercht_id = nil # 商户编号
     @pay_chnl_encd = nil # 支付宝：0001；微信支付：0002。注：商户开通多种支付渠道需分别提交进件申请
     @mercht_belg_chnl_id = '10000022' # 一般为渠道编号，多级渠道情况下为商户直属上级渠道编号
-    @mercht_full_nm = @merchant.full_name #商户全名称
+    @mercht_full_nm = @merchant.full_name # 商户全名称
     @mercht_sht_nm = @merchant.name # 商户简称
     @cust_serv_tel = @merchant.company.service_tel # 客服电话
     @contcr_nm = @merchant.legal_person.name # 联系人名称
@@ -26,7 +28,7 @@ class Biz::ZxMctInfo
     @acct_nm = @merchant.bank_info.owner_name # 开户人姓名/公司名
     @opn_bnk = @merchant.bank_info.bank_full_name # 开户行（中文名）
     @is_nt_citic = 0 # 是否中信银行,是：0，否：1
-    @acct_typ =  zx_account_type(@merchant.bank_info.account_type)# 账户类型:1--中信银行对私账户，2--中信银行对公账户 3--中信银行内部账户，4--他行（非中信银行账户）
+    @acct_typ =  zx_account_type(@merchant.bank_info.account_type) # 账户类型:1--中信银行对私账户，2--中信银行对公账户 3--中信银行内部账户，4--他行（非中信银行账户）
     @pay_ibank_num = @merchant.bank_info.bank_sub_code # 支付联行号
     @acct_num = @merchant.bank_info.account_num # 账号
     @is_nt_two_line = 0 # 是否支持收支两条线,否：0，是：1
@@ -48,20 +50,20 @@ class Biz::ZxMctInfo
         chnl_merchant_id: @merchant.channel_data['zx_wechat_chnl_mercht_id']
       },
       wechat_query: {
-        "Chnl_Id": "10000022",
+        "Chnl_Id": '10000022',
         "Chnl_Mercht_Id": null,
         "Pay_Chnl_Encd": null,
-        "trancode": "0100SDC0"
+        "trancode": '0100SDC0'
       },
       alipay: {
         pay_chnl_encd: '0001',
         chnl_merchant_id: @merchant.channel_data['zx_alipay_chnl_mercht_id']
       }
 
-    }.each do |key,value|
+    }.each do |key, value|
       @pay_chnl_encd = value[:pay_chnl_encd]
       @chnl_mercht_id = value[:chnl_merchant_id]
-      zx_request[key] = self.inspect
+      zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
     @merchant.save
@@ -93,12 +95,13 @@ class Biz::ZxMctInfo
       is_nt_two_line: @is_nt_two_line
     }
   end
+
   def query_data
     {
-      "Chnl_Id": "10000022",
+      "Chnl_Id": '10000022',
       "Chnl_Mercht_Id": null,
       "Pay_Chnl_Encd": null,
-      "trancode": "0100SDC0"
+      "trancode": '0100SDC0'
     }
   end
 end

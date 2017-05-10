@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class User::SessionsController < ApplicationController
-# before_action :configure_sign_in_params, only: [:create]
+  # before_action :configure_sign_in_params, only: [:create]
   include Authentication
   layout 'login'
   # GET /resource/sign_in
@@ -23,10 +25,10 @@ class User::SessionsController < ApplicationController
   end
 
   # DELETE /resource/sign_out
-   def destroy
-     session[:user_id] = nil
-     redirect_to root_path
-   end
+  def destroy
+    session[:user_id] = nil
+    redirect_to root_path
+  end
 
   # protected
 
@@ -37,6 +39,7 @@ class User::SessionsController < ApplicationController
   def self.resource_name
     'user'
   end
+
   def resource_name
     'user'
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ResourcesController
   authorize_resource
   def update
@@ -7,11 +9,10 @@ class UsersController < ResourcesController
     role = Role.find_by(name: params[:user][:roles])
     @object.roles = [role]
     if @object.save
-      flash[:success] = "修改成功"
+      flash[:success] = '修改成功'
     else
       flash[:error] = "修改失败: #{@object.errors.messages.join('\n')}"
     end
     redirect_to @object
   end
-
 end

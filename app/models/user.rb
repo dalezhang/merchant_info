@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include Mongoid::Document
   include Mongoid::Timestamps::Created
@@ -21,9 +23,8 @@ class User < ApplicationRecord
 
   before_create :generate_password, :generate_token
 
-
   def verify!(password)
-    cryt_func(self.salt, password).eql?(self.encrypted_password)
+    cryt_func(salt, password).eql?(encrypted_password)
   end
 
   # 加密密码的算法
@@ -35,15 +36,15 @@ class User < ApplicationRecord
   def generate_password
     if @password && @password_confirmation
       if @password == @password_confirmation
-        self.salt = ('a'..'z').to_a.shuffle[0..19].join # 随机salt
-        self.encrypted_password = cryt_func(self.salt, self.password)
+        self.salt = ('a'..'z').to_a.sample(20).join # 随机salt
+        self.encrypted_password = cryt_func(salt, password)
       else
         raise '两次输入密码不一致！'
       end
     end
   end
-  def generate_token
-    self.token = UUID.new.generate unless self.token
-  end
 
+  def generate_token
+    self.token = UUID.new.generate unless token
+  end
 end

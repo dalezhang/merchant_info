@@ -1,5 +1,6 @@
-class Importer
-	class << self
+# frozen_string_literal: true
 
-	end
+class Importer
+  class << self
+  end
 end

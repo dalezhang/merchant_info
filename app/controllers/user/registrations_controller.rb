@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 class User::RegistrationsController < AdminController
-# before_action :configure_sign_up_params, only: [:create]
-# before_action :configure_account_update_params, only: [:update]
+  # before_action :configure_sign_up_params, only: [:create]
+  # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-   def new
-     redirect_to root_path
-     #super
-   end
+  def new
+    redirect_to root_path
+    # super
+  end
 
   # POST /resource
-   def create
-     redirect_to root_path
-     #super
-   end
+  def create
+    redirect_to root_path
+    # super
+  end
 
   # GET /resource/edit
   def edit
@@ -35,10 +37,10 @@ class User::RegistrationsController < AdminController
   end
 
   # DELETE /resource
-   def destroy
-     redirect_to root_path
-     #super
-   end
+  def destroy
+    redirect_to root_path
+    # super
+  end
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign
