@@ -4,7 +4,7 @@ module Biz
 
     attr_accessor :merchant, :zx_mct_info
 
-    def initialize(mch_id)
+    def initialize(mch_id,channel)
       @has_error = false
       @messages = []
       if mch_id.class == Merchant
@@ -17,8 +17,9 @@ module Biz
         raise 'Merchant require'
 
       end
+      raise "channel should be one of ['wechat', 'alipay']" unless ['wechat', 'alipay'].include?(channel)
+      @channel = channel
       @zx_mct_info = Biz::ZxMctInfo.new(@merchant)
-
     end
 
     #appl_typ =>  新增：0；变更：1；停用：2
@@ -28,6 +29,10 @@ module Biz
     end
     def send_query
       xml = prepare_query
+      request_hash =  Hash.from_xml xml
+      request_hash["ROOT"].delete('Msg_Sign')
+      @merchant.request_and_response.zx_request["#{@channel}_query"] = request_hash
+      @merchant.save
       send_zx_query(xml)
     end
 
@@ -35,8 +40,8 @@ module Biz
     private
     def sign(mabs)
       @mab = mabs.join().encode('GBK', 'UTF-8')
-      key = OpenSSL::PKey::RSA.new(File.read("#{AppConfig.get('pooul', 'keys_path')}/zx_prod_key.pem"))
-      crt = OpenSSL::X509::Certificate.new(File.read("#{AppConfig.get('pooul', 'keys_path')}/zx_prod.crt"))
+      key = OpenSSL::PKey::RSA.new(File.read("#{Rails.application.secrets.pooul['keys_path']}/zx_prod_key.pem"))
+      crt = OpenSSL::X509::Certificate.new(File.read("#{Rails.application.secrets.pooul['keys_path']}/zx_prod.crt"))
       sign = OpenSSL::PKCS7::sign(crt, key, @mab, [], OpenSSL::PKCS7::DETACHED)
       sign.certificates = []
       Base64.strict_encode64 sign.to_der
@@ -44,8 +49,8 @@ module Biz
 
     #appl_typ =>  新增：0；变更：1；停用：2
     def prepare_request(appl_typ)
-      bank_account = @zx_mct_info.bank_account
-      return log_error(nil, "bank_account不能为空") unless bank_account
+      # bank_account = @zx_mct_info.bank_account
+      # return log_error(nil, "bank_account不能为空") unless bank_account
       mabs = []
       missed_require_fields = []
 
@@ -80,7 +85,7 @@ module Biz
       end
     end
 
-    def get_lics_file(lics) # 获取营业执照
+    def get_lics_file(lics_key) # 获取营业执照
       stringio = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry(lics.attach_asset_identifier)
         zio.write File.read("#{Rails.root}/public#{URI.decode(lics.attach_asset.url)}")
@@ -106,16 +111,25 @@ module Biz
     end
 
     def prepare_query
+      case @channel
+      when 'wechat'
+        chnl_mercht_id = @merchant.channel_data['zx_wechat_chnl_mercht_id']
+        pay_chnl_encd =  '0002'
+      when 'alipay'
+        chnl_mercht_id = @merchant.channel_data['zx_alipay_chnl_mercht_id']
+        pay_chnl_encd =  '0001'
+      end
+
       mab_query = []
       mab_query << @zx_mct_info.inspect[:chnl_id]
-      mab_query << @zx_mct_info.inspect[:chnl_mercht_id]
+      mab_query << chnl_mercht_id
       mab_query << @zx_mct_info.inspect[:pay_chnl_encd]
       mab_query << '0100SDC0'
       builder = Nokogiri::XML::Builder.new(:encoding => 'GBK') do |xml|
         xml.ROOT {
           xml.Chnl_Id @zx_mct_info.inspect[:chnl_id]
-          xml.Chnl_Mercht_Id @zx_mct_info.inspect[:chnl_mercht_id]
-          xml.Pay_Chnl_Encd @zx_mct_info.inspect[:pay_chnl_encd]
+          xml.Chnl_Mercht_Id chnl_mercht_id
+          xml.Pay_Chnl_Encd pay_chnl_encd
           xml.trancode '0100SDC0'
           xml.Msg_Sign sign(mab_query)
         }
@@ -126,9 +140,8 @@ module Biz
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc_query', url, data)
       return if @has_error
-
-      xml = Nokogiri::XML(ret)
-      if xml.xpath("//Chnl_Id").text == '10000022'
+      resp_hash = Hash.from_xml ret
+      if resp_hash["Chnl_Id"] == '10000022'
         # @merchant.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
         # @merchant.status = 1 if @merchant.status < 1
         # if @merchant.changed?
@@ -141,6 +154,7 @@ module Biz
       else
         log_error(nil, "返回记录没有对应资料")
       end
+      return resp_hash
     end
 
     def post_xml_gbk(method, url, data)

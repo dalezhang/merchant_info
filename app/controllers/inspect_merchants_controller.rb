@@ -33,12 +33,12 @@ class InspectMerchantsController < ResourcesController
     when '停用'
       send_request 2
     when '查询'
-      bz = Biz::ZxInfcApi.new(@object.merchant_id)
-      response_xml = bz.send_query
-      if response_xml
-        @object.request_and_response.zx_reponse = Hash.from_xml(response_xml)
+      bz = Biz::ZxInfcApi.new(@object.merchant_id,params[:channel])
+      response_hash = bz.send_query
+      if response_hash
+        @object.request_and_response.zx_response["#{params[:channel]}_query"] = response_hash
         @object.save
-        flash[:success] = "返回信息已保存在request_and_response.zx_reponse"
+        flash[:success] = "返回信息已保存在request_and_response.zx_response"
       else
         flash[:error] = "无返回信息"
       end
@@ -56,11 +56,11 @@ class InspectMerchantsController < ResourcesController
   end
   private
   def send_request(appl_typ)
-    bz = Biz::ZxInfcApi.new(@object.merchant_id)
+    bz = Biz::ZxInfcApi.new(@object.merchant_id,params[:channel])
     response_xml = bz.send_intfc(appl_typ)
     if response_xml
-      @object.request_and_response.zx_reponse = Hash.from_xml(response_xml)
-      @object.save
+      # @object.request_and_response.zx_reponse["#{params[:channel]}_#{params[:req_typ]}"] = Hash.from_xml(response_xml)
+      # @object.save
       flash[:success] = "返回信息已保存在request_and_response.zx_reponse"
     else
       flash[:error] = "无返回信息"
