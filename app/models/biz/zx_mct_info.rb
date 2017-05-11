@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class Biz::ZxMctInfo
-  attr_accessor :bank_account, :lics, :chnl_id, :full_name, :name, :contact_tel,
-                :contact_name, :service_tel, :contact_email, :memo,
-                :province, :urbn, :address, :owner_name, :bank_name,
-                :bank_sub_code, :account_num,
-                :pay_chnl_encd
+  attr_accessor  :lics_file_url
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
@@ -32,6 +28,8 @@ class Biz::ZxMctInfo
     @pay_ibank_num = @merchant.bank_info.bank_sub_code # 支付联行号
     @acct_num = @merchant.bank_info.account_num # 账号
     @is_nt_two_line = 0 # 是否支持收支两条线,否：0，是：1
+    @lics_file_url = "#{@merchant.user.bucket_url}/#{@merchant.company.license_key}"
+    @zx_contr_info_lists = @merchant.zx_contr_info_lists.collect { |o| o.inspect}
   end
 
   def zx_account_type(account_type)
@@ -48,12 +46,6 @@ class Biz::ZxMctInfo
       wechat: {
         pay_chnl_encd: '0002',
         chnl_merchant_id: @merchant.channel_data['zx_wechat_chnl_mercht_id']
-      },
-      wechat_query: {
-        "Chnl_Id": '10000022',
-        "Chnl_Mercht_Id": null,
-        "Pay_Chnl_Encd": null,
-        "trancode": '0100SDC0'
       },
       alipay: {
         pay_chnl_encd: '0001',
@@ -92,15 +84,17 @@ class Biz::ZxMctInfo
       acct_typ: @acct_typ,
       pay_ibank_num: @pay_ibank_num,
       acct_num: @acct_num,
-      is_nt_two_line: @is_nt_two_line
+      is_nt_two_line: @is_nt_two_line,
+      lics_file_url: @lics_file_url,
+      zx_contr_info_lists: @zx_contr_info_lists,
     }
   end
 
   def query_data
     {
       "Chnl_Id": '10000022',
-      "Chnl_Mercht_Id": null,
-      "Pay_Chnl_Encd": null,
+      "Chnl_Mercht_Id": '',
+      "Pay_Chnl_Encd": '',
       "trancode": '0100SDC0'
     }
   end

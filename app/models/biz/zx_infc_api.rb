@@ -3,7 +3,7 @@
 require 'zip'
 module Biz
   class ZxInfcApi < IntfcBase
-    attr_accessor :merchant, :zx_mct_info
+    attr_accessor :merchant, :zx_request
 
     def initialize(mch_id, channel)
       @has_error = false
@@ -20,13 +20,18 @@ module Biz
       end
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
-      @zx_mct_info = Biz::ZxMctInfo.new(@merchant)
+      @zx_request = @merchant.request_and_response["zx_request"][@channel]
+      raise "zx_request 无内容，请先生产进件请求" unless @zx_request.present?
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
     def send_intfc(appl_typ)
       xml = prepare_request(appl_typ)
-      send_zx_intfc(xml) unless @has_error
+      if @has_error
+        return false
+      else
+        send_zx_intfc(xml)
+      end
     end
 
     def send_query
@@ -50,15 +55,12 @@ module Biz
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
-    def prepare_request(_appl_typ)
-      # bank_account = @zx_mct_info.bank_account
+    def prepare_request(appl_typ)
+      # bank_account = @zx_request.bank_account
       # return log_error(nil, "bank_account不能为空") unless bank_account
       mabs = []
       missed_require_fields = []
-
-      lics = @zx_mct_info.lics
-      return log_error(nil, '请先上传营业执照') unless lics
-      return log_error(nil, '请先上传营业执照') unless get_lics_file(lics) # 获取营业执照
+      return log_error(nil, '请先上传营业执照') unless get_lics_file # 获取营业执照
 
       trancode = '0100SDC1'
       # appl_typ = 0 #新增：0；变更：1；停用：2
@@ -66,7 +68,7 @@ module Biz
       builder = Nokogiri::XML::Builder.new(encoding: 'GBK') do |xml|
         xml.ROOT do
           CSV.foreach("#{Rails.root}/db/init_data/zx_reg_fields.csv", headers: true) do |r|
-            val = r['f_name'] ? eval(r['f_name']) : @zx_mct_info.send(r['regn_en_nm'].downcase)
+            val = r['f_name'] ? eval(r['f_name']) : @zx_request[ r['regn_en_nm'].downcase ]
             unless val == 'NO_VALUE'
               xml.send r['regn_en_nm'], val
               if val
@@ -87,12 +89,11 @@ module Biz
       end
     end
 
-    def get_lics_file(lics_key) # 获取营业执照
-      return false unless lices_key.present?
-      file_url = "#{@merchant.user.bucket_url}/#{lics_key}"
-      web_contents = open(file_url, &:read)
+    def get_lics_file # 获取营业执照
+      return false unless @merchant.company.license_key.present?
+      web_contents = open(@zx_request['lics_file_url'], &:read)
       stringio = Zip::OutputStream.write_buffer do |zio|
-        zio.put_next_entry(lics_key)
+        zio.put_next_entry(@merchant.company.license_key)
         zio.write web_contents
       end
       lics_file = stringio.string
@@ -126,13 +127,13 @@ module Biz
       end
 
       mab_query = []
-      mab_query << @zx_mct_info.inspect[:chnl_id]
+      mab_query << @zx_request.inspect[:chnl_id]
       mab_query << chnl_mercht_id
-      mab_query << @zx_mct_info.inspect[:pay_chnl_encd]
+      mab_query << @zx_request.inspect[:pay_chnl_encd]
       mab_query << '0100SDC0'
       builder = Nokogiri::XML::Builder.new(encoding: 'GBK') do |xml|
         xml.ROOT do
-          xml.Chnl_Id @zx_mct_info.inspect[:chnl_id]
+          xml.Chnl_Id @zx_request.inspect[:chnl_id]
           xml.Chnl_Mercht_Id chnl_mercht_id
           xml.Pay_Chnl_Encd pay_chnl_encd
           xml.trancode '0100SDC0'
@@ -180,15 +181,15 @@ module Biz
 
     def contr_info_list(xml, mabs)
       xml.Contr_Info_List do
-        @zx_mct.zx_contr_info_lists.each do |cl|
+        @zx_request['zx_contr_info_lists'].each do |cl|
           xml.Contrinfo do
-            xml.Pay_Typ_Encd cl.pay_typ_encd
-            xml.Pay_Typ_Fee_Rate cl.pay_typ_fee_rate
-            xml.Start_Dt cl.start_dt
+            xml.Pay_Typ_Encd cl['pay_typ_encd']
+            xml.Pay_Typ_Fee_Rate cl['pay_typ_fee_rate']
+            xml.Start_Dt cl['start_dt']
           end
-          mabs << cl.pay_typ_encd
-          mabs << cl.start_dt
-          mabs << cl.pay_typ_fee_rate
+          mabs << cl['pay_typ_encd']
+          mabs << cl['pay_typ_fee_rate']
+          mabs << cl['start_dt']
         end
       end
       'NO_VALUE'

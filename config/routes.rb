@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   end
   resources :inspect_merchants do
     post :change_status, :prepare_request, :zx_infc, on: :member
+    resources :zx_contr_info_lists
   end
   namespace :user do
   	resources :sessions

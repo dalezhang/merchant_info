@@ -1,0 +1,27 @@
+.row
+  h4 费率
+  .col-xs-4
+    p    支付类型编码：
+    p    支付宝:
+    p    00010001-----条码支付
+    p    00010002-----扫码支付
+    p    00010003-----无线支付
+    p    微信支付:
+    p    00020001-----公众号支付（JSAPI）
+    p    00020002-----原生扫码支付（NATIVE） 
+    p    00020003-----APP支付（APP）
+    p    00020004-----刷卡支付（MICROPAY）
+  - @object.zx_contr_info_lists.each_with_index do |obj,i|
+    .col-xs-4
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 支付类型编码
+        .col-sm-9
+          = text_field_tag "merchant[zx_contr_info_lists][#{i}][pay_typ_encd]", obj['pay_typ_encd'], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 支付类型费率
+        .col-sm-9
+          = text_field_tag "merchant[zx_contr_info_lists][#{i}][pay_typ_fee_rate]", obj['pay_typ_fee_rate'], class: "form-control string optional"
+      .form-group.string.optional.merchant_address
+        label.col-sm-3.control-label.string.optional 费率生效日期(yyyymmdd)
+        .col-sm-9
+          = text_field_tag "merchant[zx_contr_info_lists][#{i}][start_dt]", obj['start_dt'], class: "form-control string optional"

@@ -26,6 +26,7 @@ class Merchant < ApplicationRecord
   embeds_one :bank_info, autobuild: true
   accepts_nested_attributes_for :company, :legal_person, :bank_info
   embeds_one :request_and_response
+  embeds_many :zx_contr_info_lists #签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
   STATUS_DATA = {0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功'}
 
@@ -40,7 +41,7 @@ class Merchant < ApplicationRecord
   end
   def self.attr_readable
     [
-      :merchant_id, :id, :out_merchant_id
+      :merchant_id, :id, :out_merchant_id,
       :full_name, :name, :appid, :mch_type, :industry, :memo,
       :province, :urbn, :address,
       :bank_info, :legal_person, :company,
@@ -67,10 +68,12 @@ class Merchant < ApplicationRecord
     if all
       hash[:merchant_id] = merchant_id
       hash[:request_and_response] = request_and_response.inspect
+      hash[:zx_contr_info_lists] = zx_contr_info_lists.collect { |o| o.inspect}
     end
     return hash
   end
 end
+
 
 class LegalPerson < ApplicationRecord
   include Imagable
