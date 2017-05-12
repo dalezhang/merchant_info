@@ -49,9 +49,9 @@ class InspectMerchantsController < ResourcesController
       flash[:error] = '未知的请求类型'
     end
     redirect_to action: :show, id: @object.id.to_s
-    # rescue Exception => e
-    #   flash[:error] = e.message
-    #   redirect_to action: :show, id: @object.id.to_s
+  rescue Exception => e
+    flash[:error] = e.message
+    redirect_to action: :show, id: @object.id.to_s
   end
 
   def object_name
@@ -64,9 +64,9 @@ class InspectMerchantsController < ResourcesController
     bz = Biz::ZxInfcApi.new(@object.merchant_id, params[:channel])
     response_xml = bz.send_intfc(appl_typ)
     if response_xml
-      # @object.request_and_response.zx_reponse["#{params[:channel]}_#{params[:req_typ]}"] = Hash.from_xml(response_xml)
-      # @object.save
-      flash[:success] = '返回信息已保存在request_and_response.zx_reponse'
+      @object.request_and_response.zx_reponse["#{params[:channel]}_#{params[:req_typ]}"] = Hash.from_xml(response_xml)
+      @object.save
+      flash[:success] = "返回信息已保存在request_and_response.zx_reponse[#{params[:channel]}_#{params[:req_typ]}]"
     else
       flash[:error] = '无返回信息'
     end

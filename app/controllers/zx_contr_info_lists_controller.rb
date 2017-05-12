@@ -25,4 +25,13 @@ class ZxContrInfoListsController < ResourcesController
     end
     redirect_to controller: :inspect_merchants, action: :edit, id: params[:inspect_merchant_id]
   end
+  def destroy
+    load_object
+    if @object.destroy
+      flash[:success] = "删除成功"
+    else
+      flash[:error] = "删除失败"
+    end
+    redirect_to controller: :inspect_merchants, action: :edit, id: params[:inspect_merchant_id]
+  end
 end

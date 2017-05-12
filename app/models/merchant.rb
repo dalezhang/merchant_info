@@ -13,8 +13,8 @@ class Merchant < ApplicationRecord
   field :appid, type: String # 公众号
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
-  field :zx_channel_type, type: String # 中信经营类目，见附件《经营类目》中的经营类目明细编码
-
+  field :zx_wechat_channel_type, type: String # 中信经营类目--微信，见附件《经营类目》中的经营类目明细编码
+  field :zx_alipay_channel_type, type: String
   field :bank_info, type: Hash, default:{} # 银行信息
   field :legal_person # 法人信息
   field :company # 公司信息
@@ -50,6 +50,7 @@ class Merchant < ApplicationRecord
   def inspect(all = false)
     hash = {
       id: id.to_s,
+      merchant_id: merchant_id,
       out_merchant_id: out_merchant_id,
       status: STATUS_DATA[status],
       full_name: full_name,
@@ -61,14 +62,17 @@ class Merchant < ApplicationRecord
       appid: appid,
       mch_type: mch_type,
       industry: industry,
+      zx_wechat_channel_type: zx_wechat_channel_type,
+      zx_alipay_channel_type: zx_alipay_channel_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
       company: company.inspect,
     }
     if all
-      hash[:merchant_id] = merchant_id
       hash[:request_and_response] = request_and_response.inspect
       hash[:zx_contr_info_lists] = zx_contr_info_lists.collect { |o| o.inspect}
+    else
+      hash.delete(:merchant_id)
     end
     return hash
   end

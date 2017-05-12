@@ -46,7 +46,7 @@ class ResourcesController < AdminController
       end
     end
     respond_to do |format|
-      format.html { redirect_to action: :show }
+      format.html { redirect_to controller: controller_name, action: :show }
       format.json { respond_with_bip(@object) }
       format.js
     end
@@ -69,12 +69,11 @@ class ResourcesController < AdminController
 
   def destroy
     load_object
-    @object.status = if @object.status && @object.status > 0
-                       0
-                     else
-                       7
-                     end
-    @object.save
+    if @object.destroy
+      flash[:success] = "删除成功"
+    else
+      flash[:error] = "删除失败"
+    end
     redirect_to action: :index
   end
 

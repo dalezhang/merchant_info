@@ -14,7 +14,7 @@
           td= obj.start_dt
           td
             = link_to '编辑', edit_inspect_merchant_zx_contr_info_list_path(inspect_merchant_id: params[:id], id: obj.id.to_s), class: 'btn btn-sm btn-primary'
-            = link_to '删除', inspect_merchant_zx_contr_info_lists_path(inspect_merchant_id: params[:id], id: obj.id.to_s), method: :delete, class: 'btn btn-sm btn-danger'
+            = link_to '删除', "/inspect_merchants/#{params[:id]}/zx_contr_info_lists/#{obj.id.to_s}", method: :delete, class: 'btn btn-sm btn-danger'
 
     .col-xs-11.text-right
       = link_to '增加渠道', new_inspect_merchant_zx_contr_info_list_path(inspect_merchant_id: params[:id]), class: 'btn btn-success'

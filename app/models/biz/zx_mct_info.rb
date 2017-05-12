@@ -16,7 +16,7 @@ class Biz::ZxMctInfo
     @contcr_tel = @merchant.legal_person.tel # 联系人电话
     @contcr_mobl_num = @merchant.legal_person.tel # 联系人手机
     @contcr_eml = @merchant.legal_person.email # 联系人邮箱
-    @opr_cls = @merchant.zx_channel_type # 根据不同支付渠道要求，填写相应经营类目。详细见附件《经营类目》中的经营类目明细编码
+    @opr_cls = nil # 根据不同支付渠道要求，填写相应经营类目。详细见附件《经营类目》中的经营类目明细编码
     @mercht_memo = @merchant.memo # 商户备注
     @prov = @merchant.province # 省份（字典
     @urbn = @merchant.urbn # 城市（汉字标示
@@ -45,16 +45,19 @@ class Biz::ZxMctInfo
     {
       wechat: {
         pay_chnl_encd: '0002',
-        chnl_merchant_id: @merchant.channel_data['zx_wechat_chnl_mercht_id']
+        chnl_mercht_id: "zx_wechat_#{@merchant.merchant_id}",
+        opr_cls: @merchant.zx_wechat_channel_type,
       },
       alipay: {
         pay_chnl_encd: '0001',
-        chnl_merchant_id: @merchant.channel_data['zx_alipay_chnl_mercht_id']
+        chnl_mercht_id: "zx_alipay_#{@merchant.merchant_id}",
+        opr_cls: @merchant.zx_alipay_channel_type,
       }
 
     }.each do |key, value|
       @pay_chnl_encd = value[:pay_chnl_encd]
-      @chnl_mercht_id = value[:chnl_merchant_id]
+      @chnl_mercht_id = value[:chnl_mercht_id]
+      @opr_cls = value[:opr_cls]
       zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
@@ -64,7 +67,7 @@ class Biz::ZxMctInfo
   def inspect
     {
       chnl_id: @chnl_id,
-      chnl_merchant_id: @chnl_mercht_id,
+      chnl_mercht_id: @chnl_mercht_id,
       pay_chnl_encd: @pay_chnl_encd, # 支付宝：0001；微信支付：0002。注：商户开通多种支付渠道需分别提交进件申请
       mercht_belg_chnl_id: @mercht_belg_chnl_id,
       mercht_full_nm: @mercht_full_nm,

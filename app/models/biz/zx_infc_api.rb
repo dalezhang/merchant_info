@@ -13,10 +13,7 @@ module Biz
       elsif merchant = Merchant.find_by(merchant_id: mch_id)
         @merchant = merchant
       else
-
-        log_error(nil, 'Merchant require')
-        raise 'Merchant require'
-
+        raise 'merchant_id 无效'
       end
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
@@ -27,11 +24,7 @@ module Biz
     # appl_typ =>  新增：0；变更：1；停用：2
     def send_intfc(appl_typ)
       xml = prepare_request(appl_typ)
-      if @has_error
-        return false
-      else
-        send_zx_intfc(xml)
-      end
+      send_zx_intfc(xml)
     end
 
     def send_query
@@ -60,8 +53,7 @@ module Biz
       # return log_error(nil, "bank_account不能为空") unless bank_account
       mabs = []
       missed_require_fields = []
-      return log_error(nil, '请先上传营业执照') unless get_lics_file # 获取营业执照
-
+      raise '请先上传营业执照' unless get_lics_file # 获取营业执照
       trancode = '0100SDC1'
       # appl_typ = 0 #新增：0；变更：1；停用：2
 
@@ -85,7 +77,7 @@ module Biz
       if missed_require_fields.empty?
         builder.to_xml
       else
-        log_error(nil, "缺少必须的字段：\n" + missed_require_fields.join("\n"))
+        raise "缺少必须的字段：\n" + missed_require_fields.join("\n")
       end
     end
 
@@ -112,7 +104,7 @@ module Biz
       if xml.xpath('//rtncode').text == '00000000'
         @merchant.update!(status: 1)
       else
-        log_error(nil, '返回中没有rtninfo:' + xml.xpath('//rtninfo').text)
+        raise xml.xpath('//rtninfo').text
       end
     end
 
@@ -146,7 +138,6 @@ module Biz
     def send_zx_query(data)
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc_query', url, data)
-      return if @has_error
       resp_hash = Hash.from_xml ret
       if resp_hash['Chnl_Id'] == '10000022'
         # @merchant.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
@@ -159,7 +150,7 @@ module Biz
         #   @merchant.save
         # end
       else
-        log_error(nil, '返回记录没有对应资料')
+        raise "返回记录没有对应资料,\n#{resp_hash}"
       end
       resp_hash
     end
@@ -168,13 +159,13 @@ module Biz
       begin
         resp = HTTParty.post(url, body: data, headers: { "Content-Type": 'text/xml' }, verify: false)
       rescue => e
-        return log_error(nil, "HTTP错误: #{e.message}")
+        raise "HTTP错误: #{e.message}"
       end
       ret = nil
       if resp.success?
         ret = resp.body
       else
-        log_error(nil, '中信服务器错误:' + resp.inspect)
+        raise '中信服务器错误:' + resp.inspect
       end
       ret
     end

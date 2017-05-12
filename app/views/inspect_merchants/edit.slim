@@ -1,5 +1,5 @@
 = link_to '中信经营类目对照表', '/支付宝及微信支付经营类目.xlsx', target: '_blank', class: 'btn btn-link'
-= horizon_form_for @object do |f|
+= horizon_form_for @object  do |f|
   = render 'base', f: f
   br
   br
@@ -11,3 +11,8 @@
   .row
     .col-xs-11.text-right
       = f.submit '修改', class: 'btn btn-lg btn-success'
+javascript:
+  $(document).ready(function(){ 
+  　　$('.form-horizontal').attr('action', "/inspect_merchants/#{@object.id}" )
+  }); 
+  
