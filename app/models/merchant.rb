@@ -15,6 +15,7 @@ class Merchant < ApplicationRecord
   field :industry, type: String # 经营行业
   field :zx_wechat_channel_type, type: String # 中信经营类目--微信，见附件《经营类目》中的经营类目明细编码
   field :zx_alipay_channel_type, type: String
+  field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
   field :bank_info, type: Hash, default:{} # 银行信息
   field :legal_person # 法人信息
   field :company # 公司信息
@@ -32,7 +33,7 @@ class Merchant < ApplicationRecord
 
   def self.attr_writeable
     [
-      :out_merchant_id,
+      :out_merchant_id, :mch_deal_type,
   		:full_name, :name, :appid, :mch_type, :industry, :memo,
       :wechat_channel_type, :alipay_channel_type,
   		:province, :urbn, :address,
@@ -41,7 +42,7 @@ class Merchant < ApplicationRecord
   end
   def self.attr_readable
     [
-      :merchant_id, :id, :out_merchant_id,
+      :merchant_id, :id, :out_merchant_id, :mch_deal_type,
       :full_name, :name, :appid, :mch_type, :industry, :memo,
       :province, :urbn, :address,
       :bank_info, :legal_person, :company,
@@ -64,6 +65,7 @@ class Merchant < ApplicationRecord
       industry: industry,
       zx_wechat_channel_type: zx_wechat_channel_type,
       zx_alipay_channel_type: zx_alipay_channel_type,
+      mch_deal_type: mch_deal_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
       company: company.inspect,
@@ -106,6 +108,8 @@ class Company < ApplicationRecord
 
   field :shop_picture_key, type: String  # 店铺照
   field :license_key, type: String   # 营业执照
+  field :org_photo_key, type: String # 组织机构代码照
+  field :protocol_photo_key, type: Sting # 威付通，商户协议照
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话
@@ -115,6 +119,8 @@ class Company < ApplicationRecord
     {
       shop_picture_key: shop_picture_key,
       license_key: license_key,
+      org_photo_key: org_photo_key,
+      protocol_photo_key: protocol_photo_key,
       contact_tel: contact_tel,
       contact_name: contact_name,
       service_tel: service_tel,

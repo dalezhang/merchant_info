@@ -1,14 +1,47 @@
-# frozen_string_literal: true
-
-class Biz::ZxMctInfo
+class Biz::WftMctInfo
+  attr_accessor  :lics_file_url
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
+    @merchantName = @merchant.full_name # 商户名称
+    @outMerchantId =  @merchant.merchant_id # 外商户号: 合作伙伴系统内部的商户号，确保唯一
+    @feeTypen = 'CNY' # 币种: CNY：人民币；USD：美元；EUR：欧元；HKD：港币；
+    # 商户经营类型: 1:实体;2:虚拟
+    if @merchant.mch_deal_type =~ /实体/
+      @mchDealType = 1
+    elsif @merchant.mch_deal_type =~ /虚拟/
+      @mchDealType = 2
+    end
+    @remark = @merchant.memo # 商户备注
+    @chPayAuth = nil  # 渠道授权交，是否渠道授权交易，不传默认否（1:是，0：否）
+    @merchantDetail = {} # 商户详情
+    @bankAccount = {} # 银行账户
+    # 商户详情信息（MerchantDetail对象）====>
+    @merchantShortName = @merchant.name # 商户简称
+    @industrId = nil # 行业类别
+    @province = nil # 省份
+    @city = nil # 城市
+    @address = @merchant.address # 详细地址
+    @tel = @merchant.company.contact_tel # 电话
+    @email = @merchant.company.contact_email # 邮箱
+    @legalPerson = @merchant.legal_person.name # 企业法人
+    @customerPhone = @merchant.company.service_tel # 客服电话
+    @principal = @merchant.legal_person.name # 负责人
+    @principalMobile = @merchant.legal_person.tel # 负责人手机号
+    @idCode =  @merchant.legal_person.identity_card_num # 负责人身份证
+    @indentityPhoto = nil # 身份证图片: 调用图片上传接口获取，多张以;分割
+    @licensePhoto = nil # 营业执照
+    @protocolPhoto = nil # 商户协议照
+    @orgPhoto = nil # 组织机构代码照
+    # <---------
+
+
+
     @chnl_id = '10000022' # 商户归属渠道编号 ?
     @chnl_mercht_id = nil # 商户编号
     @pay_chnl_encd = nil # 支付宝：0001；微信支付：0002。注：商户开通多种支付渠道需分别提交进件申请
     @mercht_belg_chnl_id = '10000022' # 一般为渠道编号，多级渠道情况下为商户直属上级渠道编号
-    @mercht_full_nm = @merchant.full_name # 商户全名称
+    @mercht_full_nm = @merchant.full_namc # 商户全名称
     @mercht_sht_nm = @merchant.name # 商户简称
     @cust_serv_tel = @merchant.company.service_tel # 客服电话
     @contcr_nm = @merchant.legal_person.name # 联系人名称
@@ -65,7 +98,7 @@ class Biz::ZxMctInfo
 
   def inspect
     {
-      chnl_id: @chnl_id,
+      merchantName: @chnl_id, # 商户名称
       chnl_mercht_id: @chnl_mercht_id,
       pay_chnl_encd: @pay_chnl_encd, # 支付宝：0001；微信支付：0002。注：商户开通多种支付渠道需分别提交进件申请
       mercht_belg_chnl_id: @mercht_belg_chnl_id,
@@ -89,6 +122,15 @@ class Biz::ZxMctInfo
       is_nt_two_line: @is_nt_two_line,
       lics_file_url: @lics_file_url,
       zx_contr_info_lists: @zx_contr_info_lists,
+    }
+  end
+
+  def query_data
+    {
+      "Chnl_Id": '10000022',
+      "Chnl_Mercht_Id": '',
+      "Pay_Chnl_Encd": '',
+      "trancode": '0100SDC0'
     }
   end
 end

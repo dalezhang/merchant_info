@@ -18,6 +18,7 @@ zh-CN:
         address: '详细地址'
         zx_wechat_channel_type: '中信微信经营类目编号'
         zx_alipay_channel_type: '中信支付宝经营类目编号'
+        mch_deal_type: '商户经营类型(实体,虚拟)'
         mch_type: '商户类型'
       zx_contr_info_list:
         pay_typ_encd: 支付类型
