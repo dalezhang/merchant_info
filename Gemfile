@@ -53,8 +53,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # gem 'devise'
 gem 'cancancan'
 # gem 'ransack'
-gem 'will_paginate', github: 'jonatack/will_paginate'
-gem 'will_paginate-bootstrap'
+#gem 'will_paginate', github: 'jonatack/will_paginate'
+#gem 'will_paginate-bootstrap'
 
 
 gem 'rubyzip'
