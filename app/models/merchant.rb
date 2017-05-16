@@ -109,7 +109,7 @@ class Company < ApplicationRecord
   field :shop_picture_key, type: String  # 店铺照
   field :license_key, type: String   # 营业执照
   field :org_photo_key, type: String # 组织机构代码照
-  field :protocol_photo_key, type: Sting # 威付通，商户协议照
+  field :protocol_photo_key, type: String # 威付通，商户协议照
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话
