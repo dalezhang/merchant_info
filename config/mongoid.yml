@@ -152,9 +152,30 @@ production:
     default:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: merchant_info_production
+      database: szpl_mgdb_zy
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - 172.18.183.140:27017
+        - 172.18.183.141: 27017
       options:
+        # Change the default write concern. (default = { w: 1 })
+        # write:
+        #   w: 1
+
+        # Change the default read preference. Valid options for mode are: :secondary,
+        # :secondary_preferred, :primary, :primary_preferred, :nearest
+        # (default: primary)
+        # read:
+        #   mode: :secondary_preferred
+        #   tag_sets:
+        #     - use: web
+
+        # The name of the user for authentication.
+         user: 'zy'
+
+        # The password of the user for authentication.
+         password: 'zy834629845'
+
+        # The user's database roles.
+         roles:
+           - 'dbOwner'
