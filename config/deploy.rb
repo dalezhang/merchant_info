@@ -66,7 +66,7 @@ task :deploy do
         command %{ ruby -v }
         command %{ ls /home/rb/prgs/merchant_info/current}
         command %{ ls /home/rb/tmp/pids/}
-        command %{ eye restart merchant_info}
+        command %{ eye start merchant_info}
       end
     end
   end
