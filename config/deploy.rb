@@ -60,9 +60,12 @@ task :deploy do
 
     on :launch do
       in_path("/home/rb") do
-        #command %{rails s -e production}
         invoke :environment
+        command %{source .bashrc}
+        #command %{rails s -e production}
         command %{ ruby -v }
+        command %{ ls /home/rb/prgs/merchant_info/current}
+        command %{ ls /home/rb/tmp/pids/}
         command %{ eye restart merchant_info}
       end
     end
