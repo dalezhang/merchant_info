@@ -80,6 +80,9 @@ task :deploy do
   # you can use `run :local` to run tasks on local machine before of after the deploy scripts
   # run(:local){ say 'done' }
 end
+task :clean_shared_files do
+  command %{rm config/database.yml config/puma.rb config/secrets.yml}
+end
 task :eye do
   command %{ pwd }
   invoke :environment
