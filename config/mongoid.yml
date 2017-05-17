@@ -158,24 +158,7 @@ production:
       hosts:
         - 172.18.183.141:27017
       options:
-        # Change the default write concern. (default = { w: 1 })
-        # write:
-        #   w: 1
-
-        # Change the default read preference. Valid options for mode are: :secondary,
-        # :secondary_preferred, :primary, :primary_preferred, :nearest
-        # (default: primary)
-        # read:
-        #   mode: :secondary_preferred
-        #   tag_sets:
-        #     - use: web
-
-        # The name of the user for authentication.
-         user: 'zy'
-
-        # The password of the user for authentication.
-         password: 'zy834629845'
-
-        # The user's database roles.
-         roles:
-           - 'dbOwner'
+        user: 'zy'
+        password: 'zy834629845'
+        roles:
+          - 'dbOwner'
