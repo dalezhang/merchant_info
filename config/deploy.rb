@@ -63,6 +63,7 @@ task :deploy do
 		invoke :clean_shared_files
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
+    invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
 
 
