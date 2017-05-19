@@ -30,11 +30,11 @@ class InspectMerchantsController < ResourcesController
     load_object
     case params[:req_typ]
     when '新增'
-      send_request 0
+      send_request '0'
     when '变更'
-      send_request 1
+      send_request '1'
     when '停用'
-      send_request 2
+      send_request '2'
     when '查询'
       bz = Biz::ZxInfcApi.new(@object.merchant_id, params[:channel])
       response_hash = bz.send_query
