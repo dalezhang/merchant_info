@@ -2,6 +2,8 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
+  field :publicy_key, type: String # 商户公钥
+  field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String  # 代理商自定义的merchant唯一标识
   field :status, type: Integer, default: 0 # 状态
   field :full_name, type: String # 商户全名称

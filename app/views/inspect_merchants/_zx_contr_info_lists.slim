@@ -1,20 +1,26 @@
 .row
   .col-xs-12
-    h4 渠道信息
-    table.table
-      tr
-        th 支付类型
-        th 支付类型费率
-        th 费率生效日期
-        th 操作
-      - @object.zx_contr_info_lists.each do |obj|
-        tr
-          td= ZxContrInfoList::PayTypData[obj.pay_typ_encd]
-          td= obj.pay_typ_fee_rate
-          td= obj.start_dt
-          td
-            = link_to '编辑', edit_inspect_merchant_zx_contr_info_list_path(inspect_merchant_id: params[:id], id: obj.id.to_s), class: 'btn btn-sm btn-primary'
-            = link_to '删除', "/inspect_merchants/#{params[:id]}/zx_contr_info_lists/#{obj.id.to_s}", method: :delete, class: 'btn btn-sm btn-danger'
+    .box
+      .box-header
+        h4.box-title 中信渠道信息
+      .box-body
+        table.table.table-bordered
+          thead
+            tr
+              th 支付类型
+              th 支付类型费率
+              th 费率生效日期
+              th 操作
+          tbody
+            - @object.zx_contr_info_lists.each do |obj|
+              tr
+                td= ZxContrInfoList::PayTypData[obj.pay_typ_encd]
+                td= obj.pay_typ_fee_rate
+                td= obj.start_dt
+                td
+                  = link_to '编辑', edit_inspect_merchant_zx_contr_info_list_path(inspect_merchant_id: params[:id], id: obj.id.to_s), class: 'btn btn-sm btn-primary'
+                  = link_to '删除', "/inspect_merchants/#{params[:id]}/zx_contr_info_lists/#{obj.id.to_s}", method: :delete, class: 'btn btn-sm btn-danger'
 
-    .col-xs-11.text-right
-      = link_to '增加渠道', new_inspect_merchant_zx_contr_info_list_path(inspect_merchant_id: params[:id]), class: 'btn btn-success'
+        br
+        .col-xs-11.text-right
+          = link_to '增加渠道', new_inspect_merchant_zx_contr_info_list_path(inspect_merchant_id: params[:id]), class: 'btn btn-success'

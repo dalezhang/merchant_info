@@ -17,6 +17,9 @@ class User < ApplicationRecord
   field :token, type: String
   field :bucket_url, type: String
   field :bucket_name, type: String
+  validates :password, length: { minimum: 6 } if @password
+  validates :email, :format=> {:with=> /^[\d,a-z]([\w\.\-]+)@([a-z0-9\-]+).([a-z\.]+[a-z])$/i, :multiline => true, :message=> "邮箱地址格式不正确"}
+  validates :email,:presence => true, uniqueness: { case_sensitive: false, message: '该email已经存在' }
 
   has_and_belongs_to_many :roles
   has_many :merchants
@@ -41,6 +44,8 @@ class User < ApplicationRecord
       else
         raise '两次输入密码不一致！'
       end
+    else
+      raise '请填入密码和确认密码！'
     end
   end
 

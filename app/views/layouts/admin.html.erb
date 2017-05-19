@@ -43,12 +43,16 @@
   		  <!-- Content Header (Page header) -->
   		  <section class="content-header">
   		    <h1>
-            <%= controller_name.titlecase %>
-  		      <small><%= action_name.titlecase %></small>
+            <%= I18n.translate(controller_name) %>
+  		      <small><%= I18n.translate(action_name) %></small>
   		    </h1>
   		    <ol class="breadcrumb">
-            <li><a href="<%= url_for(action: 'index') rescue '###' %>"><i class="fa fa-dashboard"></i><%= controller_name.titlecase %></a></li>
-            <li class="active"><%= action_name.titlecase %></li>
+            <li>
+              <a href="<%= url_for(action: 'index') rescue '###' %>">
+                <i class="fa fa-dashboard"></i><%= I18n.translate(controller_name) %>
+              </a>
+            </li>
+            <li class="active"><%= I18n.translate(action_name) %></li>
   		    </ol>
   		  </section>
 

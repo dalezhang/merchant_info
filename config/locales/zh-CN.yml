@@ -1,0 +1,1657 @@
+zh-CN:
+  uploader:
+    upload_file: "批量上传图片"
+  date:
+    abbr_day_names:
+    - 日
+    - 一
+    - 二
+    - 三
+    - 四
+    - 五
+    - 六
+    abbr_month_names:
+    -
+    - 1月
+    - 2月
+    - 3月
+    - 4月
+    - 5月
+    - 6月
+    - 7月
+    - 8月
+    - 9月
+    - 10月
+    - 11月
+    - 12月
+    day_names:
+    - 星期日
+    - 星期一
+    - 星期二
+    - 星期三
+    - 星期四
+    - 星期五
+    - 星期六
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%Y年%b%d日'
+      short: ! '%b%d日'
+    month_names:
+    -
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: 大约一小时
+        other: 大约 %{count} 小时
+      about_x_months:
+        one: 大约一个月
+        other: 大约 %{count} 个月
+      about_x_years:
+        one: 大约一年
+        other: 大约 %{count} 年
+      almost_x_years:
+        one: 接近一年
+        other: 接近 %{count} 年
+      half_a_minute: 半分钟
+      less_than_x_minutes:
+        one: 不到一分钟
+        other: 不到 %{count} 分钟
+      less_than_x_seconds:
+        one: 不到一秒
+        other: 不到 %{count} 秒
+      over_x_years:
+        one: 一年多
+        other: ! '%{count} 年多'
+      x_days:
+        one: 一天
+        other: ! '%{count} 天'
+      x_minutes:
+        one: 一分钟
+        other: ! '%{count} 分钟'
+      x_months:
+        one: 一个月
+        other: ! '%{count} 个月'
+      x_seconds:
+        one: 一秒
+        other: ! '%{count} 秒'
+    prompts:
+      day: 日
+      hour: 时
+      minute: 分
+      month: 月
+      second: 秒
+      year: 年
+  errors: &errors
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: 必须是可被接受的
+      blank: 不能为空字符
+      confirmation: 与确认值不匹配
+      empty: 不能留空
+      equal_to: 必须等于 %{count}
+      even: 必须为双数
+      exclusion: 不可使用的字段
+      greater_than: 必须大于 %{count}
+      greater_than_or_equal_to: 必须大于或等于 %{count}
+      inclusion: 不包含于列表中
+      invalid: 是无效的
+      less_than: 必须小于 %{count}
+      less_than_or_equal_to: 必须小于或等于 %{count}
+      not_a_number: 不是数字
+      not_an_integer: 必须是整数
+      odd: 必须为单数
+      record_invalid: ! '验证失败: %{errors}'
+      taken: 已经被使用
+      too_long: 过长（最长为 %{count} 个字符）
+      too_short: 过短（最短为 %{count} 个字符）
+      wrong_length: 长度非法（必须为 %{count} 个字符）
+    template:
+      body: 如下字段出现错误：
+      header:
+        one: 有 1 个错误发生导致「%{model}」无法被保存。
+        other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
+  helpers:
+    select:
+      prompt: 请选择
+    submit:
+      create: 新增%{model}
+      submit: 储存%{model}
+      update: 更新%{model}
+  number:
+    currency:
+      format:
+        delimiter: ! ','
+        format: ! '%u %n'
+        precision: 2
+        separator: .
+        significant: false
+        strip_insignificant_zeros: false
+        unit: CN¥
+    format:
+      delimiter: ! ','
+      precision: 3
+      separator: .
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: 十亿
+          million: 百万
+          quadrillion: 千兆
+          thousand: 千
+          trillion: 兆
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ! ', 和 '
+      two_words_connector: ! ' 和 '
+      words_connector: ! ', '
+  time:
+    am: 上午
+    formats:
+      default: ! '%Y年%b%d日 %A %H:%M:%S %Z'
+      long: ! '%Y年%b%d日 %H:%M'
+      short: ! '%b%d日 %H:%M'
+    pm: 下午
+  # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
+  activemodel:
+    errors:
+      <<: *errors
+  activerecord:
+    models:
+      meeting: "会议介绍"
+      meeting_entry: "会议详情"
+      approve_module: "幼儿园审核模块"
+      admin_user: "管理员"
+      garden_new: "新闻"
+      garden_picture: "照片集锦"
+      garden_activitie: "发布活动"
+      asset_img: "图片资源"
+      sms_log: "短信计费日志"
+      kindergarten: "幼儿园"
+      user: "用户"
+      grade: "年级"
+      squad: "班级"
+      student_info: "学生信息"
+      teacher: "负责老师"
+      staff: "教职工"
+      role: "角色"
+      operate: "权限"
+      menu: "菜单管理"
+      smarty: "常用功能"
+      option_operate: "幼儿园配置功能"
+      template: "模板"
+      career_strategy: "班级升级策略"
+      topic: "信息论坛"
+      topic_entry: "贴子回复"
+      cook_book: "菜谱"
+      notice: "通知信息"
+      message: "消息"
+      message_entry: "消息记录"
+      growth_record: "成长记录"
+      seedling_record: "疫苗"
+      physical_record: "体检记录"
+      album: "相册集锦"
+      album_entry: "相册图片"
+      content_pattern: "表格模版"
+      student_resource: "学员提交图片"
+      activity: "活动信息"
+      activity_entry: "活动信息评论"
+      page_content: "幼儿园官网内容配置"
+      content_entry: "幼儿园官网详细内容配置"
+      page_img: "页面图片资源"
+      activity_img: "活动图片"
+      topic_category: "论坛分类"
+      user_squad: "延时班"
+      category: "资料分类"
+      weixin_databank: "微信资料库"
+      comment_databank: "点评资料库"
+      weixin_share: "微信资料库推送"
+      weixin_share_user: "推送记录详细"
+      weiyi_config: "微一平台配置"
+      shrink_record: "seo关键字优化"
+      appurtenances: "附件"
+      sms_record: "短信发送记录"
+      comment: "评论"
+      read_user: "阅读人员记录"
+      dean_email: "园长信箱"
+      sys_log: "操作日志"
+      help_category: "视频分类"
+      help_movie: "帮助视频"
+      resource_library: "上传资源库"
+      evaluate_template: "评估模板下载"
+      credit_log: "积分日志"
+      credit_cofig: "积分配置"
+      squad_credit: "班级积分"
+      personal_credit: "个人积分管理"
+      merchant: "商家"
+      product: "商品"
+      delivery_address: "发货地址"
+      product_category: "商品分类"
+      order: "订单"
+      order_info: "订单详细"
+      report: "举报"
+      shop_config: "商城配置"
+      credit_grade: "积分等级"
+      prize: "奖品"
+      prize_log: "奖品列表"
+      audio: "资料音频"
+      weixin_token: "服务号token"
+      wonderful_episode: "精彩视频"
+      kind_zone: "幼儿园地区"
+      policy: "政策法规"
+      show_case: "作品展示"
+      weixin_code: "微信绑定code"
+      admin_role: "后台角色"
+      admin_permission: "后台权限"
+      admin_role_permission: "后台角色权限关联"
+      infantidea: "智慧教育"
+      apply_info: "微一申请单"
+      choose_account: "推荐幼儿园"
+      tip: '小贴士'
+      yearbook: '年度纪念册'
+      weixin_introduce: '微信介绍页'
+      show_video: "展示动画"
+      user_time_line: '个人时间轴'
+      user_growth: '个人成长记录'
+      squad_growth: '班级成长记录'
+      squad_time_line: '班级时间轴'
+      student_bale: "学生打包"
+      sms_package: '短信套餐'
+      sms_order: '短信充值订单'
+      agency: '代理机构'
+      apply_message: '申请信息'
+      agency_help: '代理机构帮助'
+      brand_owner: '品牌商'
+      brand_classify: '分类管理'
+      brand_label: '标签管理'
+      brand_recommend: '品牌推荐'
+      brand_driver: '品牌驱动类型'
+      brand_comment_report: '用户留言举报'
+      brand_series: '产品系列'
+      offline_activity: '线下活动'
+      baby_time: 'BabyTime'
+      kind_info: '幼儿园信息配置'
+      ask_classify: '问题分类'
+      ask_label_group: '问题标签组'
+      ask_label: '问题标签'
+      ask_replier: '专家管理'
+      thanks_giving: '感恩活动'
+      thanks_giving_teacher: '感恩活动老师信息'
+      thanks_giving_child: '感恩活动学生信息'
+      statistic: "网站访问统计"
+      template_message: '微信模板消息'
+      event: 'BabyTime'
+      gift: "礼品"
+      sponsor: "礼品赞助商"
+      asset_logo: '图片'
+      device_info: '门禁设备管理'
+      card_log: '刷卡记录'
+      charge:   '收费项目'
+      pay_detail:  '家长收费明细'
+      pay_detail_charge:  '家长收费明细包含的项目'
+      transfer_detail:  '家长转账明细'
+      celler: '商家'
+      sms_record_report: '短信使用统计'
+      weixin_festival: '微信活动'
+    attributes:
+      pay_detail_charge:
+        count:  '购买数量'
+      pay_detail: 
+        paid:   '已付金额'
+      student_bale:
+        end_at: "结束时间"
+        kindergarten: "幼儿园"
+        kindergarten_name: "幼儿园名"
+        kindergarten_number: "幼儿园编号"
+        name: "名称"
+        start_time: "开始时间"
+        status: "状态"
+        user: "用户"
+        webaddr: "地址"
+        squad: "班级"
+        id: " "
+      show_video:
+        name: "名称"
+        note: "展示"
+        visible: "可见"
+      choose_account:
+        kindergarten: "幼儿园"
+        sequence: "排序"
+        url: "网址"
+        note: "介绍"
+      admin_role:
+        name: "名称"
+        number: "编码"
+        note: "描述"
+        level: "等级"
+      admin_permission:
+        temp_actions: "普通操作权限"
+        actions: "普通操作权限"
+        model_class: "模型"
+        name: "名称"
+        remark: "标识"
+        resource: "资源"
+        category_type: "类型"
+      admin_role_permission:
+        admin_permission: "权限"
+        admin_role: "角色"
+      meeting:
+        title: "标题"
+        organized: "举办方"
+        time_horizon: "时间范围"
+        content: "内容"
+        status: "状态"
+      meeting_entry:
+        title: "标题"
+        content: "内容"
+        meeting: "所属会议"
+        send_at: "发布时间"
+      infantidea:
+        title: "标题"
+        note: "内容"
+        send_at: "发布时间"
+      approve_module:
+        kindergarten: "幼儿园"
+        name: "名字"
+        number: "编码"
+        status: "状态"
+      show_case:
+        kindergarten: "幼儿园"
+        user: "用户"
+        note: "简述"
+        title: "标题"
+        creater: "创建人"
+        creater_id: "创建人"
+        asset_img: "作品图片"
+        created_at: "创建时间"
+        user_name: "用户名"
+      weixin_token:
+        number: "编码"
+        appid: "appid"
+        secret: "secret"
+        access_token: "token号"
+        expires_in: "有效时间(秒)"
+        expires_at: "获取时间"
+      audio:
+        kindergarten: "幼儿园"
+        user: "用户"
+      prize_log:
+        kindergarten: "幼儿园"
+        resource: "资源对象"
+        stage_credit: "阶段积分"
+        status: "状态"
+        win_at: "中奖时间"
+      prize:
+        beep: "提示音"
+        beep_url: "提示音地址"
+        content: "内容"
+        content_url: "内容地址"
+        name: "名称"
+        status: "状态"
+      shop_config:
+        name: "名称"
+        number: "编码"
+        note: "描述"
+        status: "状态"
+      product:
+        name: "商品名称"
+        product_category: "商品分类"
+        credit: "积分"
+        price: "价格"
+        market_price: "市场价"
+        approve: "审核人"
+        user: "上传者"
+        keywords: "seo关键字"
+        description: "seo描述"
+        view_asset: "商品图片"
+        meaning: "教育理念"
+        shop: "所属商城"
+        shop_id: "所属商城"
+        status: "状态"
+        note: "描述"
+        merchant_id: "商家"
+        merchant: "商家"
+      delivery_address:
+        kindergarten: "幼儿园"
+        user: "收货人"
+        address_info: "详细地址及收件人"
+        phone: "电话"
+        shipment_at: "发货时间"
+        address: "地址"
+      product_category:
+        name: "分类名称"
+        parent: "父类"
+        note: "描述"
+      order:
+        number: "订单编码"
+        status: "状态"
+        user: "下单人"
+        amount: "总额"
+        credit: "积分"
+        postage: "邮编"
+        note: "描述"
+        shipment_at: "发送时间"
+        express_code: "证件号"
+        kindergarten: "幼儿园"
+      order_info: 
+        order: "订单"
+        product: "商品"
+        kindergarten: "幼儿园"
+        amount: "总额"
+        count: "数量"
+        comment: "评价"
+        credit: "积分"
+        quality: "评分"
+        address_info: "详细地址及收件人"
+        phone: "电话"
+        address: "地址"
+        delivery_address: "收货信息"
+      personal_credit:
+        kindergarten: "幼儿园"
+        user: "用户"
+        credit: "积分"
+        heap_credit: "累积积分"
+        prize_credit: "上一次奖品积分"
+      squad_credit: 
+        kindergarten: "幼儿园"
+        squad: "班级名称"
+        credit: "积分"
+      credit_log:
+        kindergarten: "幼儿园"
+        tp: "类型"
+        credit: "积分"
+        note: "描述"
+        resource: "积分类型来源"
+        business: "业务来源"
+      credit_cofig: 
+        name: "名称"
+        number: "编码"
+        credit: "积分"
+        note: "描述"
+      evaluate_template:
+        name: "名称"
+        template_url: "附件地址"
+        note: "描述"
+        tp: "类型"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      resource_library: 
+        file_name: "文件名"
+        resource_avatar_url: "文件地址"
+        resource_avatar: "文件地址"
+      sms_record:
+        kindergarten_name: '幼儿园名称'
+        status: "状态"
+        chain_code: "扩展码"
+        message_entry_id: "信息回复"
+        kindergarten_id: "幼儿园"
+        kindergarten: "幼儿园"
+        sender_id: "发送人id"
+        sender_name: "发送人"
+        msgid: "信息id"
+        content: "内容"
+        receiver_id: "接受人id"
+        receiver_name: "接受人"
+        receiver_phone: "接受人电话号码"
+        sms_count: "短信条数"
+        kindergarten_id: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        status_label: "状态"
+      garden_activitie:
+        content: "详细内容"
+        note: "简述"
+        title: "标题"
+        title: "标题"
+        start_at: "开始时间"
+        end_at: "结束时间"
+      garden_picture:
+        title: "标题"
+        tp: "类型"
+        created_at: "创建于"
+      garden_new:
+        content: "详细内容"
+        note: "简述"
+        tp: "分类"
+        title: "标题"
+        creater: "创建人"
+        creater_id: "创建人"
+        created_at: "创建时间"
+      help_movie:
+        name: "名字"
+        content: "内容"
+        created_at: "创建于"
+        updated_at: "更新于"
+      help_category:
+        parent_id: "父类"
+        parent: "父类"
+        name: "名字"
+        code: "编号"
+        remark: "标记"
+        tp_id: "角色"
+        help_movie_id: "帮助视频"
+        help_movie: "帮助视频"
+        created_at: "创建于"
+        updated_at: "更新于"
+      kind_zone:
+        parent_id: "父类"
+        parent: "父类"
+        name: "名字"
+        code: "编号"
+        remark: "标记"
+        created_at: "创建于"
+        updated_at: "更新于"
+      sms_log:
+        kindergarten_id: "所属幼儿园"
+        kindergarten: "所属幼儿园"
+        user: "用户"
+        user_id: "用户id"
+        admin_user: "管理用户"
+        admin_user_id: "管理用户id"
+        note: "描述"
+        message_id: "短信消息"
+        message: "短信消息"
+        count: "数量"
+        tp: "类型"
+        created_at: "时间"
+      dean_email:
+        kindergarten_id: "所属幼儿园"
+        kindergarten: "所属幼儿园"
+        user: "家长"
+        user_id: "家长id"
+        user_name: "家长名字"
+        user_email: "家长邮箱"
+        status: "状态"
+        title: "标题"
+        content: "家长提问"
+        sender: "回复人"
+        sender_id: "回复人"
+        return_content: "园长回复"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        visible: "是否显示"
+      read_user:
+        kindergarten_id: "所属幼儿园"
+        kindergarten: "所属幼儿园"
+        resource: "所属记录"
+        user: "用户"
+        user_id: "用户id"
+        user_name: "用户名字"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      sms_count:
+        chain_code: "扩展码"
+        status: "状态"
+        message_entry: "所属消息"
+        kindergarten: "所属幼儿园"
+        sender: "发送人"
+        sender_name: "发送人"
+        msgid: "短信id(第三方)"
+        content: "内容"
+        receiver: "接收人"
+        receiver_name: "接收人"
+        receiver_phone: "接收手机号"
+        sms_count: "短信数量"
+      weiyi_config:
+        number: "编号"
+        content: "描述"
+      admin_user:
+        current_sign_in_at: "当前登录时间"
+        last_sign_in_at: "最后登录时间"
+        sign_in_count: "登录次数"
+        password: "密码"
+        auth_code: "验证码"
+        password_confirmation: "确认密码"
+        role_name: "所属角色"
+        role_name_label: "所属角色"
+      asset_img:
+        resource_id: "选题"
+        vote_entry: "选题"
+        uploaded_data: "图片"
+        filename: "图片"
+        content_type: "图片类型"
+      kindergarten:
+        custom_link: "定制内容（除非幼儿园需要，否则不填写）"
+        enable_fees: "是否收费"
+        baidu_seo: "百度SEO"
+        enable_credit: "是否启用积分系统"
+        enable_credit_label: "是否启用积分系统"
+        credit_status: "积分用户群"
+        hint_tp: "提醒系统化"
+        hint_tp_label: "提醒系统化"
+        name: "名称"
+        balance_count: "短信剩余条数"
+        note: "描述"
+        number: "编号"
+        weixin_template: "微信模板"
+        template: "展示模板"
+        template_id: "展示模板"
+        use_console: "启用新后台"
+        status: "状态"
+        login_note: "注册短信追加内容"
+        weixin_status: "微信公共账号状态"
+        weixin_status_label: "微信绑定状态"
+        weixin_code: "微信账号"
+        weixin_token: "微信token"
+        asset_img: "LOGO"
+        asset_logo: "二维码"
+        admin: "管理员"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        latlng: "经纬度"
+        address: "地址"
+        aliases_url: "独立域名"
+        sms_count: "每月免费短信数量"
+        sms_user_count: "短信用户数量"
+        allsms_count: "每月群发短信次数"
+        open_allsms: "开启限制数量群发"
+        open_allsms_label: "开启限制数量群发"
+        begin_allsms: "可使用短信群发"
+        begin_allsms_label: "可使用短信群发"
+        telephone: "联系电话"
+        init_status: "幼儿园初始化值"
+        show_cookbook: "展示菜谱到首页"
+        kind_zone_id: "地区"
+        kind_zone: "地区"
+        current_user_count: "当前用户总数"
+        binding_users_count: "已绑定用户总数"
+        qr_code_tp: '订阅号状态'
+        login_tp: "登陆限制类型"
+        agency_id: "代理商"
+        short_name: '幼儿园简称(可不填)'
+      user:
+        account: '银行账户'
+        is_demo: "演示用户"
+        name: "姓名"
+        login: "账号"
+        email: "电子邮箱"
+        status: "状态"
+        role: "角色"
+        tp: "类型"
+        tp_label: "类型"
+        locked: "锁定"
+        gender: "性别"
+        phone: "手机号"
+        head_url: "头像"
+        deviceid: "设备编号"
+        kindergarten_label: "所属幼儿园"
+        kindergarten_name: '所属幼儿园名称'
+        kindergarten: "所属幼儿园"
+        area: "城市"
+        weixin_code: "绑定幼儿园"
+        weiyi_code: "绑定微一资讯"
+        password: "密码"
+        password_confirmation: "确认密码"
+        old_password: "原始密码"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        is_send: '是否能够发短信'
+        is_send_label: '能够发短信'
+        is_receive: '是否能够接受短信'
+        is_receive_label: '能够接受短信'
+        chain_code: "短信扩展码"
+        repeat: "手机允许重复"
+        able_email: "订阅邮件消息"
+        repeat_label: "手机允许重复"
+      grade:
+        kindergarten_label: "所属幼儿园"
+        kindergarten: "所属幼儿园"
+        staff: "年级组长"
+        name: "名称"
+        note: "描述"
+        sequence: "排序"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      squad:
+        kindergarten_label: "所属幼儿园"
+        grade_label: "所属年级"
+        historyreview: "届"
+        kindergarten: "所属幼儿园"
+        grade: "年级"
+        name: "名称"
+        note: "描述"
+        tp: "类型"
+        sequence: "排序"
+        graduate: "是否已毕业"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      student_info:
+        user: "学员姓名"
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        squad_label: "所属班级"
+        grade: "年级"
+        grade_label: "年级"
+        squad: "班级"
+        squad_id: "班级"
+        birthday: "出生日期"
+        come_in_at: "入园时间"
+        card_category: "证件类别"
+        card_code: "证件号"
+        guardian: "监护人名字"
+        guardian_card_category: "监护人证件类别"
+        guardian_card_code: "监护人证件号"
+        nationality: "国籍"
+        nation: "民族"
+        overseas_chinese: "港澳台侨"
+        household: "户口性质"
+        birthplace: "出生地"
+        native: "籍贯"
+        domicile_place: "户口所在地"
+        family_address: "家庭地址"
+        leftover_children: "是否留守儿童"
+        employofficialt: "是否进城务工人员子女"
+        insured: "是否低保"
+        subsidize: "是否接受资助"
+        deformity: "是否残疾儿童"
+        deformity_category: "残疾儿童类型"
+        lodging: "是否寄宿生"
+        orphan: "是否孤儿"
+        housing: "住房性质"
+        live_family: "居住情况"
+        only_child: "是否独生子女"
+        brothers: "家中兄妹数"
+        children_number: "本人第几胎"
+        family_ties: "关系"
+        family_name: "姓名"
+        politics_status: "政治面貌"
+        family_birthday: "出生日期"
+        profession: "职业"
+        duties: "职务"
+        working: "工作单位"
+        family_register: "户籍类型"
+        family_phone: "移动电话"
+        family_email: "电子邮箱"
+        living_time: "父母在深连续居住时间"
+        family_marital: "婚姻状况"
+        education: "学历"
+        safe_box: "社保电脑号"
+        head_url: "头像"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      teacher:
+        squad: "负责的班级"
+        staff: "教职工名称"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        tp: "类型"
+        squad_name: "班级名"
+        staff_user_name: "教职工名"
+        created_at: "创建时间"
+      staff:
+        kindergarten_label: "所属幼儿园"
+        name: "姓名"
+        user: "教职工姓名"
+        card_code: "身份证号码"
+        education: "教育背景"
+        attendance_code: "考勤卡号"
+        birthday: "出生日期"
+        come_in_at: "入职时间"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      role:
+        name: "名称"
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        number: "编号"
+        admin: "是否是管理员"
+        note: "描述"
+        admin_label: "是否是管理员"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      operate:
+        name: "名称"
+        controller: "控制器"
+        action: "行为"
+        params: "参数"
+        protocol: "请求协议"
+        note: "描述"
+        level: "层级"
+        sequence: "排序"
+        authable: "需要授权"
+        visible: "是否可见"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        description: '功能介绍'
+      menu:
+        kindergarten: "所属幼儿园"
+        kindergarten_label: "所属幼儿园"
+        parented: "上级菜单"
+        children: "下级菜单"
+        number: "编号"
+        name: "名称"
+        url: "url"
+        title: "标题"
+        visible: "是否可见"
+        visible_label: "是否可见"
+        sequence: "排序"
+        operate_id: "权限id"
+        note: "描述"
+        height_level: "菜单等级"
+      smarty:
+        role: "角色"
+        option_operate: "幼儿园常用功能"
+        rename: "重命名"
+      option_operate:
+        kindergarten: "幼儿园"
+        operate: "权限"
+        visible: "是否可见"
+        visible_label: "是否可见"
+      template:
+        name: "名称"
+        number: "编号"
+        is_default: "是否默认"
+        image_url: "图片信息"
+        beta: '测试版'
+      career_strategy:
+        kindergarten_label: "所属幼儿园"
+        kindergarten: "幼儿园"
+        graduation: "是否是毕业"
+        add_squad: "升学时需新开班级"
+        from_id: "原来的班级"
+        to_id: "升学后班级"
+      topic:
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        creater_id: "发贴人"
+        creater: "发帖人"
+        title: "标题"
+        content: "内容"
+        tp: "类型"
+        squad: "班级"
+        squad_label: "所属班级"
+        is_show: "显示在页面上"
+        is_top: "置顶"
+        status: "状态"
+        approve_status: "审核状态"
+        approver_id: "审核人"
+        approver: "审核人"
+        topic_category: "论坛分类"
+        topic_category_label: "论坛分类"
+        show_count: "浏览次数"
+        appurtenances: "附件"
+        topic_entires_count: "评论数量"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        accessed_at: "最近访问时间"
+        topic_category_id: "所属论坛分类"
+        topic_category_name: "论坛分类"
+        squad_name: "班级名"
+        creater_name: "创建人"
+      topic_entry:
+        topic: "回复的贴子"
+        content: "内容"
+        creater_id: "回贴人"
+        status: "状态"
+        goodback: "精品回复"
+        creater: "回贴人"
+        human_goodback: "是否精品回复"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        deleted_at: "删除时间"
+        is_show: "是否删除"
+        human_is_show: "是否删除"
+      cook_book:
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        start_at: "开始时间"
+        end_at: "结束时间"
+        content: "内容"
+        range_tp: "菜谱类型"
+        creater_id: "创建人"
+        creater: "创建人"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      notice:
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        title: "标题"
+        content: "内容"
+        send_date: "发送时间"
+        creater: "创建人"
+        approve_status: "审核状态"
+        approver_id: "审核人"
+        send_range: "发送范围"
+        status: "状态"
+        send_range_ids: "通知具体信息"
+        send_range_label: "发送范围"
+        approver_status_label: "审核状态"
+      message:
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        sender_name: "发送人"
+        title: "标题"
+        content: "内容"
+        tp: "类型"
+        status: "是否草稿"
+        approve_status: "审核状态"
+        approver_id: "审核人"
+        chain_code: "扩展号"
+        send_date: "发送时间"
+        sender: "发送人"
+        allsms: "短信发给所有人"
+        allsms_label: "短信发给所有人"
+        send_me: "短信发给自己"
+        send_me_label: "短信发给自己"
+        tp_data_label: "消息类型"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        deleted_at: "删除时间"
+        approve_status_label: "审核状态"
+        status_data_label: "状态类型"
+      message_entry:
+        message: "消息"
+        receiver_name: "收接者"
+        status: "状态"
+        read_status: "阅读状态"
+        sms: "短信服务"
+        phone: "手机号"
+        content: "内容"
+        read_status_label: "阅读状态"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        deleted_at: "删除时间"
+        receiver: "接收者"
+        message_content: "消息内容"
+      growth_record:
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        start_at: "开始时间"
+        end_at: "结束时间"
+        content: "表现"
+        creater_id: "创建人"
+        creater: "创建人"
+        creater_name: "创建人"
+        squad_name: "班级名"
+        student_info: "学员"
+        student_info_id: "学员"
+        student_info_label: "学员"
+        student_info_user_name: "学员"
+        tp: "类型"
+        siesta: "午休"
+        dine: "进餐"
+        reward: "评价星数"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        accessed_at: "最近访问时间"
+        student: "学员"
+      seedling_record:
+        kindergarten: "幼儿园"
+        student_info_user_name: "学员名称"
+        kindergarten_name: "幼儿园名称"
+        creater_name: "创建人名称"
+        kindergarten_label: "所属幼儿园"
+        student_info: "学员"
+        name: "疫苗名称"
+        note: "描述"
+        shot_at: "注射时间"
+        expire_at: "过期时间"
+        creater_id: "创建人"
+        creater: "创建人"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      physical_record:
+        kindergarten: "幼儿园"
+        kindergarten_number: "幼儿园编号"
+        kindergarten_name: "幼儿园名称"
+        kindergarten_label: "所属幼儿园"
+        creater_id: "创建人"
+        student_info: "学员"
+        send_date: "体检时间"
+        content: "体检记录"
+        creater: "创建人"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        creater_name: "创建人"
+      album:
+        kindergarten: "幼儿园"
+        kindergarten_name: "幼儿园名称"
+        kindergarten_number: "幼儿园编号"
+        creater_name: "创建人名称"
+        kindergarten_label: "所属幼儿园"
+        squad: "班级"
+        squad_label: "所属班级"
+        grade: "年级"
+        grade_label: "所属年级"
+        creater_id: "创建人"
+        approve_status: "审核状态"
+        approver_id: "审核人"
+        is_show: "是否公开"
+        is_show_label: "是否公开"
+        tp: "类型"
+        title: "相册标题"
+        content: "内容"
+        is_top: "是否置顶"
+        is_top_label: "是否置顶"
+        album_entries_count_label: "图片数量"
+        comments_count_label: "评论数量"
+        creater: "创建人"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        squad_name: "班级名"
+        accessed_at: "最近访问时间"
+      album_entry:
+        album: "相册"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        title: "标题"
+        asset_img: "图片"
+      content_pattern:
+        number: "编号"
+        content: "内容"
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        name: "名称"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      student_resource:
+        student_info: "学员"
+        asset_img: "图片"
+      activity:
+        kindergarten: "幼儿园"
+        kindergarten_name: "幼儿园名称"
+        kindergarten_number: "幼儿园编号"
+        kindergarten_label: "所属幼儿园"
+        squad_label: "所属班级"
+        start_at: "开始时间"
+        end_at: "结束时间"
+        creater_id: "创建人"
+        creater: "创建人"
+        approve_status: "审核状态"
+        approve_status_label: "审核状态"
+        approver_id: "审核人"
+        approver: "审核人"
+        note: "描述"
+        title: "标题"
+        content: "内容"
+        tp: "活动类型"
+        tp_label: "活动类型"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        squad: "班级"
+        activity_entries_count_label: "回复的数量"
+      activity_entry:
+        note: "描述"
+        tp: "类型"
+        creater_id: "创建者"
+        creater: "创建者"
+        activity: "活动"
+        activity_img: "活动图片"
+        is_show_label: "是否显示"
+        is_show: "是否显示"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        deleted_at: "最近访问时间"
+      page_content:
+        number: "编号"
+        name: "名称"
+        kindergarten_label: "所属幼儿园"
+        kindergarten: "幼儿园"
+        note: "描述"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        logo_url: "预览图"
+        tp_label: "类型"
+        content_entries: "详细内容配置"
+        tp: "类型"
+      content_entry:
+        title: "标题"
+        number: "编号"
+        content: "内容"
+        page_content: "页面内容"
+        page_img: "图片"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      page_img:
+        resource_id: "选题"
+        filename: "图片"
+        content_type: "图片类型"
+        uploaded_data: "上传图片"
+      activity_img:
+        resource_id: "选题"
+        filename: "图片"
+        content_type: "图片类型"
+        uploaded_data: "上传图片"
+      topic_category:
+        name: "名称"
+        kindergarten_label: "所属幼儿园"
+        kindergarten: "幼儿园"
+        sequence: "排序"
+      user_squad:
+        user_id: "延时班级的用户"
+        squad_id: "延时班级"
+      category:
+        name: "名称"
+        tp: "所属模块"
+        tp_label: "所属模块"
+        visible: "是否显示"
+      weixin_databank:
+        title: "标题"
+        content: "内容"
+        creater_id: "创建人"
+        creater: "创建人"
+        category_id: "分类"
+        category: "分类"
+        visible: "是否显示"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      comment_databank:
+        content: "内容"
+        user_id: "创建人"
+        user: "创建人"
+        category_id: "分类"
+        category: "分类"
+        visible: "是否显示"
+      weixin_share:
+        weixin_databank_id: "微信资料库记录"
+        weixin_databank: "微信资料库记录"
+        send_date: "推送时间"
+        visible: "是否显示"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      weixin_share_user:
+        weixin_share_id: "微信推送记录"
+        weixin_share: "微信推送记录"
+        user_id: "接收用户"
+        user: "接收用户"
+        kindergarten_id: "所属幼儿园"
+        kindergarten: "所属幼儿园"
+        read_status: "阅读状态"
+        read_at: "阅读时间"
+      shrink_record:
+        keywords: "关键字"
+        description: "描述"
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      sys_log:
+        kindergarten: "幼儿园"
+        method: "请求方式"
+        node: "描述"
+        original_url: "请求地址"
+        remote_ip: "请求ip"
+        url_chinese: "操作功能"
+        url_options: "controller和action"
+        url_params: "提交参数"
+        user: "用户名"
+      merchant:
+        name: "商家名称"
+        status: "状态"
+        status_label: "状态"
+        note: "描述"
+        asset_img: "LOGO"
+      comment:
+        comment: "评论"
+      report:
+        content: "内容"
+        informants: "举报人"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        process: "处理情况"
+        process_label: "处理情况"
+        resource_type: "举报的对象"
+        resource_type_label: "举报的对象"
+        resource_id: "举报的对象id"
+        kindergarten: "幼儿园"
+        resource_link: "举报对象链接"
+      credit_grade:
+        tp: "类型"
+        name: "名称"
+        down_credit: "积分下限"
+        up_credit: "积分上限"
+        credit_label: "积分范围"
+        tp_label: "类型"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+      wonderful_episode:
+        title: "标题"
+        url_address: "url地址"
+        squad: "班级"
+        squad_id: "班级"
+        squad_label: "可见性"
+        kindergarten: "幼儿园"
+        kindergarten_label: "所属幼儿园"
+        creater: "创建人"
+        is_top: "置顶"
+        is_top_label: "置顶"
+      policy:
+        title: "标题"
+        content: "内容"
+        kind_zones_label: "所属地区"
+        created_at: "创建于"
+        updated_at: "更新于"
+        asset_img: "图片"
+      weixin_code:
+        weixin_code: "微信code"
+        user: "用戶"
+        user_name: "用户"
+        user_login: "登录名"
+        user_phone: "手机号"
+        kindergarten: "幼儿园"
+        weixin_tp: "公共账号类型"
+        tp_label: "公共账号类型"
+        created_at: "创建时间"
+      apply_info:
+        name: "您的称呼"
+        contact: "联系方式"
+        note: "描述信息"
+        tp: "申请类型"
+        status: "处理状态"
+        memo: "备忘"
+        code: "微信码"
+      tip:
+        content: "提示内容"
+        cate: '提示分类'
+        role: '角色'
+        enable: '状态'
+        created_at: "创建时间"
+        updated_at: '更新时间'
+      yearbook:
+        name: '名称'
+        started_at: '报名开始日期'
+        ended_at: '报名截止日期'
+        description: '描述'
+        tip: '给用户的提示信息'
+        created_at: "创建时间"
+        updated_at: '更新时间'
+      weixin_introduce:
+        number: '编号'
+        name: '名称'
+        content: '正文'
+        created_at: "创建时间"
+        updated_at: '更新时间'
+      user_time_line:
+        user_time_line: 个人时间轴
+        publish_at: '创建时间'
+        note: '备注'
+        creater: '发布人'
+        user_id: '用户'
+        user: '用户'
+        user_name: '用户名称'
+        user_growths: '个人成长记录'
+        kindergarten_id: '幼儿园'
+        kindergarten_name: '幼儿园名称'
+        kindergarten_number: '幼儿园编号'
+        kindergarten: '幼儿园'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      user_growth:
+        parents_say: '家长寄语'
+        teacher_say: '教师寄语'
+        tp: '文件格式'
+        data_link: '文件位置'
+        note: '备注'
+        asset_img: '图片'
+        user_time_line_id: '个人时间轴'
+        user_time_line: '个人时间轴'
+        kindergarten_id: '幼儿园'
+        kindergarten: '幼儿园'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+        kindergarten_name: '幼儿园名称'
+        kindergarten_number: '幼儿园编号'
+      squad_time_line:
+        squad_id: '班级'
+        squad: '班级'
+        squad_growths: '班级成长记录'
+        squad_time_line: '班级时间轴'
+        publish_at: '创建时间'
+        note: '备注'
+        creater: '发布人'
+        kindergarten_id: '幼儿园'
+        kindergarten_name: '幼儿园名称'
+        kindergarten_number: '幼儿园编号'
+        squad_name: "班级名称"
+        kindergarten: '幼儿园'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      squad_growth:
+        teacher_say: '教师寄语'
+        tp: '文件格式'
+        kindergarten_name: '幼儿园名称'
+        kindergarten_number: '幼儿园编号'
+        data_link: '文件位置'
+        note: '备注'
+        asset_img: '图片'
+        squad_time_line_id: '班级时间轴'
+        squad_time_line: '班级时间轴'
+        kindergarten_id: '幼儿园'
+        kindergarten: '幼儿园'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      sms_package:
+        name: '套餐名称'
+        sms_count: '短信数量'
+        price: '套餐价格'
+        tp: '套餐状态'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      sms_order:
+        kindergarten_id: '所属幼儿园'
+        user_id: '创建者'
+        sms_log_id: '短信计费日志记录'
+        sms_package_id: '短信套餐'
+        trade_no: '订单号'
+        name: '订单名称'
+        memo: '备注'
+        sms_count: '短信数量'
+        price: '短信价格'
+        order_count: '套餐数量'
+        tp: '订单状态'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+        deleted_at: '删除时间'
+      agency: 
+        agency_name: '机构名称'
+        location: '地址'
+        email: '电子邮箱'
+        password: '密码'
+        password_confirmation: '确认密码'
+        current_password: '当前密码'
+        remember_me: '记住我'
+        note: '备注'
+        phone: '电话'
+        status: "状态"
+        email: "电子邮件"
+        password: "密码"
+        principal_name: '负责人姓名'
+      apply_message:
+        agency_id: '代理商'
+        kind_principal: '负责人'
+        kind_name: '园所名称'
+        kind_address: '园所地址'
+        email: '电子邮箱'
+        phone: '固定电话'
+        note: '备注'
+        status: '状态'
+        kind_logo_id: '标志'
+        principal_phone: '负责人手机'
+        refuse_reason: '拒绝理由'
+        garden_permission_photo_file: '办园许可证'
+        kind_logo_file: '园所LOGO'
+        number: '园所编号'
+        qq: 'QQ'
+        tp: '权限'
+      agency_help:
+        number: '编号'
+        content: '内容'
+      brand_owner:
+        name: '品牌商名称'
+        code: '品牌编号'
+        status: '审核状态'
+        company: '公司名称'
+        contact: '联系人'
+        phone: '联系电话'
+        address: '联系地址'
+        content: '宣传页'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+        deleted_at: '删除时间'
+        asset_logo_file: '品牌商LOGO'
+      brand_classify:
+        name: '名称'
+        status: '状态'
+        code: '类别'
+        sequence: '显示顺序'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      brand_label:
+        name: '名称'
+        status: '状态'
+        type: '类别'
+        code: '排序标识'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      brand_recommend:
+        brand_owner_id: '品牌商'
+        note: '推荐说明'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      brand_driver:
+        name: '驱动名称'
+        class_name: '驱动类名'
+        key: 'AppKey'
+        token: 'Secret'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      brand_comment_report:
+        brand_product_id: '所属产品'
+        brand_comment_id: '留言内容'
+        user_id: '举报者'
+      brand_series:
+        brand_owner_id: '品牌商'
+        name: '系列名'
+        description: '系列描述'
+        default_desc: '默认描述'
+      offline_activity:
+        title: '活动标题'
+        comment: '活动内容'
+        addr: '活动地址'
+        start_at: '开始时间'
+        end_at: '结束时间'
+        hoster: '主办方'
+        status: '状态'
+        count: '访问次数'
+        kind_zone: '学区'
+      baby_time:
+        title: '新闻标题'
+        content: '内容'
+        note: '备注'
+        show_count: '浏览次数'
+        start_data: '发布时间'
+      kind_info:
+        kindergarten_id: '幼儿园'
+        code: '编码'
+        val: '配置值'
+        status: '启用'
+      ask_classify:
+        name: '分类名'
+        code: '编号'
+        status: '状态'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+        sequence: '排序'
+      ask_label_group:
+        name: '标签组名'
+        code: '编号'
+        status: '状态'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+        sequence: '排序'
+      ask_label:
+        name: '标签名'
+        code: '编号'
+        ask_label_group_id: '所属标签组'
+        status: '状态'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+        sequence: '排序'
+        ask_label_group: '所属标签组'
+      ask_replier:
+        name: '名称'
+        role_type: '角色'
+        classify: '专项领域'
+        description: '简要描述'
+        status: '状态'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      thanks_giving:
+        title: '活动标题'
+        from_time: '开始时间'
+        to_time: '结束时间'
+        tp: '类型'
+        describe: '描述'
+        status: '状态'
+        asset_logo: '宣传图'
+      thanks_giving_teacher:
+        kind_id: '所属幼儿园'
+        thanks_giving: '活动'
+        thanks_giving_id: '活动'
+        user_id: '老师'
+        note: '简述'
+        content: '感言'
+        count: '赞数量'
+        asset_img: '头像'
+        name: '姓名'
+      thanks_giving_child:
+        thanks_giving: '活动'
+        thanks_giving_id: '活动'
+        thanks_giving_teacher_id: '老师'
+        user_id: '学生'
+        content: '内容'
+        teacher_say: '老师的回复'
+        audio: '音频记录'
+        name: '姓名'
+      template_message:
+        code: '模板ID'
+        name: '模板标题'
+        parameters: '模板参数'
+        created_at: '创建时间'
+        updated_at: '更新时间'
+      event:
+        name: '活动名称'
+        code: '活动类型'
+        start_at: '开始时间'
+        vote_at: '投票开始时间'
+        end_at: '结束时间'
+        ex_start_at: '积分兑奖开始时间'
+        ex_end_at: '积分兑奖结束时间'
+        note: '介绍页'
+        start_note: '活动开始弹窗'
+        vote_note: '投票开始弹窗'
+        end_note: '活动结束弹窗'
+      gift:
+        name: "礼品名称"
+        sponsor_id: "所属赞助商"
+        note: "礼品介绍"
+        address: "兑奖方式"
+        expire_at: "礼品过期时间"
+        asset_logo: "礼品图片"
+        price: '价格'
+      sponsor:
+        name: "赞助商"
+        uploaded_data: "代理商Logo"
+      asset_logo:
+        uploaded_data: "图片文件"
+        created_at: '创建时间'
+      device_info:
+        kindergarten: '所属幼儿园'
+        kindergarten_id: '所属幼儿园'
+        device_no: '设备编号'
+        regcode: '设备注册码'
+        last_updated_at: '最近更新数据时间'
+        enable: '是否启用'
+      card_log:
+        kindergarten: '所属幼儿园'
+        kindergarten_id: '所属幼儿园'
+        user: '刷卡人'
+        user_id: '刷卡人'
+        note_at: '刷卡时间'
+        name: '刷卡名'
+        temp: '温度'
+      fees:
+        first_session_start_at: '第一学期开始时间'
+        first_session_end_at: '第一学期结束时间'
+        second_session_start_at: '第二学期结束时间'
+        second_session_end_at: '第二学期开始时间'
+        price: '价格'
+        tp: '缴费模式'
+      regist_info:
+        name:            '姓名'
+        identity_card:   '监护人身份证号'
+        phone:           '手机号码'
+        gender:          '性别'
+        email:           '电子邮箱'
+        family_address:  '家庭住址'
+      charge:
+        name:            '项目名称'
+        price:           '价格'
+        tp:              '收费类型'
+        note:            '介绍信息'
+      transfer_detail:
+        account:         '帐号'
+        price:           '价格'
+        transfer_at:     '转账时间'
+        pay_detail_id: '关联家长收费明细'
+      celler:
+        name: '名称'
+        kindergarten_id: '幼儿园'
+        kindergarten_name: '幼儿园名称'
+        logo: '商家logo'
+        asset_logo: '商家logo'
+        company_name: '公司名称'
+        address: '公司地址'
+        phone: '手机号'
+        cryt_password: '加密密码'
+        cryt_salt: '加密盐'
+        email: '电子邮件'
+        tp:	'状态'
+        reset_token: '重置密码token'
+        reset_at: '重置密码时间'
+        kindergarten_id: '所属幼儿园'
+        kindergarten: '所属幼儿园'
+      weixin_festival:
+        name: '活动名称'
+        note: '活动描述'
+        start_at: '开始时间'
+        end_at: '结束时间'
+    errors:
+      <<: *errors
+  views:
+    pagination:
+      first: "首页"
+      last: "末页"
+      previous: "&laquo; 上一页"
+      next: "下一页 &raquo;"
+      truncate: "..."
+  active_admin:
+    smsstatistics: "短信统计"
+    smsrecordreports: "短信使用统计"
+    batch_actions:
+      labels:
+        luck: "中奖用户"
+        lose: "未中奖"
+    access_denied:
+      message: "你未被授权执行该动作。"
