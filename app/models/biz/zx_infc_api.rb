@@ -39,7 +39,7 @@ module Biz
     private
 
     def sign(mabs)
-      @mab = mabs.join.encode('GBK', 'UTF-8')
+      @mab = mabs.join().encode('GBK', 'UTF-8')
       key = OpenSSL::PKey::RSA.new(File.read("#{Rails.application.secrets.pooul['keys_path']}/zx_prod_key.pem"))
       crt = OpenSSL::X509::Certificate.new(File.read("#{Rails.application.secrets.pooul['keys_path']}/zx_prod.crt"))
       sign = OpenSSL::PKCS7.sign(crt, key, @mab, [], OpenSSL::PKCS7::DETACHED)
@@ -119,13 +119,13 @@ module Biz
       end
 
       mab_query = []
-      mab_query << @zx_request.inspect[:chnl_id]
+      mab_query << @zx_request[:chnl_id]
       mab_query << chnl_mercht_id
-      mab_query << @zx_request.inspect[:pay_chnl_encd]
+      mab_query << @zx_request[:pay_chnl_encd]
       mab_query << '0100SDC0'
       builder = Nokogiri::XML::Builder.new(encoding: 'GBK') do |xml|
         xml.ROOT do
-          xml.Chnl_Id @zx_request.inspect[:chnl_id]
+          xml.Chnl_Id @zx_request[:chnl_id]
           xml.Chnl_Mercht_Id chnl_mercht_id
           xml.Pay_Chnl_Encd pay_chnl_encd
           xml.trancode '0100SDC0'
@@ -150,7 +150,7 @@ module Biz
         #   @merchant.save
         # end
       else
-        raise "返回记录没有对应资料,\n#{resp_hash}"
+        raise "返回记录没有对应资料,\n#{resp_hash['rtninfo']}"
       end
       resp_hash
     end
@@ -175,12 +175,12 @@ module Biz
         @zx_request['zx_contr_info_lists'].each do |cl|
           xml.Contrinfo do
             xml.Pay_Typ_Encd cl['pay_typ_encd']
-            xml.Pay_Typ_Fee_Rate cl['pay_typ_fee_rate']
             xml.Start_Dt cl['start_dt']
+            xml.Pay_Typ_Fee_Rate cl['pay_typ_fee_rate']
           end
           mabs << cl['pay_typ_encd']
-          mabs << cl['pay_typ_fee_rate']
           mabs << cl['start_dt']
+          mabs << cl['pay_typ_fee_rate']
         end
       end
       'NO_VALUE'

@@ -19,6 +19,3 @@ table.table
         = link_to '编辑', edit_inspect_merchant_url(obj.id.to_s), class: 'btn btn-sm btn-primary'
         = link_to '查看', inspect_merchant_url(obj.id.to_s), class: 'btn btn-sm btn-default'
         = link_to '锁定数据', change_status_inspect_merchant_url(obj.id.to_s, status: '审核中'), method: :post, class: 'btn btn-sm btn-warning'
-        = link_to '关闭', change_status_inspect_merchant_url(obj.id.to_s, status: '关闭'), method: :post, class: 'btn btn-sm btn-danger'
-        = link_to '进件失败', change_status_inspect_merchant_url(obj.id.to_s, status: '进件失败'), method: :post, class: 'btn btn-sm btn-danger'
-        = link_to '进件成功', change_status_inspect_merchant_url(obj.id.to_s, status: '进件成功'), method: :post, class: 'btn btn-sm btn-success'

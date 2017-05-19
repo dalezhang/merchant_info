@@ -21,8 +21,6 @@
     | &nbsp
     = link_to '生成进件请求', prepare_request_inspect_merchant_url(@object.id.to_s), method: :post, class: 'btn btn-lg btn-default'
     | &nbsp
-    = link_to '关闭', change_status_inspect_merchant_url(@object.id.to_s, status: '关闭'), method: :post, class: 'btn btn-lg btn-danger'
-    | &nbsp
     = link_to '进件失败', change_status_inspect_merchant_url(@object.id.to_s, status: '进件失败'), method: :post, class: 'btn btn-lg btn-primary'
     | &nbsp
     = link_to '进件成功', change_status_inspect_merchant_url(@object.id.to_s, status: '进件成功'), method: :post, class: 'btn btn-lg btn-success'

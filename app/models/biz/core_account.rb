@@ -34,7 +34,6 @@ module Biz
 
 
     def backend_account(action, url, params)
-      binding.pry
       begin
         response = HTTParty.try(action, "http://zt-t.pooulcloud.cn/#{url}", body: params)
       rescue Exception # Errno::ECONNREFUSED, Net::OpenTimeout => e
