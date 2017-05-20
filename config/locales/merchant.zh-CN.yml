@@ -2,6 +2,8 @@ zh-CN:
   merchants: '商户进件'
   inspect_merchants: '商户进件审核'
   zx_contr_info_lists: '中信渠道费率'
+  registrations: 注册信息
+  home: 首页
   upload_img: 图片上传
   users: 用户管理
   index: '列表'
@@ -29,13 +31,14 @@ zh-CN:
         zx_alipay_channel_type: '中信支付宝经营类目编号'
         mch_deal_type: '商户经营类型(实体,虚拟)'
         mch_type: '商户类型'
+        appid: '微信公众号appid'
       zx_contr_info_list:
         pay_typ_encd: 支付类型
         pay_typ_fee_rate: 支付类型费率
         start_dt: 费率生效日期
       user:
         password: '密码'
-        password_confirm: '确认密码'
+        password_confirmation: '确认密码'
         roles: '角色'
         bucket_name: 图片上传空间名
         bucket_url: 图片上传空间链接

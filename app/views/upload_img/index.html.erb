@@ -1,11 +1,18 @@
-<h4>当前用户图片空间: <%= current_user.bucket_name %></h4>
-<% if current_user.bucket_name.present? %>
-	<form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
-	  <%= text_field_tag 'token', @uptoken, type: 'hidden'%>
-	  <input name="file" type="file" />
-	  <%= submit_tag '提交' %>
-	</form>
+<% if current_user.bucket_name.present? && current_user.bucket_url.present? %>
+  <div class="box">
+    <div class="box-header">
+      <h4 class="box-title">当前用户图片空间: <%= current_user.bucket_name %></h4>
+    </div>
+    <div class="box-body">
+	    <form method="post" action="http://up-z2.qiniu.com/" enctype="multipart/form-data">
+	      <%= text_field_tag 'token', @uptoken, type: 'hidden'%>
+	      <input name="file" type="file" />
+        <br>
+	      <%= submit_tag '提交', class: 'btn btn-lg btn-default' %>
+	    </form>
+    </div>
+  </div>
 <% else %>
 	<br>
-	<h2>请先找管理员开通图片上传空间</h2>
+	<h2 class="text-warning">请先找管理员开通图片上传空间</h2>
 <% end %>	

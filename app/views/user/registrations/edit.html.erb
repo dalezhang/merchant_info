@@ -1,33 +1,32 @@
 
 <!-- /.login-logo -->
 <div class="login-box-body">
-  <p class="login-box-msg">Edit User</p>
+  <p class="login-box-msg">编辑用户</p>
   <% resource_name = 'user'%>
 
 <%= form_for(@user, as: resource_name, url: url_for(controller: 'user/registrations', action: :update, id: @user.id.to_s), html: { method: :put }) do |f| %>
     <div class="form-group has-feedback">
       <%= f.email_field :email, autofocus: true, disabled: 'disabled', class:"form-control", placeholder: "Email" %>
     </div>
-  
     <div class="form-group has-feedback">
-      <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Password" %>
-    <i>(leave blank if you don't want to change it)</i><br />
+      <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "密码" %>
+    <i>(如果你不想修改密码，请留空。)</i><br />
     <% if @minimum_password_length %>
       <br />
       <em><%= @minimum_password_length %> characters minimum</em>
     <% end %>
     </div>
     <div class="form-group has-feedback">
-      <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Password Confirmation" %>
+      <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "确认密码" %>
     </div>
     <div class="form-group has-feedback">
-      <%= f.password_field :current_password, autocomplete: "off", class: "form-control", placeholder: "Current Password" %>
-      <i>(we need your current password to confirm your changes)</i><br />
+      <%= f.password_field :current_password, autocomplete: "off", class: "form-control", placeholder: "原密码" %>
+      <i>(需要你输入当前密码以确认修改权限)</i><br />
     </div>
     <div class="row">
       <!-- /.col -->
       <div class="col-xs-12">
-        <%= f.submit "Update", class: "btn btn-primary btn-block btn-flat" %>
+        <%= f.submit "提交", class: "btn btn-primary btn-block btn-flat" %>
       </div>
       <!-- /.col -->
     </div>
