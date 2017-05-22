@@ -84,6 +84,10 @@
           label.col-sm-3.control-label.string.optional 银行全称
           .col-sm-9
             = text_field_tag 'merchant[bank_info][bank_full_name]', @object.bank_info[:bank_full_name], class: "form-control string optional"
+        .form-group.string.optional.merchant_address
+          label.col-sm-3.control-label.string.optional 是否中信银行
+          .col-sm-9
+            = select_tag 'merchant[bank_info][is_nt_citic]', options_for_select( [['是',0],['否',1]],@object.bank_info[:is_nt_citic]), class: "form-control string optional"
 
     .box
       .box-header

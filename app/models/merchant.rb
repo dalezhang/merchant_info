@@ -147,6 +147,7 @@ class BankInfo < ApplicationRecord
   field :urbn, type: String # 开户市
   field :zone, type: String # 开户区
   field :bank_full_name, type: String # 银行全称
+  field :is_nt_citic, type: String # 是否中信银行
 
   def inspect
     {
@@ -160,6 +161,7 @@ class BankInfo < ApplicationRecord
       urbn: urbn, # 开户市
       zone: zone, # 开户区
       bank_full_name: bank_full_name, # 银行全称
+      is_nt_citic: is_nt_citic, # 是否中信银行
     }
   end
 end

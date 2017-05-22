@@ -19,7 +19,7 @@ module Biz
         @merchant.update_attributes(merchant_id: response['data'])
         return true
       else
-        return log_error @merchant, 'CoreAccount', response['msg']
+        return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
       end
     end
     # def get_backend_account(merchant)
