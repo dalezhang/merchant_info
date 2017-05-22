@@ -16,10 +16,11 @@ class InspectMerchantsController < ResourcesController
   def prepare_request
     load_object
     biz = Biz::ZxMctInfo.new @object
+    core_account = Biz::CoreAccount.new(@object)
     if !biz.prepare_request
       flash[:error] = '数据生成报错！'
-    elsif !Biz::CoreAccount.create_backend_account(@object)
-      flash[:error] = 'merchant_id生成报错！'
+    elsif !core_account.create_backend_account
+      flash[:error] = core_account.error_message
     else
       flash[:success] = '数据生成成功！'
     end

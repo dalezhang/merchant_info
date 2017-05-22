@@ -2,6 +2,8 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
+  field :out_mch_id, type: String # 代理商自定义的merchant唯一标识
+  field :partner_mch_id, type: String, default: "c#{Merchant.count+1}" # 商户号
   field :publicy_key, type: String # 商户公钥
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String  # 代理商自定义的merchant唯一标识
@@ -54,7 +56,8 @@ class Merchant < ApplicationRecord
     hash = {
       id: id.to_s,
       merchant_id: merchant_id,
-      out_merchant_id: out_merchant_id,
+      out_mch_id: out_mch_id,
+      partner_mch_id: partner_mch_id,
       status: STATUS_DATA[status],
       full_name: full_name,
       name: name,
