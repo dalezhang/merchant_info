@@ -1,22 +1,12 @@
 .row
   .col-xs-12
     h4 费率
-    p    支付类型编码：
-    p    支付宝:
-    p    00010001-----条码支付
-    p    00010002-----扫码支付
-    p    00010003-----无线支付
-    p    微信支付:
-    p    00020001-----公众号支付（JSAPI）
-    p    00020002-----原生扫码支付（NATIVE
-    p    00020003-----APP支付（APP）
-    p    00020004-----刷卡支付（MICROPAY）
   .col-xs-6
     = form_tag url_for(controller: 'zx_contr_info_lists', action: :create, inspect_merchant_id: params[:inspect_merchant_id]) do |f|
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 支付类型
         .col-sm-9
-          = text_field_tag 'zx_contr_info_list[pay_typ_encd]', @object.pay_typ_encd, class: "form-control string optional"
+          = select_tag "zx_contr_info_list[pay_typ_encd]", options_for_select( ZxContrInfoList::PayTypData.invert,  @object.pay_typ_encd), class: "form-control string optional",include_blank: true
       .form-group.string.optional.merchant_address
         label.col-sm-3.control-label.string.optional 支付类型费率
         .col-sm-9

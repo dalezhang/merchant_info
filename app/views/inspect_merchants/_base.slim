@@ -64,7 +64,7 @@
         .form-group.string.optional.merchant_address
           label.col-sm-3.control-label.string.optional 账户类型(个人，企业)
           .col-sm-9
-            = text_field_tag 'merchant[bank_info][account_type]', @object.bank_info[:account_type], class: "form-control string optional"
+            = select_tag 'merchant[bank_info][account_type]', options_for_select( ['个人', '企业'],@object.bank_info[:account_type]), class: "form-control string optional"
         .form-group.string.optional.merchant_address
           label.col-sm-3.control-label.string.optional 持卡人身份证号码
           .col-sm-9
