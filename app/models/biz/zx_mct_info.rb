@@ -20,7 +20,7 @@ class Biz::ZxMctInfo
     @prov = @merchant.province # 省份（字典
     @urbn = @merchant.urbn # 城市（汉字标示
     @dtl_addr = @merchant.address # 详细地址
-    @acct_nm = @merchant.bank_info.account_num # 开户人姓名/公司名
+    @acct_nm = @merchant.bank_info.owner_name # 开户人姓名/公司名
     @opn_bnk = @merchant.bank_info.bank_full_name # 开户行（中文名）
     @is_nt_citic = @merchant.bank_info.is_nt_citic # 是否中信银行,是：0，否：1
     @acct_typ =  zx_account_type(@merchant.bank_info.account_type) # 账户类型:1--中信银行对私账户，2--中信银行对公账户 3--中信银行内部账户，4--他行（非中信银行账户）
