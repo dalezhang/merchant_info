@@ -62,10 +62,11 @@ class InspectMerchantsController < ResourcesController
   private
 
   def send_request(appl_typ)
+    raise '找不到商户数据' unless @object.present?
     bz = Biz::ZxInfcApi.new(@object.merchant_id, params[:channel])
     response_xml = bz.send_intfc(appl_typ)
     if response_xml
-      @object.request_and_response.zx_reponse["#{params[:channel]}_#{params[:req_typ]}"] = Hash.from_xml(response_xml)
+      @object.request_and_response.zx_response["#{params[:channel]}_#{params[:req_typ]}"] = Hash.from_xml(response_xml)
       @object.save
       flash[:success] = "返回信息已保存在request_and_response.zx_reponse[#{params[:channel]}_#{params[:req_typ]}]"
     else
