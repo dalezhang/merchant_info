@@ -40,9 +40,14 @@ class InspectMerchantsController < ResourcesController
       bz = Biz::ZxInfcApi.new(@object.merchant_id, params[:channel])
       response_hash = bz.send_query
       if response_hash
+        response_hash["ROOT"]["Msg_Sign"] = '**'
         @object.request_and_response.zx_response["#{params[:channel]}_query"] = response_hash
         @object.save
-        flash[:success] = '返回信息已保存在request_and_response.zx_response'
+        if response_hash['ROOT']['Chnl_Id'] == '10000022'
+          flash[:success] = '返回信息已保存在request_and_response.zx_response'
+        else
+          flash[:error] = "返回记录没有对应资料,\n#{response_hash['ROOT']['rtninfo']}"
+        end
       else
         flash[:error] = '无返回信息'
       end
@@ -64,11 +69,17 @@ class InspectMerchantsController < ResourcesController
   def send_request(appl_typ)
     raise '找不到商户数据' unless @object.present?
     bz = Biz::ZxInfcApi.new(@object.merchant_id, params[:channel])
-    response_xml = bz.send_intfc(appl_typ)
-    if response_xml
-      @object.request_and_response.zx_response["#{params[:channel]}_#{params[:req_typ]}"] = Hash.from_xml(response_xml)
+    response_hash = bz.send_intfc(appl_typ)
+    if response_hash.present?
+      response_hash["ROOT"]["Msg_Sign"] = '**'
+      @object.request_and_response.zx_response["#{params[:channel]}_#{params[:req_typ]}"] = response_hash
       @object.save
-      flash[:success] = "返回信息已保存在request_and_response.zx_reponse[#{params[:channel]}_#{params[:req_typ]}]"
+      if response_hash["ROOT"]['rtncode'] == '00000000'
+        @object.update!(status: 1)
+        flash[:success] = "返回信息已保存在request_and_response.zx_reponse[#{params[:channel]}_#{params[:req_typ]}]"
+      else
+        flash[:error] = response_hash["ROOT"]['rtninfo']
+      end
     else
       flash[:error] = '无返回信息'
     end

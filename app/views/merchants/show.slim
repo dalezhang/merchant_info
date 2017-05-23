@@ -2,6 +2,9 @@
   .row
     .col-xs-9
       = text_area_tag 'req_body', JSON.pretty_generate(@object.inspect), style: 'height: 1000px;', class: 'form-control'
+      .col-xs-12.text-center
+        br
+        = link_to '编辑', edit_merchant_path(@object.id.to_s), class: 'btn btn-lg btn-default'
     .col-xs-3
       h4
         | 营业执照
@@ -15,7 +18,3 @@
       h4
         | 法人身份证反面
       = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
-  .row
-    .col-xs-12.text-center
-      br
-      = link_to '编辑', edit_merchant_path(@object.id.to_s), class: 'btn btn-lg btn-default'

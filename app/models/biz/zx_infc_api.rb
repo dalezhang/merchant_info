@@ -18,7 +18,7 @@ module Biz
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
       @zx_request = @merchant.request_and_response["zx_request"][@channel]
-      raise "zx_request 无内容，请先生产进件请求" unless @zx_request.present?
+      raise "zx_request 无内容，请先生成进件请求" unless @zx_request.present?
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
@@ -31,8 +31,6 @@ module Biz
       xml = prepare_query
       request_hash = Hash.from_xml xml
       request_hash['ROOT'].delete('Msg_Sign')
-      @merchant.request_and_response.zx_request["#{@channel}_query"] = request_hash
-      @merchant.save
       send_zx_query(xml)
     end
 
@@ -49,8 +47,6 @@ module Biz
 
     # appl_typ =>  新增：0；变更：1；停用：2
     def prepare_request(appl_typ)
-      # bank_account = @zx_request.bank_account
-      # return log_error(nil, "bank_account不能为空") unless bank_account
       mabs = []
       missed_require_fields = []
       raise '请先上传营业执照' unless get_lics_file # 获取营业执照
@@ -99,13 +95,7 @@ module Biz
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc', url, data)
       return if has_error
-
-      xml = Nokogiri::XML(ret)
-      if xml.xpath('//rtncode').text == '00000000'
-        @merchant.update!(status: 1)
-      else
-        raise xml.xpath('//rtninfo').text
-      end
+      Hash.from_xml(ret)
     end
 
     def prepare_query
@@ -139,19 +129,6 @@ module Biz
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc_query', url, data)
       resp_hash = Hash.from_xml ret
-      if resp_hash['Chnl_Id'] == '10000022'
-        # @merchant.mch_id = xml.xpath("//Mercht_Idtfy_Num").text
-        # @merchant.status = 1 if @merchant.status < 1
-        # if @merchant.changed?
-        #   if @sent_post
-        #     @sent_post.result_message = @merchant.changes.to_s
-        #     @sent_post.save
-        #   end
-        #   @merchant.save
-        # end
-      else
-        raise "返回记录没有对应资料,\n#{resp_hash['rtninfo']}"
-      end
       resp_hash
     end
 
