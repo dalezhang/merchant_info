@@ -12,7 +12,7 @@ module Authentication
   end
 
   def current_user
-    User.find_by(id: session[:user_id].to_s)
+    @current_user ||= User.find_by(id: session[:user_id].to_s)
   end
 
   def logout

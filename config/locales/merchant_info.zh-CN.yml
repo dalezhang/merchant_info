@@ -39,11 +39,16 @@ zh-CN:
         pay_typ_fee_rate: 支付类型费率
         start_dt: 费率生效日期
       user:
+        email: '电子邮箱(登录名)'
         password: '密码'
         password_confirmation: '确认密码'
+        current_password: '当前密码'
         roles: '角色'
         bucket_name: 图片上传空间名
         bucket_url: 图片上传空间链接
+        name: '用户名'
+        company_name: '公司名'
+        tel: '联系电话'
     placeholders:
       merchant:
         bank_account: '银行账号'

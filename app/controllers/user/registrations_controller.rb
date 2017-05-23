@@ -24,16 +24,17 @@ class User::RegistrationsController < AdminController
   # PUT /resource
   def update
     if current_user && current_user.verify!(params[:user][:current_password])
-      current_user.password = params[:user][:password]
-      current_user.password_confirmation = params[:user][:password_confirmation]
-      current_user.generate_password
+      current_user.update(user_params)
       session[:user_id] = current_user.id.to_s
       flash[:success] = '信息修改成功。'
     else
       params[:user][:password].clear
-      flash[:error] = '请输入正确的用户名和密码。'
+      flash[:error] = '请输入正确的密码。'
     end
     redirect_to action: :edit, id: current_user.id.to_s
+  # rescue Exception => e
+  #   flash[:error] = e.message
+  #   redirect_to action: :edit, id: current_user.id.to_s
   end
 
   # DELETE /resource
@@ -72,4 +73,10 @@ class User::RegistrationsController < AdminController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+  private
+  def user_params
+    params.require(:user).permit(
+      :email, :password, :password_confirmation, :tel, :name, :company_name
+    )
+  end
 end

@@ -1,8 +1,17 @@
 .row
   .col-md-6
     .form-group
-      = label 'user', '登录名'
+      = label 'user', '电子邮箱(登录名)'
       = text_field_tag '', current_user.email, readonly: true, class: "form-control"
+    .form-group
+      = label :name, '用户名'
+      = text_field_tag '', current_user.name, readonly: true, class: "form-control"
+    .form-group
+      = label :company_name, '公司名'
+      = text_field_tag '', current_user.company_name, readonly: true, class: "form-control"
+    .form-group
+      = label :tel, '联系电话'
+      = text_field_tag '', current_user.tel, readonly: true, class: "form-control"
     .form-group
       = label :roles, '角色'
       = text_field_tag '', current_user.roles.pluck(:name).join('--'), readonly: true, class: "form-control"

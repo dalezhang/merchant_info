@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include Mongoid::Timestamps::Created
 
   attr_accessor :password, :password_confirmation
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   # devise :database_authenticatable, :registerable, :lockable,
@@ -17,7 +18,8 @@ class User < ApplicationRecord
   field :token, type: String
   field :bucket_url, type: String
   field :bucket_name, type: String
-  validates :password, length: { minimum: 6 } if @password
+  field :company_name, type: String
+  field :tel, type: String
   validates :email, :format=> {:with=> /^[\d,a-z]([\w\.\-]+)@([a-z0-9\-]+).([a-z\.]+[a-z])$/i, :multiline => true, :message=> "邮箱地址格式不正确"}
   validates :email,:presence => true, uniqueness: { case_sensitive: false, message: '该email已经存在' }
 
@@ -25,6 +27,7 @@ class User < ApplicationRecord
   has_many :merchants
 
   before_create :generate_password, :generate_token
+  before_save :generate_password
 
   def verify!(password)
     cryt_func(salt, password).eql?(encrypted_password)
@@ -37,15 +40,11 @@ class User < ApplicationRecord
 
   # 生成用户密码
   def generate_password
-    if @password && @password_confirmation
-      if @password == @password_confirmation
-        self.salt = ('a'..'z').to_a.sample(20).join # 随机salt
-        self.encrypted_password = cryt_func(salt, password)
-      else
-        raise '两次输入密码不一致！'
-      end
-    else
-      raise '请填入密码和确认密码！'
+    if password.present? && password_confirmation.present?
+      raise '两次输入密码不一致！' unless password == password_confirmation
+      raise '密码不得小于6位' if password.size < 6
+      self.salt = ('a'..'z').to_a.sample(20).join # 随机salt
+      self.encrypted_password = cryt_func(salt, password)
     end
   end
 

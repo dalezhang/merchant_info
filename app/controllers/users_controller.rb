@@ -36,7 +36,8 @@ class UsersController < ResourcesController
   private
   def user_params
     params.require(:user).permit(
-			:email, :password, :password_confirmation, :bucket_name, :bucket_url
+			:email, :password, :password_confirmation, :bucket_name, :bucket_url,
+      :tel, :name, :company_name
     )
   end
 end

@@ -1,0 +1,16 @@
+- resource_name = 'user'
+.login-box-body
+  p.login-box-msg 编辑用户
+  = vertical_form_for(@user, as: resource_name, url: url_for(controller: 'user/registrations', action: :update, id: @user.id.to_s), html: { method: :put }) do |f|
+    = f.input :email, disabled: true,  placeholder: "Email"
+    = f.input :password, autocomplete: "off", class: "form-control", placeholder: "密码", hint: '(如果你不想修改密码，请留空。)'
+    = f.input :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "确认密码"
+    = f.input :current_password, autocomplete: "off", class: "form-control", placeholder: "原密码", hint: '(需要你输入当前密码以确认修改权限)'
+    = f.input :name
+    = f.input :company_name
+    = f.input :tel
+    br
+    .row
+      .col-xs-12
+        = f.submit "提交", class: "btn btn-primary btn-block btn-flat"
+  = render "user/shared/links" unless current_user
