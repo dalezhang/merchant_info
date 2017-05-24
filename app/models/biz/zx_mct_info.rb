@@ -40,6 +40,7 @@ class Biz::ZxMctInfo
   end
 
   def prepare_request
+    raise 'merchant_id为空' unless @merchant.merchant_id.present?
     zx_request = {}
     {
       wechat: {
