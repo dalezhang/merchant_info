@@ -6,8 +6,6 @@ module Biz
     attr_accessor :merchant, :zx_request
 
     def initialize(mch_id, channel)
-      @has_error = false
-      @messages = []
       if mch_id.class == Merchant
         @merchant = mch_id
       elsif merchant = Merchant.find_by(merchant_id: mch_id)
@@ -22,16 +20,25 @@ module Biz
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
-    def send_intfc(appl_typ)
-      xml = prepare_request(appl_typ)
-      send_zx_intfc(xml)
-    end
-
-    def send_query
-      xml = prepare_query
-      request_hash = Hash.from_xml xml
-      request_hash['ROOT'].delete('Msg_Sign')
-      send_zx_query(xml)
+    def send_intfc(req_typ)
+      xml = nil
+      case req_typ
+      when '新增'
+        xml = prepare_request('0')
+      when '变更'
+        xml = prepare_request('1')
+      when '停用'
+        xml = prepare_request('2')
+      when '查询'
+        xml = prepare_query
+        return send_zx_query(xml)
+      else
+        return log_error @merchant, '请求', '未知的请求类型'
+      end
+      if send_zx_intfc(xml, req_typ)
+        return "返回信息已保存在request_and_response.zx_response.#{@channel}_#{req_typ}"
+      end
+      false
     end
 
     private
@@ -90,12 +97,22 @@ module Biz
       true
     end
 
-    def send_zx_intfc(data)
+    def send_zx_intfc(data, req_typ)
       return unless !has_error && data
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc', url, data)
-      return if has_error
-      Hash.from_xml(ret)
+      resp_hash = Hash.from_xml(ret)
+      if resp_hash.present?
+        resp_hash["ROOT"]["Msg_Sign"] = '**'
+        @merchant.request_and_response.zx_response["#{@channel}_#{req_typ}"] = resp_hash
+        @merchant.save
+        unless resp_hash["ROOT"]['rtncode'] == '00000000'
+          return log_error @merchant, resp_hash["ROOT"]['rtninfo']
+        end
+      else
+        return log_error @merchant, '无返回信息'
+      end
+      true
     end
 
     def prepare_query
@@ -129,7 +146,17 @@ module Biz
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc_query', url, data)
       resp_hash = Hash.from_xml ret
-      resp_hash
+      if resp_hash.present?
+        resp_hash["ROOT"]["Msg_Sign"] = '**'
+        @merchant.request_and_response.zx_response["#{@channel}_query"] = resp_hash
+        @merchant.save
+        unless resp_hash["ROOT"]['Chnl_Id'] == '10000022'
+          return log_error @merchant, resp_hash["ROOT"]['rtninfo']
+        end
+      else
+        return log_error @merchant, '查询', '无返回信息'
+      end
+      "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"
     end
 
     def post_xml_gbk(_method, url, data)
