@@ -143,6 +143,9 @@ module Biz
     end
 
     def send_zx_query(data)
+      js = Hash.from_xml data
+      js['ROOT']['Msg_Sign'] = '**'
+      @merchant.request_and_response.zx_request["#{@channel}_query"] = js
       url = 'https://219.142.124.205:30280'
       ret = post_xml_gbk('zx_intfc_query', url, data)
       resp_hash = Hash.from_xml ret

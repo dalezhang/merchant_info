@@ -170,10 +170,14 @@ class RequestAndResponse < ApplicationRecord
   embedded_in :merchant
   field :zx_request, type: Hash, default:{} # 中信进件内容
   field :zx_response, type: Hash, default:{} # 中信进件内容
+  field :pfb_request, type: Hash, default:{} # 农商行进件内容
+  field :pfb_response, type: Hash, default:{} # 农商行进件内容
   def inspect
     {
       zx_request: zx_request,
       zx_response: zx_response,
+      pfb_request: zx_request,
+      pfb_response: zx_response,
     }
   end
 end
