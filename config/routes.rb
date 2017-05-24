@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
   resources :users
   resources :upload_img, only: [:index]
+  resources :error_logs
   namespace :api do
     resources :merchants
   end

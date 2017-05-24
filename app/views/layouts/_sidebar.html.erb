@@ -36,6 +36,11 @@
           <i class="fa fa-link"></i> <span>上传图片</span>
         <% end %>
       </li>
+      <li class="<%= controller_name == 'error_logs' ? 'active' : '' %>">
+        <%= link_to error_logs_path, target: '_blank' do %>
+          <i class="fa fa-link"></i> <span>错误信息</span>
+        <% end %>
+      </li>
       <%#<li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>%>
       <%#<li class="treeview">%>
         <%#<a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>%>

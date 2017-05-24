@@ -12,8 +12,8 @@ module Biz
       @sender, @title, @message, @call_stack = *args
       @has_error = true
       call_stack = caller(2)[0..2].join("\n") unless call_stack
-      if defined?(Logs::ErrorLog)
-        Logs::ErrorLog.create(
+      if defined?(ErrorLog)
+        ErrorLog.create(
           sender: @sender, err_title: @title, err_message: @message,
           call_stack: @call_stack
         )

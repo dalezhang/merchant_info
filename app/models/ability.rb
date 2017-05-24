@@ -34,6 +34,7 @@ class Ability
     grant_general_permission(user)
     can :manage, :inspect_merchants
     can :manage, User
+    can :manage, ErrorLog
   end
 
   def grant_permissions_to_super_admin(user); end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class InspectMerchantsController < ResourcesController
+  include Logging
   authorize_resource class: 'Merchant'
 
   def change_status
@@ -39,6 +40,7 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
+    log_error @object, e.message, '', e.backtrace
     redirect_to action: :show, id: @object.id.to_s
   end
 

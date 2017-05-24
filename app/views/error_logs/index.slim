@@ -1,0 +1,12 @@
+table.table
+  tr
+    th time
+    th err_title
+    th 操作
+  - @collection.each do |obj|
+    tr
+      td= obj.created_at
+      td= obj.err_title
+      td
+        = link_to '查看', obj, class: 'btn btn-sm btn-success'
+        = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger'
