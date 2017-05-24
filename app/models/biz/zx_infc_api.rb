@@ -21,7 +21,7 @@ module Biz
 
     # appl_typ =>  新增：0；变更：1；停用：2
     def send_intfc(req_typ)
-      raise '请先生成进件请求。' if @zx_request.chnl_mercht_id.size < 10
+      raise '请先生成进件请求。' if @zx_request['chnl_mercht_id'].size < 11
       xml = nil
       case req_typ
       when '新增'
