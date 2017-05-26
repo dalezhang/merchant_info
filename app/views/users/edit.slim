@@ -3,6 +3,9 @@
     .col-xs-6
       h4 基本信息
       = f.input :email, readonly: true
+      = f.input :name
+      = f.input :company_name
+      = f.input :tel
       = f.input :roles do
         = f.select :roles, options_for_select([['--无--']] + Role.all.pluck(:name), selected: f.object.roles.first.try(:name) ), {}, include_blank: true
       = f.input :bucket_name

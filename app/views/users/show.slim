@@ -4,6 +4,18 @@
       = label 'user', '登录名'
       = text_field_tag '', @object.email, readonly: true, class: "form-control"
     .form-group
+      = label :name, '用户名'
+      = text_field_tag '', @object.name, readonly: true, class: "form-control"
+    .form-group
+      = label :company_name, '公司名'
+      = text_field_tag '', @object.company_name, readonly: true, class: "form-control"
+    .form-group
+      = label :token, 'Token'
+      = text_field_tag '', @object.token, readonly: true, class: "form-control"
+    .form-group
+      = label :tel, '联系电话'
+      = text_field_tag '', @object.tel, readonly: true, class: "form-control"
+    .form-group
       = label :roles, '角色'
       = text_field_tag '', @object.roles.pluck(:name).join('--'), readonly: true, class: "form-control"
     .form-group

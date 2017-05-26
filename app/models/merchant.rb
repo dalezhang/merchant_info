@@ -21,6 +21,7 @@ class Merchant < ApplicationRecord
   field :industry, type: String # 经营行业
   field :zx_wechat_channel_type, type: String # 中信经营类目--微信，见附件《经营类目》中的经营类目明细编码
   field :zx_alipay_channel_type, type: String
+  field :pfb_channel_type, type: String # 农商行普付宝经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
   field :bank_info, type: Hash, default: {} # 银行信息
   field :legal_person # 法人信息
@@ -74,6 +75,7 @@ class Merchant < ApplicationRecord
       industry: industry,
       zx_wechat_channel_type: zx_wechat_channel_type,
       zx_alipay_channel_type: zx_alipay_channel_type,
+      pfb_channel_type: pfb_channel_type,
       mch_deal_type: mch_deal_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
@@ -82,6 +84,7 @@ class Merchant < ApplicationRecord
     if all
       hash[:request_and_response] = request_and_response.inspect
       hash[:zx_contr_info_lists] = zx_contr_info_lists.collect(&:inspect)
+      hash[:channel_data] = channel_data
     else
       hash.delete(:merchant_id)
     end
