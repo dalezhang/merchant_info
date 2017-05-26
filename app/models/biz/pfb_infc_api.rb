@@ -13,7 +13,8 @@ module Biz
       @channel = channel
       @pfb_request = @merchant.request_and_response['pfb_request'][@channel]
       raise 'zx_request 无内容，请先生成进件请求' unless @pfb_request.present?
-    end    def get_mab(js)
+    end
+    def get_mab(js)
       mab = []
       js.keys.sort.each do |k|
         mab << "#{k}=#{js[k]}" if k != :mac && k != :sign && js[k]
