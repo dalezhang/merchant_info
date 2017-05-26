@@ -3,7 +3,9 @@
 class Api::MerchantsController < ActionController::API
   def create
     jwt = params[:jwt]
-    arr = Biz::Jwt.h5_verify? jwt
+    email = params[:email]
+    decoder = Biz::Jwt.new(params[:email])
+    arr = decoder.h5_verify? jwt
     unless arr[0]
       render json: { error: 'invalid jwt' }
       return

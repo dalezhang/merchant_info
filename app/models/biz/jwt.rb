@@ -2,19 +2,22 @@
 
 module Biz
   module Jwt
-    extend self
+    def initialize(email)
+      raise 'email 不得为空' unless email.present?
+      user = User.find_by(email: email)
+      raise '找不到对应的用户' unless user.present?
+      @secrets_base = user.token
+    end
     # h5 接口加签
     def hsh_encode(payload, ttl_in_minutes = 60 * 24 * 30)
-      secrets_base = '$secretshello'
       payload[:exp] = ttl_in_minutes.minutes.from_now.to_i
-      JWT.encode(payload, secrets_base)
+      JWT.encode(payload, @secrets_base)
     end
 
     # h5 接口解签
     def hsh_decode(token, leeway = nil)
-      secrets_base = '$secretshello'
       begin
-        decoded = JWT.decode(token, secrets_base, leeway: leeway)
+        decoded = JWT.decode(token, @secrets_base, leeway: leeway)
         HashWithIndifferentAccess.new(decoded[0])
       rescue JWT::ExpiredSignature
         decoded = 'JWT::ExpiredSignature'

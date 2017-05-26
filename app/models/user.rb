@@ -15,7 +15,7 @@ class User < ApplicationRecord
   field :encrypted_password, type: String
   field :salt, type: String
   field :last_signed_in, type: Time
-  field :token, type: String
+  field :token, type: String, default: UUID.new.generate
   field :bucket_url, type: String
   field :bucket_name, type: String
   field :company_name, type: String
@@ -40,6 +40,9 @@ class User < ApplicationRecord
 
   # 生成用户密码
   def generate_password
+    unless token.present?
+      self.token = UUID.new.generate
+    end
     if password.present? && password_confirmation.present?
       raise '两次输入密码不一致！' unless password == password_confirmation
       raise '密码不得小于6位' if password.size < 6

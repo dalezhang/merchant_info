@@ -10,6 +10,9 @@
       = label :company_name, '公司名'
       = text_field_tag '', current_user.company_name, readonly: true, class: "form-control"
     .form-group
+      = label :token, 'Token'
+      = text_field_tag '', current_user.token, readonly: true, class: "form-control"
+    .form-group
       = label :tel, '联系电话'
       = text_field_tag '', current_user.tel, readonly: true, class: "form-control"
     .form-group

@@ -3,19 +3,19 @@
 
 table.table
   tr
-    th 商户编号
+    th 自定义编号
+    th Id
     th 商户类型
     th 商户名称
     th 商户状态
-    th 代理商
     th 操作
   - @collection.each do |obj|
     tr
-      td= obj.merchant_id
+      td= obj.out_mch_id
+      td= obj.id.to_s
       td= obj.mch_type
       td= obj.name
       td= Merchant::STATUS_DATA[obj.status]
-      td= obj.user.name
       td
         = link_to '查看', obj, class: 'btn btn-sm btn-success'
         - if obj.status <= 5
