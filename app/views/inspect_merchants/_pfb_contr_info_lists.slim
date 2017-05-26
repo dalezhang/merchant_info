@@ -1,0 +1,25 @@
+.row
+  .col-xs-12
+    .box
+      .box-header
+        h4.box-title 农商行渠道信息
+      .box-body
+        table.table.table-bordered
+          thead
+            tr
+              th 支付类型
+              th 支付类型费率
+          tbody
+            tr
+              td 微信线下
+              td
+              	= text_field_tag 'merchant[channel_data][pfb][wechat_offline][rate]', @object.channel_data['pfb'].try(:[],'wechat_offline').try(:[],'rate') 
+            tr
+              td 微信APP支付
+              td
+              	= text_field_tag 'merchant[channel_data][pfb][wechat_app][rate]', @object.channel_data['pfb'].try(:[],'wechat_app').try(:[],'rate') 
+            tr
+              td 支付宝
+              td
+              	= text_field_tag 'merchant[channel_data][pfb][alipay][rate]', @object.channel_data['pfb'].try(:[],'alipay').try(:[],'rate') 
+
