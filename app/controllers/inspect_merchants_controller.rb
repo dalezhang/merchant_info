@@ -3,6 +3,10 @@
 class InspectMerchantsController < ResourcesController
   include Logging
   authorize_resource class: 'Merchant'
+  before_action :authorize_current_user
+  def authorize_current_user
+    redirect_to '/' unless current_user.roles.pluck(:name).include?('admin')
+  end
 
   def change_status
     load_object
