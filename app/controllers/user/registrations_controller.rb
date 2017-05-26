@@ -32,9 +32,9 @@ class User::RegistrationsController < AdminController
       flash[:error] = '请输入正确的密码。'
     end
     redirect_to action: :edit, id: current_user.id.to_s
-  # rescue Exception => e
-  #   flash[:error] = e.message
-  #   redirect_to action: :edit, id: current_user.id.to_s
+    # rescue Exception => e
+    #   flash[:error] = e.message
+    #   redirect_to action: :edit, id: current_user.id.to_s
   end
 
   # DELETE /resource
@@ -73,7 +73,9 @@ class User::RegistrationsController < AdminController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
   private
+
   def user_params
     params.require(:user).permit(
       :email, :password, :password_confirmation, :tel, :name, :company_name

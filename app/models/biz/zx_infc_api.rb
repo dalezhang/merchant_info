@@ -15,8 +15,8 @@ module Biz
       end
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
-      @zx_request = @merchant.request_and_response["zx_request"][@channel]
-      raise "zx_request 无内容，请先生成进件请求" unless @zx_request.present?
+      @zx_request = @merchant.request_and_response['zx_request'][@channel]
+      raise 'zx_request 无内容，请先生成进件请求' unless @zx_request.present?
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
@@ -45,7 +45,7 @@ module Biz
     private
 
     def sign(mabs)
-      @mab = mabs.join().encode('GBK', 'UTF-8')
+      @mab = mabs.join.encode('GBK', 'UTF-8')
       key = OpenSSL::PKey::RSA.new(File.read("#{Rails.application.secrets.pooul['keys_path']}/zx_prod_key.pem"))
       crt = OpenSSL::X509::Certificate.new(File.read("#{Rails.application.secrets.pooul['keys_path']}/zx_prod.crt"))
       sign = OpenSSL::PKCS7.sign(crt, key, @mab, [], OpenSSL::PKCS7::DETACHED)
@@ -54,7 +54,7 @@ module Biz
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
-    def prepare_request(appl_typ)
+    def prepare_request(_appl_typ)
       mabs = []
       missed_require_fields = []
       raise '请先上传营业执照' unless get_lics_file # 获取营业执照
@@ -64,7 +64,7 @@ module Biz
       builder = Nokogiri::XML::Builder.new(encoding: 'GBK') do |xml|
         xml.ROOT do
           CSV.foreach("#{Rails.root}/db/init_data/zx_reg_fields.csv", headers: true) do |r|
-            val = r['f_name'] ? eval(r['f_name']) : @zx_request[ r['regn_en_nm'].downcase ]
+            val = r['f_name'] ? eval(r['f_name']) : @zx_request[r['regn_en_nm'].downcase]
             unless val == 'NO_VALUE'
               xml.send r['regn_en_nm'], val
               if val
@@ -104,11 +104,11 @@ module Biz
       ret = post_xml_gbk('zx_intfc', url, data)
       resp_hash = Hash.from_xml(ret)
       if resp_hash.present?
-        resp_hash["ROOT"]["Msg_Sign"] = '**'
+        resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save
-        unless resp_hash["ROOT"]['rtncode'] == '00000000'
-          return log_error @merchant, resp_hash["ROOT"]['rtninfo']
+        unless resp_hash['ROOT']['rtncode'] == '00000000'
+          return log_error @merchant, resp_hash['ROOT']['rtninfo']
         end
       else
         return log_error @merchant, '无返回信息'
@@ -151,11 +151,11 @@ module Biz
       ret = post_xml_gbk('zx_intfc_query', url, data)
       resp_hash = Hash.from_xml ret
       if resp_hash.present?
-        resp_hash["ROOT"]["Msg_Sign"] = '**'
+        resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_query"] = resp_hash
         @merchant.save
-        unless resp_hash["ROOT"]['Chnl_Id'] == '10000022'
-          return log_error @merchant, resp_hash["ROOT"]['rtninfo']
+        unless resp_hash['ROOT']['Chnl_Id'] == '10000022'
+          return log_error @merchant, resp_hash['ROOT']['rtninfo']
         end
       else
         return log_error @merchant, '查询', '无返回信息'

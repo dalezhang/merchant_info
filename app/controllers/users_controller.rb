@@ -8,35 +8,37 @@ class UsersController < ResourcesController
     flash[:success] = '用户创建成功。'
     redirect_to @object
   rescue Exception => e
-    if e.class = Mongoid::Errors::Validations
-      @message = @object.errors.messages.values.flatten.join
-    else
-      @message = e.message
-    end
+    @message = if e.class = Mongoid::Errors::Validations
+                 @object.errors.messages.values.flatten.join
+               else
+                 e.message
+               end
     flash[:error] = "创建失败: #{@message}"
     render 'new'
   end
+
   def update
     load_object
     role = Role.find_by(name: params[:user][:roles])
     @object.roles = [role]
-    @object.update!(user_params.merge({roles: [role]}))
+    @object.update!(user_params.merge(roles: [role]))
     flash[:success] = '修改成功'
     redirect_to @object
   rescue Exception => e
-    if e.class = Mongoid::Errors::Validations
-      @message = @object.errors.messages.values.flatten.join
-    else
-      @message = e.message
-    end
+    @message = if e.class = Mongoid::Errors::Validations
+                 @object.errors.messages.values.flatten.join
+               else
+                 e.message
+               end
     flash[:error] = "修改失败: #{@message}"
     redirect_to @object
   end
 
   private
+
   def user_params
     params.require(:user).permit(
-			:email, :password, :password_confirmation, :bucket_name, :bucket_url,
+      :email, :password, :password_confirmation, :bucket_name, :bucket_url,
       :tel, :name, :company_name
     )
   end

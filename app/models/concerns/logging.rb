@@ -1,4 +1,6 @@
 
+# frozen_string_literal: true
+
 module Logging
   extend ActiveSupport::Concern
   attr_accessor :has_error, :messages, :error_message
@@ -19,8 +21,8 @@ module Logging
     end
     false
   end
+
   def error_message
     "#{@title}#{@message.present? ? (': ' + @message) : '.'}"
   end
-
 end

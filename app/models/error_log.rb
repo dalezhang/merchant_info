@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErrorLog < ApplicationRecord
   include Mongoid::Timestamps
   field :sender, type: String

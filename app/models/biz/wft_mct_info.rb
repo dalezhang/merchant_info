@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Biz::WftMctInfo
-  attr_accessor  :lics_file_url
+  attr_accessor :lics_file_url
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
@@ -13,7 +15,7 @@ class Biz::WftMctInfo
       @mchDealType = 2
     end
     @remark = @merchant.memo # 商户备注
-    @chPayAuth = nil  # 渠道授权交，是否渠道授权交易，不传默认否（1:是，0：否）
+    @chPayAuth = nil # 渠道授权交，是否渠道授权交易，不传默认否（1:是，0：否）
     @merchantDetail = {} # 商户详情
     @bankAccount = {} # 银行账户
     # 商户详情信息（MerchantDetail对象）====>
@@ -28,14 +30,12 @@ class Biz::WftMctInfo
     @customerPhone = @merchant.company.service_tel # 客服电话
     @principal = @merchant.legal_person.name # 负责人
     @principalMobile = @merchant.legal_person.tel # 负责人手机号
-    @idCode =  @merchant.legal_person.identity_card_num # 负责人身份证
+    @idCode = @merchant.legal_person.identity_card_num # 负责人身份证
     @indentityPhoto = nil # 身份证图片: 调用图片上传接口获取，多张以;分割
     @licensePhoto = nil # 营业执照
     @protocolPhoto = nil # 商户协议照
     @orgPhoto = nil # 组织机构代码照
     # <---------
-
-
 
     @chnl_id = '10000022' # 商户归属渠道编号 ?
     @chnl_mercht_id = nil # 商户编号
@@ -61,7 +61,7 @@ class Biz::WftMctInfo
     @acct_num = @merchant.bank_info.account_num # 账号
     @is_nt_two_line = 0 # 是否支持收支两条线,否：0，是：1
     @lics_file_url = "#{@merchant.user.bucket_url}/#{@merchant.company.license_key}"
-    @zx_contr_info_lists = @merchant.zx_contr_info_lists.collect { |o| o.inspect}
+    @zx_contr_info_lists = @merchant.zx_contr_info_lists.collect(&:inspect)
   end
 
   def zx_account_type(account_type)
@@ -78,12 +78,12 @@ class Biz::WftMctInfo
       wechat: {
         pay_chnl_encd: '0002',
         chnl_mercht_id: "zx_wechat_#{@merchant.merchant_id}",
-        opr_cls: @merchant.zx_wechat_channel_type,
+        opr_cls: @merchant.zx_wechat_channel_type
       },
       alipay: {
         pay_chnl_encd: '0001',
         chnl_mercht_id: "zx_alipay_#{@merchant.merchant_id}",
-        opr_cls: @merchant.zx_alipay_channel_type,
+        opr_cls: @merchant.zx_alipay_channel_type
       }
 
     }.each do |key, value|
@@ -121,7 +121,7 @@ class Biz::WftMctInfo
       acct_num: @acct_num,
       is_nt_two_line: @is_nt_two_line,
       lics_file_url: @lics_file_url,
-      zx_contr_info_lists: @zx_contr_info_lists,
+      zx_contr_info_lists: @zx_contr_info_lists
     }
   end
 

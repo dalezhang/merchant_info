@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class ZxContrInfoListsController < ResourcesController
   def load_object
     @object = Merchant.find(params[:inspect_merchant_id]).zx_contr_info_lists.find(params[:id])
   end
+
   def update
     load_object
     params.permit!
@@ -16,6 +19,7 @@ class ZxContrInfoListsController < ResourcesController
     end
     redirect_to controller: :inspect_merchants, action: :edit, id: params[:inspect_merchant_id]
   end
+
   def create
     params.permit!
     @object = Merchant.find(params[:inspect_merchant_id]).zx_contr_info_lists.new(params[object_name.singularize.parameterize('_')])
@@ -25,12 +29,13 @@ class ZxContrInfoListsController < ResourcesController
     end
     redirect_to controller: :inspect_merchants, action: :edit, id: params[:inspect_merchant_id]
   end
+
   def destroy
     load_object
     if @object.destroy
-      flash[:success] = "删除成功"
+      flash[:success] = '删除成功'
     else
-      flash[:error] = "删除失败"
+      flash[:error] = '删除失败'
     end
     redirect_to controller: :inspect_merchants, action: :edit, id: params[:inspect_merchant_id]
   end

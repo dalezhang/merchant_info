@@ -28,7 +28,7 @@ class Biz::ZxMctInfo
     @acct_num = @merchant.bank_info.account_num # 账号
     @is_nt_two_line = 0 # 是否支持收支两条线,否：0，是：1
     @lics_file_url = "#{@merchant.user.bucket_url}/#{@merchant.company.license_key}"
-    @zx_contr_info_lists = @merchant.zx_contr_info_lists.collect { |o| o.inspect}
+    @zx_contr_info_lists = @merchant.zx_contr_info_lists.collect(&:inspect)
   end
 
   def zx_account_type(account_type)
@@ -47,20 +47,20 @@ class Biz::ZxMctInfo
         pay_chnl_encd: '0002',
         chnl_mercht_id: "zx_wechat_#{@merchant.merchant_id}",
         opr_cls: @merchant.zx_wechat_channel_type,
-        zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: ['00020001','00020002','00020003','00020004']),
+        zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: %w[00020001 00020002 00020003 00020004])
       },
       alipay: {
         pay_chnl_encd: '0001',
         chnl_mercht_id: "zx_alipay_#{@merchant.merchant_id}",
         opr_cls: @merchant.zx_alipay_channel_type,
-        zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: ['00010001','00010002','00010003']),
+        zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: %w[00010001 00010002 00010003])
       }
 
     }.each do |key, value|
       @pay_chnl_encd = value[:pay_chnl_encd]
       @chnl_mercht_id = value[:chnl_mercht_id]
       @opr_cls = value[:opr_cls]
-      @zx_contr_info_lists = value[:zx_contr_info_lists].collect { |o| o.inspect}
+      @zx_contr_info_lists = value[:zx_contr_info_lists].collect(&:inspect)
       zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
@@ -93,7 +93,7 @@ class Biz::ZxMctInfo
       acct_num: @acct_num,
       is_nt_two_line: @is_nt_two_line,
       lics_file_url: @lics_file_url,
-      zx_contr_info_lists: @zx_contr_info_lists,
+      zx_contr_info_lists: @zx_contr_info_lists
     }
   end
 end

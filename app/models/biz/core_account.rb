@@ -7,6 +7,7 @@ module Biz
       @merchant = merchant
       @error = nil
     end
+
     def create_backend_account
       return @merchant.merchant_id if @merchant.merchant_id
       params = {
@@ -33,7 +34,6 @@ module Biz
     # def delete_backend_account(merchant)
     #   response = HTTParty.try('delete', "http://zt-t.pooulcloud.cn/cms/merchants/590fe5d7ffea0e5f6dcb3ab8")
     # end
-
 
     def backend_account(action, url, params)
       begin

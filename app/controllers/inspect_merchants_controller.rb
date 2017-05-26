@@ -51,5 +51,4 @@ class InspectMerchantsController < ResourcesController
   def object_name
     'merchant'
   end
-
 end

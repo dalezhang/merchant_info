@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::MerchantsController < ActionController::API
+  include Logging
   def create
     jwt = params[:jwt]
     email = params[:email]
@@ -24,7 +25,13 @@ class Api::MerchantsController < ActionController::API
         @merchant.send("#{key}=", data[1][key])
       end
     when 'merchant.update'
-      @merchant = @user.merchant.find_by(out_merchant_id: data[:out_merchant_id])
+      if data[:out_merchant_id].present?
+        @merchant = @user.merchants.find_by(out_merchant_id: data[:out_merchant_id])
+      elsif data[:merchant_id].present?
+        @merchant = @user.merchants.find_by(merchant_id: data[:merchant_id])
+      elsif data[:id].present?
+        @merchant = @user.merchants.find_by(id: data[:id])
+      end
       unless @merchant.present?
         render json: { error: 'invalid id' }.to_json
         return
@@ -50,5 +57,8 @@ class Api::MerchantsController < ActionController::API
     else
       render json: { error: @merchant.errors.messages }.to_json
     end
+  rescue Exception => e
+    log_error @merchant, e.message, '', e.backtrace
+    render json: { error: e.message }.to_json
   end
 end

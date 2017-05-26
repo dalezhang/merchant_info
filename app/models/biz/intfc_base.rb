@@ -20,6 +20,7 @@ module Biz
       end
       false
     end
+
     def error_message
       "#{@title}#{@message.present? ? (': ' + @message) : '.'}"
     end
