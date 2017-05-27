@@ -2,6 +2,27 @@
   .col-xs-3
     .box.box-success
       .box-header
+        h4.box-title 法人身份证正面token
+      .box-body
+        = text_field_tag 'merchant[legal_person][identity_card_front_key]', @object.legal_person.identity_card_front_key
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
+  .col-xs-3
+    .box.box-success
+      .box-header
+        h4.box-title 法人身份证反面token
+      .box-body
+        = text_field_tag 'merchant[legal_person][identity_card_back_key]', @object.legal_person.identity_card_back_key
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
+  .col-xs-3
+    .box.box-success
+      .box-header
+        h4.box-title 法人手持身份证token
+      .box-body
+        = text_field_tag 'merchant[legal_person][id_with_hand_key]', @object.legal_person.id_with_hand_key
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.id_with_hand_key), class: 'image'
+  .col-xs-3
+    .box.box-success
+      .box-header
         h4.box-title 营业执照token
       .box-body
         = text_field_tag 'merchant[company][license_key]', @object.company.license_key
@@ -16,14 +37,14 @@
   .col-xs-3
     .box.box-success
       .box-header
-        h4.box-title 法人身份证正面token
+        h4.box-title 银行卡正面token
       .box-body
-        = text_field_tag 'merchant[legal_person][identity_card_front_key]', @object.legal_person.identity_card_front_key
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
+        = text_field_tag 'merchant[bank_info][right_bank_card_key]', @object.bank_info.right_bank_card_key
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.bank_info.right_bank_card_key), class: 'image'
   .col-xs-3
     .box.box-success
       .box-header
-        h4.box-title 法人身份证反面token
+        h4.box-title 农商行开户许可证token
       .box-body
-        = text_field_tag 'merchant[legal_person][identity_card_back_key]', @object.legal_person.identity_card_back_key
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
+        = text_field_tag 'merchant[company][pfb_account_licence_key]', @object.company.pfb_account_licence_key
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.pfb_account_licence_key), class: 'image'

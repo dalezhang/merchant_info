@@ -79,9 +79,10 @@ class Merchant < ApplicationRecord
       mch_deal_type: mch_deal_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
-      company: company.inspect
+      company: company.inspect,
     }
     if all
+      hash[:channel_data] = channel_data
       hash[:request_and_response] = request_and_response.inspect
       hash[:zx_contr_info_lists] = zx_contr_info_lists.collect(&:inspect)
     else
@@ -96,6 +97,7 @@ class LegalPerson < ApplicationRecord
   embedded_in :merchant
   field :identity_card_front_key, type: String # 身份证正面
   field :identity_card_back_key, type: String # 身份证反面
+  field :id_with_hand_key, type: String # 手持身份证
   field :tel, type: String               # 联系人电话
   field :name, type: String              # 联系人名称
   field :email, type: String             # 联系人邮箱
@@ -104,6 +106,7 @@ class LegalPerson < ApplicationRecord
     {
       identity_card_front_key: identity_card_front_key,
       identity_card_back_key: identity_card_back_key,
+      id_with_hand_key: id_with_hand_key,
       tel: tel,
       name: name,
       email: email,
@@ -119,7 +122,8 @@ class Company < ApplicationRecord
   field :shop_picture_key, type: String  # 店铺照
   field :license_key, type: String   # 营业执照
   field :org_photo_key, type: String # 组织机构代码照
-  field :protocol_photo_key, type: String # 威付通，商户协议照
+  field :wft_protocol_photo_key, type: String # 威付通，商户协议照
+  field :pfb_account_licence_key, type: String # 农商行，开户许可证
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话
@@ -143,7 +147,6 @@ end
 class BankInfo < ApplicationRecord
   embedded_in :merchant
   field :owner_name, type: String # 账户名称（账号名）
-  # field :bank_name, type: String # 开户行检称（中文名）
   field :bank_sub_code, type: String # 支付联行号
   field :account_num, type: String # 账号
   field :account_type, type: String # 账户类型(个人，企业)
@@ -153,11 +156,11 @@ class BankInfo < ApplicationRecord
   field :zone, type: String # 开户区
   field :bank_full_name, type: String # 银行全称
   field :is_nt_citic, type: String # 是否中信银行
+  field :right_bank_card_key, type: String # 银行卡正面
 
   def inspect
     {
       owner_name: owner_name, # 账户名称（账号名）
-      # bank_name: bank_name, # 开户行检称（中文名）
       bank_sub_code: bank_sub_code, # 支付联行号
       account_num: account_num, # 账号
       account_type: account_type, # 账户类型(个人，企业)
@@ -166,7 +169,8 @@ class BankInfo < ApplicationRecord
       urbn: urbn, # 开户市
       zone: zone, # 开户区
       bank_full_name: bank_full_name, # 银行全称
-      is_nt_citic: is_nt_citic # 是否中信银行
+      is_nt_citic: is_nt_citic, # 是否中信银行
+      right_bank_card_key: right_bank_card_key,
     }
   end
 end
