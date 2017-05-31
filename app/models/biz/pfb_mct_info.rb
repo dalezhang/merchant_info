@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-
+require 'net/ftp'
 class Biz::PfbMctInfo
   SettleModes = {'T0_实时': 'T0_INSTANT', 'T0_批量': 'T0_BATCH', 'T0_手动': 'T0_HANDING', 'T1_自动': 'T1_AUTO'}
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
-    @serviceType = 'CUSTOMER_ENTER' # 业务类型
+    @serviceType = nil # 业务类型
     @agentNum = 'A147860093307610145'  # 代理商编号
     @outMchId = @merchant.merchant_id # 下游商户号(唯一),可用于查询商户信息
     @customerType = pfb_customer_type(@merchant.bank_info.account_type) # 个体：PERSONAL 企业：ENTERPRISE
@@ -39,6 +39,7 @@ class Biz::PfbMctInfo
     @city = @merchant.bank_info.urbn # 开户行城市
     @bankAddress = @merchant.bank_info.bank_full_name # 开户行支行
     @alliedBankNo = @merchant.bank_info.bank_sub_code # 联行号,否则会影响结算
+    @appId = @merchant.appid # 公众号ID
     @rightID = "/#{@merchant.merchant_id}/#{@merchant.legal_person.identity_card_front_key}" # 身份证正面
     @reservedID = "/#{@merchant.merchant_id}/#{@merchant.legal_person.identity_card_back_key}" # 身份证反面
     @IDWithHand = "/#{@merchant.merchant_id}/#{@merchant.legal_person.id_with_hand_key}" # 手持身份证
@@ -63,9 +64,10 @@ class Biz::PfbMctInfo
       'ENTERPRISE'
     end
   end
-  
+
   def prepare_request
     raise 'merchant_id为空' unless @merchant.merchant_id.present?
+    upload_relate_pictures
     wechat_offline = @merchant.channel_data['pfb'].try(:[],'wechat_offline')
     wechat_app = @merchant.channel_data['pfb'].try(:[],'wechat_app')
     alipay = @merchant.channel_data['pfb'].try(:[],'alipay')
@@ -105,15 +107,56 @@ class Biz::PfbMctInfo
     }.each do |key, value|
       @payChannel = value[:payChannel]
       @rate = value[:rate]
+      @t0Status = value[:t0Status]
+      @settleRate = value[:settleRate]
+      @fixedFee = value[:fixedFee]
+      @isCapped = value[:isCapped]
+      @upperFee = value[:upperFee]
+      @settleMode = value[:settleMode]
       pfb_request[key] = inspect
     end
     @merchant.request_and_response.pfb_request = pfb_request
     @merchant.save
   end
 
+  def upload_relate_pictures
+    [
+      @merchant.legal_person.identity_card_front_key,# 身份证正面
+      @merchant.legal_person.identity_card_back_key, # 身份证反面
+      @merchant.legal_person.id_with_hand_key, # 手持身份证
+      @merchant.bank_info.right_bank_card_key, # 银行卡正面
+      @merchant.company.license_key, # 营业执照
+      @merchant.company.shop_picture_key, # 门面照
+      @merchant.company.pfb_account_licence_key, # 农商行，开户许可证
+    ].each do |key|
+      if key.present?
+        @merchant.channel_data['pfb'] ||= {}
+        unless @merchant.channel_data['pfb']['identity_card_front_key'] == key
+          if upload_picture(key)
+            @merchant.channel_data['pfb']['identity_card_front_key'] = key
+          end
+        end
+      end
+    end
+  end
+
+  def upload_picture(key)
+    raise "merchant_id 不能为空" unless @merchant.merchant_id.present?
+    raise "bucket_url 不能为空" unless @merchant.user.bucket_url.present?
+    ftp = Net::FTP.new('60.205.203.64', 'A147920196116310531', 'A]ke7))}W=O-76,9?i')
+    ftp.chdir("/")
+    if ftp.nlst.include?(@merchant.merchant_id)
+      ftp.chdir("/#{@merchant.merchant_id}/")
+    else
+      ftp.mkdir("/#{@merchant.merchant_id}/")
+      ftp.chdir("/#{@merchant.merchant_id}/")
+    end
+    ftp.putbinaryfile("#{@merchant.user.bucket_url}/#{key}")
+    ftp.close
+  end
 
   def inspect
-    js = {
+    {
       serviceType: @serviceType, # 业务类型
       agentNum: @agentNum,
       outMchId: @outMchId, # 下游商户号(唯一),可用于查询商户信息
@@ -155,6 +198,7 @@ class Biz::PfbMctInfo
       licenseImage: @licenseImage, # 营业执照
       doorHeadImage: @doorHeadImage, # 门面照
       accountLicence: @accountLicence, # 开户许可证
+      appId: @appId,
     }
   end
 end

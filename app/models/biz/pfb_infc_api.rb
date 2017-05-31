@@ -9,36 +9,68 @@ module Biz
       else
         raise 'merchant_id 无效'
       end
-      raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
+      raise "channel should be one of ['wechat_offline', 'wechat_app', 'alipay']" unless %w[wechat_offline wechat_app alipay].include?(channel)
       @channel = channel
       @pfb_request = @merchant.request_and_response['pfb_request'][@channel]
-      raise 'zx_request 无内容，请先生成进件请求' unless @pfb_request.present?
+      raise 'pfb_request 无内容，请先生成进件请求' unless @pfb_request.present?
     end
 
-    def upload_relate_pictures
-      [
-        @merchant.legal_person.identity_card_front_key,# 身份证正面
-        @merchant.legal_person.identity_card_back_key, # 身份证反面
-        @merchant.legal_person.id_with_hand_key, # 手持身份证
-        @merchant.bank_info.right_bank_card_key, # 银行卡正面
-        @merchant.company.license_key, # 营业执照
-        @merchant.company.shop_picture_key, # 门面照
-        @merchant.company.pfb_account_licence_key, # 农商行，开户许可证
-      ].each do |key|
-        if key.present?
-          upload_picture(key)
-        end
+    def send_intfc(req_typ)
+      raise '请先生成进件请求。' if @pfb_request['outMchId'].size < 12
+      js = nil
+      case req_typ
+      when '新增'
+        js = prepare_request('CUSTOMER_ENTER')
+      when '变更'
+        js = prepare_request('CUSTOMER_UPDATE')
+      when '查询'
+        js = prepare_query
+      else
+        return log_error @merchant, '请求', '未知的请求类型'
       end
+      if sent_request(js, req_typ)
+        return "返回信息已保存在request_and_response.pfb_response.#{@channel}_#{req_typ}"
+      end
+      false
     end
 
-    def upload_picture(key)
-      raise "merchant_id 不能为空" unless @merchant.merchant_id.present?
-      raise "bucket_url 不能为空" unless @merchant.user.bucket_url.present?
-      ftp = Net::FTP.new('60.205.203.64', 'A147920196116310531', 'A]ke7))}W=O-76,9?i')
-      ftp.chdir("/#{@merchant.merchant_id}/#{key}")
-      ftp.putbinaryfile("#{@merchant.user.bucket_url}/#{key}")
-      ftp.close
+    def prepare_request(req_typ)
+      @pfb_request["serviceType"] = req_typ
+      @pfb_request
     end
+
+    def sent_request(js,req_typ)
+      url = "#{Rails.application.secrets.biz['pfb']['infc_url']}/customer/service"
+      agentNum = Rails.application.secrets.biz['pfb']['agent_num'] # 代理商编号
+      key = Rails.application.secrets.biz['pfb']['agent_key'] # 代理商密钥
+      sign = get_mac(js, key)
+      js[:sign] = sign
+      resp = HTTParty.post(url, body: js.to_json, follow_redirects: false)
+      resp_hash = JSON.parse resp.body
+      if resp_hash.present?
+        resp['sign'] = '**'
+        @merchant.request_and_response.pfb_response["#{@channel}_#{req_typ}"] = resp_hash
+        @merchant.save
+        unless resp_hash['return_code'] == '000000'
+          return log_error @merchant, resp_hash['return_msg']
+        end
+      else
+        return log_error @merchant, '无返回信息'
+      end
+      true
+    end
+
+    def prepare_query
+      js = {
+        serviceType: 'CUSTOMER_INFO',
+        agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
+        queryType: '1', # 值为：0/1
+        customerNum: nil, # 查询条件类型为0时必填
+        outMchId: @merchant.merchant_id, # 查询条件类型为1时必填
+      }
+    end
+
+    private
 
     def get_mab(js)
       mab = []

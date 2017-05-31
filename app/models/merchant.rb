@@ -134,7 +134,8 @@ class Company < ApplicationRecord
       shop_picture_key: shop_picture_key,
       license_key: license_key,
       org_photo_key: org_photo_key,
-      protocol_photo_key: protocol_photo_key,
+      pfb_account_licence_key: pfb_account_licence_key,
+      wft_protocol_photo_key: wft_protocol_photo_key,
       contact_tel: contact_tel,
       contact_name: contact_name,
       service_tel: service_tel,
@@ -185,8 +186,8 @@ class RequestAndResponse < ApplicationRecord
     {
       zx_request: zx_request,
       zx_response: zx_response,
-      pfb_request: zx_request,
-      pfb_response: zx_response
+      pfb_request: pfb_request,
+      pfb_response: pfb_response
     }
   end
 end

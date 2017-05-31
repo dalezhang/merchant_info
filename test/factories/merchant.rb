@@ -11,7 +11,7 @@ FactoryGirl.define do
     appid '公众号'
     mch_type '商户类型(个体，企业)'
     industry '经营行业'
-    zx_channel_type '中信经营类目' # 见附件《经营类目》中的经营类目明细编码
+    pfb_channel_type '普付宝经营类目' # 见附件《经营类目》中的经营类目明细编码
     
     #银行信息
     bank_info {{
