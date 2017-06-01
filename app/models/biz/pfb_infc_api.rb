@@ -66,7 +66,7 @@ module Biz
         agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
         queryType: '1', # 值为：0/1
         customerNum: nil, # 查询条件类型为0时必填
-        outMchId: @merchant.merchant_id, # 查询条件类型为1时必填
+        outMchId: "#{@channel}_#{@merchant.merchant_id}", # 查询条件类型为1时必填
       }
     end
 
