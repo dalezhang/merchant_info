@@ -24,3 +24,6 @@
     .form-group
       = label :bucket_name, '图片上传空间链接'
       = text_field_tag '', current_user.bucket_url, readonly: true, class: "form-control"
+    .form-group
+      = label 'prv_key', '交易接口私钥'
+      = text_area_tag '', Rails.application.secrets.pooul['default_prv_key'], readonly: true, class: "form-control", style: "height: 220px;"

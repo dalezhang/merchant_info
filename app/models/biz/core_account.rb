@@ -10,10 +10,11 @@ module Biz
 
     def create_backend_account
       return @merchant.merchant_id if @merchant.merchant_id
+
       params = {
         partner_id: 'merchant_info',
         partner_mch_id: @merchant.partner_mch_id,
-        # public_key: merchant.id.to_s
+        public_key: Rails.application.secrets.pooul['default_pub_key']
       }
       response = backend_account 'post', 'cms/merchants/', params.to_json
       if response['code'] == 0
