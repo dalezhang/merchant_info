@@ -6,8 +6,8 @@ class Biz::PfbMctInfo
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
     @serviceType = nil # 业务类型
-    @agentNum = 'A147860093307610145'  # 代理商编号
-    @outMchId = @merchant.merchant_id # 下游商户号(唯一),可用于查询商户信息
+    @agentNum = Rails.application.secrets.biz['pfb']['agent_num']  # 代理商编号
+    @outMchId = nil # 下游商户号(唯一),可用于查询商户信息
     @customerType = pfb_customer_type(@merchant.bank_info.account_type) # 个体：PERSONAL 企业：ENTERPRISE
     @businessType =  @merchant.pfb_channel_type # 详见:经营行业列表
     @customerName = @merchant.full_name # 商户名称
@@ -74,6 +74,7 @@ class Biz::PfbMctInfo
     pfb_request = {}
     {
       wechat_offline: {
+        outMchId: "wechat_offline_#{@merchant.merchant_id}",
         payChannel: 'WECHAT_OFFLINE',
         rate: wechat_offline.try(:[],'rate'),
         t0Status: wechat_offline.try(:[],'t0Status'),
@@ -84,6 +85,7 @@ class Biz::PfbMctInfo
         settleMode: wechat_offline.try(:[],'settleMode'),
       },
       wechat_app: {
+        outMchId: "wechat_app_#{@merchant.merchant_id}",
         payChannel: 'WECHAT_APP',
         rate: wechat_app.try(:[],'rate'),
         t0Status: wechat_app.try(:[],'t0Status'),
@@ -94,6 +96,7 @@ class Biz::PfbMctInfo
         settleMode: wechat_app.try(:[],'settleMode'),
       },
       alipay: {
+        outMchId: "alipay_#{@merchant.merchant_id}",
         payChannel: 'ALIPAY',
         rate: alipay.try(:[],'rate'),
         t0Status: alipay.try(:[],'t0Status'),
@@ -105,6 +108,7 @@ class Biz::PfbMctInfo
       }
 
     }.each do |key, value|
+      @outMchId = value[:outMchId]
       @payChannel = value[:payChannel]
       @rate = value[:rate]
       @t0Status = value[:t0Status]
