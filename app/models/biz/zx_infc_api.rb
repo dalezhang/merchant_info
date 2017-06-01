@@ -100,7 +100,7 @@ module Biz
 
     def send_zx_intfc(data, req_typ)
       return unless !has_error && data
-      url = 'https://219.142.124.205:30280'
+      url = Rails.application.secrets.biz['zx']['infc_url']
       ret = post_xml_gbk('zx_intfc', url, data)
       resp_hash = Hash.from_xml(ret)
       if resp_hash.present?

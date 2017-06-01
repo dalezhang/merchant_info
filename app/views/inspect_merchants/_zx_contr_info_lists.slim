@@ -3,7 +3,12 @@
     .box
       .box-header
         h4.box-title 中信渠道信息
+        = link_to '中信经营类目对照表', '/支付宝及微信支付经营类目.xlsx', target: '_blank', class: 'btn btn-link'
       .box-body
+        .col-xs-6
+          = f.input :zx_wechat_channel_type
+        .col-xs-6
+          = f.input :zx_alipay_channel_type
         table.table.table-bordered
           thead
             tr

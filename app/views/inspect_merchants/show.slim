@@ -1,22 +1,38 @@
 .row
   .col-xs-9
     = text_area_tag 'req_body', JSON.pretty_generate(@object.inspect(true)), style: 'height: 800px;', class: 'form-control'
-    .col-xs-3
-      h4
-        | 营业执照
-      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.license_key), class: 'image'
-    .col-xs-3
-      h4
-        | 店铺照
-      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.shop_picture_key), class: 'image'
-    .col-xs-3
-      h4
-        | 法人身份证正面
-      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
-    .col-xs-3
-      h4
-        | 法人身份证反面
-      = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
+    .col-xs-12
+      .col-xs-3
+        h4
+          | 法人身份证正面
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
+      .col-xs-3
+        h4
+          | 法人身份证反面
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
+      .col-xs-3
+        h4
+          | 法人手持身份证
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.id_with_hand_key), class: 'image'
+      .col-xs-3
+        h4
+          | 营业执照
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.license_key), class: 'image'
+    .col-xs-12
+      .col-xs-3
+        h4
+          | 店铺照
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.shop_picture_key), class: 'image'
+      .col-xs-3
+        h4
+          | 银行卡正面
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.bank_info.right_bank_card_key), class: 'image'
+      .col-xs-3
+        h4
+          | 农商行开户许可证
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.pfb_account_licence_key), class: 'image'
+
+
   .col-xs-3
     br
     .box.box-primary
@@ -53,5 +69,35 @@
         = link_to '进件', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-warning'
         | &nbsp
         = link_to '查询', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-success'
+        | &nbsp
+        = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-primary'
+    br
+    .box
+      .box-header
+        h4.box-title 农商微信线下
+      .box-body
+        = link_to '进件', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'wechat_offline'), method: :post, class: 'btn btn-lg btn-warning'
+        | &nbsp
+        = link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'wechat_offline'), method: :post, class: 'btn btn-lg btn-success'
+        | &nbsp
+        = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat_offline'), method: :post, class: 'btn btn-lg btn-primary'
+    br
+    .box
+      .box-header
+        h4.box-title 农商微信App
+      .box-body
+        = link_to '进件', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-warning'
+        | &nbsp
+        = link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-success'
+        | &nbsp
+        = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-primary'
+    br
+    .box
+      .box-header
+        h4.box-title 农商支付宝
+      .box-body
+        = link_to '进件', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-warning'
+        | &nbsp
+        = link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-success'
         | &nbsp
         = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-primary'
