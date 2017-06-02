@@ -1,9 +1,9 @@
 = link_to '中信经营类目对照表', '/支付宝及微信支付经营类目.xlsx', target: '_blank', class: 'btn btn-link'
 = horizon_form_for @object do |f|
-	= render 'base', f: f
+	= render 'shared/base', f: f
 	br
 	br
-	= render 'relate_pictures', f: f
+	= render 'shared/relate_pictures', f: f
 	br
 	br
 	.row
