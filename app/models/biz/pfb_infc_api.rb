@@ -78,14 +78,12 @@ module Biz
     def get_mab(js)
       mab = []
       js.keys.sort_by {|x| x.downcase}.each do |k|
-        mab << "#{k}=#{js[k]}" if k != :mac && k != :sign && js[k]
+        mab << "#{k}=#{js[k]}" if k != :mac && k != :sign && js[k].present?
       end
       mab.join('&')
     end
 
     def get_mac(js, key)
-      log_error @merchant, 'js', js
-      log_error @merchant, 'js', key
       Digest::MD5.hexdigest(get_mab(js).to_s + key.to_s).upcase
     end
   end
