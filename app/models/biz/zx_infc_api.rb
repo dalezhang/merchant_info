@@ -54,7 +54,7 @@ module Biz
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
-    def prepare_request(_appl_typ)
+    def prepare_request(appl_typ)
       mabs = []
       missed_require_fields = []
       raise '请先上传营业执照' unless get_lics_file # 获取营业执照
