@@ -49,7 +49,7 @@ module Biz
       sign = get_mac(js, key)
       js[:sign] = sign
       resp = HTTParty.post(url, body: js.to_json, follow_redirects: false)
-      log_error @merchant, 'pfb sent_request', resp.body
+      log_error @merchant, 'pfb sent_request', resp
       resp_hash = JSON.parse resp.body
       if resp_hash.present?
         resp['sign'] = '**'
