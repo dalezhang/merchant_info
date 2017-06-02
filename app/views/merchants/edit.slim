@@ -2,10 +2,10 @@
 = link_to '农商行普付宝经营行业列表', 'http://note.youdao.com/groupshare/?token=5A7A9ED6F13C49D0B830F1CF394B4E06&gid=45230067', target: '_blank', class: 'btn btn-link'
 - if @object.present?
   = horizon_form_for @object do |f|
-  	= render 'base', f: f
+  	= render 'shared/base', f: f
   	br
   	br
-  	= render 'relate_pictures', f: f
+  	= render 'shared/relate_pictures', f: f
   	br
   	br
   	.row

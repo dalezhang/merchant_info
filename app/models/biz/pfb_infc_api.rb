@@ -77,7 +77,7 @@ module Biz
 
     def get_mab(js)
       mab = []
-      js.keys.sort.each do |k|
+      js.keys.sort_by {|x| x.downcase}.sort.each do |k|
         mab << "#{k}=#{js[k]}" if k != :mac && k != :sign && js[k]
       end
       mab.join('&')
