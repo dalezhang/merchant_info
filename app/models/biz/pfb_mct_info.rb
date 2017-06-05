@@ -14,7 +14,7 @@ class Biz::PfbMctInfo
     @businessName = @merchant.name # 支付成功显示
     @legalId = @merchant.legal_person.identity_card_num # 法人身份证号
     @legalName = @merchant.legal_person.name # 法人名称
-    @contact = @merchant.full_name # 联系人
+    @contact = @merchant.company.contact_name # 联系人
     @contactPhone = @merchant.company.contact_tel # 联系人电话
     @contactEmail = @merchant.company.contact_email # 联系人邮箱
     @servicePhone = @merchant.company.service_tel # 客服电话
