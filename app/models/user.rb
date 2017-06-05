@@ -4,7 +4,7 @@ class User < ApplicationRecord
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  attr_accessor :password, :password_confirmation
+  attr_accessor :password, :password_confirmation, :current_email
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -16,6 +16,7 @@ class User < ApplicationRecord
   field :salt, type: String
   field :last_signed_in, type: Time
   field :token, type: String
+  field :expired_at, type: Time
   field :bucket_url, type: String
   field :bucket_name, type: String
   field :company_name, type: String

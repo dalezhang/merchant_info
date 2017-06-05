@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   end
   namespace :user do
   	resources :sessions
-    resources :password
+    resources :password do
+      post :reset_password, on: :collection
+    end
     resources :confirmation
     resources :unlock
     resources :registrations
