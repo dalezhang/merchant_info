@@ -5,10 +5,6 @@ module Logging
   extend ActiveSupport::Concern
   attr_accessor :has_error, :messages, :error_message
 
-  def send_intfc(bank_mct); end
-
-  def query(bank_mct); end
-
   def log_error(*args)
     @sender, @title, @message, @call_stack = *args
     @has_error = true
