@@ -6,6 +6,7 @@ module Biz
     def initialize(merchant)
       @merchant = merchant
       @error = nil
+      @url = 'http://zt-t.pooulcloud.cn'
     end
 
     def create_backend_account
@@ -14,7 +15,7 @@ module Biz
       params = {
         partner_id: 'merchant_info',
         partner_mch_id: @merchant.partner_mch_id,
-        public_key: Rails.application.secrets.pooul['default_pub_key']
+        public_key: @merchant.public_key,
       }
       response = backend_account 'post', 'cms/merchants/', params.to_json
       if response['code'] == 0
@@ -28,17 +29,26 @@ module Biz
     #   response = HTTParty.try('get', "http://zt-t.pooulcloud.cn/cms/merchants/590fe5d7ffea0e5f6dcb3ab8")
     # end
 
-    # def update_backend_account(merchant)
-    #   response = HTTParty.try('put', "http://zt-t.pooulcloud.cn/cms/merchants/590fe5d7ffea0e5f6dcb3ab8", body: {public_key: '123'}.to_json)
-    # end
+    def update_backend_account
+      params = {
+        public_key: @merchant.public_key,
+      }
+      #response = HTTParty.try('put', "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.merchant_id}", body: params.to_json)
+      response = backend_account 'put', "cms/merchants/#{@merchant.merchant_id}", params.to_json
+      if response['code'] == 0
+        return true
+      else
+        return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
+      end
+    end
 
     # def delete_backend_account(merchant)
     #   response = HTTParty.try('delete', "http://zt-t.pooulcloud.cn/cms/merchants/590fe5d7ffea0e5f6dcb3ab8")
     # end
 
-    def backend_account(action, url, params)
+    def backend_account(action, route, params)
       begin
-        response = HTTParty.try(action, "http://zt-t.pooulcloud.cn/#{url}", body: params)
+        response = HTTParty.try(action, "#{url}/#{route}", body: params)
       rescue Exception # Errno::ECONNREFUSED, Net::OpenTimeout => e
         response = {
           code: 502,

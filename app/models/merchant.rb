@@ -6,7 +6,7 @@ class Merchant < ApplicationRecord
   field :merchant_id, type: String # 商户编号
   field :out_mch_id, type: String # 代理商自定义的merchant唯一标识
   field :partner_mch_id, type: String, default: "c#{Merchant.count + 1}" # 商户号
-  field :publicy_key, type: String # 商户公钥
+  field :public_key, type: String # 商户公钥
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String # 代理商自定义的merchant唯一标识
   field :status, type: Integer, default: 0 # 状态
@@ -36,26 +36,18 @@ class Merchant < ApplicationRecord
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
+  before_save :generate_keys
+
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
 
-  def self.attr_writeable
-    %i[
-      out_merchant_id mch_deal_type
-      full_name name appid mch_type industry memo
-      wechat_channel_type alipay_channel_type
-      province urbn address
-      bank_info legal_person company
-    ]
+  def generate_keys
+    unless self.private_key.present?
+      key = OpenSSL::PKey::RSA.new 2048
+      self.private_key = key.to_pem
+      self.public_key = key.public_key.to_pem
+    end
   end
 
-  def self.attr_readable
-    %i[
-      merchant_id id out_merchant_id mch_deal_type
-      full_name name appid mch_type industry memo
-      province urbn address
-      bank_info legal_person company
-    ]
-  end
 
   def inspect(all = false)
     hash = {
@@ -63,6 +55,7 @@ class Merchant < ApplicationRecord
       merchant_id: merchant_id,
       out_mch_id: out_mch_id,
       partner_mch_id: partner_mch_id,
+      private_key: private_key,
       status: STATUS_DATA[status],
       full_name: full_name,
       name: name,
@@ -86,8 +79,6 @@ class Merchant < ApplicationRecord
       hash[:request_and_response] = request_and_response.inspect
       hash[:zx_contr_info_lists] = zx_contr_info_lists.collect(&:inspect)
       hash[:channel_data] = channel_data
-    else
-      hash.delete(:merchant_id)
     end
     hash
   end

@@ -5,6 +5,7 @@ class Biz::PfbMctInfo
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
+    @salt = @merchant.id.to_s
     @serviceType = nil # 业务类型
     @agentNum = Rails.application.secrets.biz['pfb']['agent_num']  # 代理商编号
     @outMchId = nil # 下游商户号(唯一),可用于查询商户信息
@@ -40,13 +41,13 @@ class Biz::PfbMctInfo
     @bankAddress = @merchant.bank_info.bank_full_name # 开户行支行
     @alliedBankNo = @merchant.bank_info.bank_sub_code # 联行号,否则会影响结算
     @appId = @merchant.appid # 公众号ID
-    @rightID = "/#{@merchant.merchant_id}/#{@merchant.legal_person.identity_card_front_key}" # 身份证正面
-    @reservedID = "/#{@merchant.merchant_id}/#{@merchant.legal_person.identity_card_back_key}" # 身份证反面
-    @IDWithHand = "/#{@merchant.merchant_id}/#{@merchant.legal_person.id_with_hand_key}" # 手持身份证
-    @rightBankCard = "/#{@merchant.merchant_id}/#{@merchant.bank_info.right_bank_card_key}" # 银行卡正面
-    @licenseImage = "/#{@merchant.merchant_id}/#{@merchant.company.license_key}" # 营业执照
-    @doorHeadImage = "/#{@merchant.merchant_id}/#{@merchant.company.shop_picture_key}" # 门面照
-    @accountLicence = "/#{@merchant.merchant_id}/#{@merchant.company.pfb_account_licence_key}" # 开户许可证
+    @rightID = "/#{@salt}/#{@merchant.legal_person.identity_card_front_key}" # 身份证正面
+    @reservedID = "/#{@salt}/#{@merchant.legal_person.identity_card_back_key}" # 身份证反面
+    @IDWithHand = "/#{@salt}/#{@merchant.legal_person.id_with_hand_key}" # 手持身份证
+    @rightBankCard = "/#{@salt}/#{@merchant.bank_info.right_bank_card_key}" # 银行卡正面
+    @licenseImage = "/#{@salt}/#{@merchant.company.license_key}" # 营业执照
+    @doorHeadImage = "/#{@salt}/#{@merchant.company.shop_picture_key}" # 门面照
+    @accountLicence = "/#{@salt}/#{@merchant.company.pfb_account_licence_key}" # 开户许可证
   end
 
   def pfb_account_type(account_type)
@@ -66,7 +67,6 @@ class Biz::PfbMctInfo
   end
 
   def prepare_request
-    raise 'merchant_id为空' unless @merchant.merchant_id.present?
     upload_relate_pictures
     wechat_offline = @merchant.channel_data['pfb'].try(:[],'wechat_offline')
     wechat_app = @merchant.channel_data['pfb'].try(:[],'wechat_app')
@@ -74,7 +74,7 @@ class Biz::PfbMctInfo
     pfb_request = {}
     {
       wechat_offline: {
-        outMchId: "wechat_offline_#{@merchant.merchant_id}",
+        outMchId: "wechat_offline_#{@salt}",
         payChannel: 'WECHAT_OFFLINE',
         rate: wechat_offline.try(:[],'rate'),
         t0Status: wechat_offline.try(:[],'t0Status'),
@@ -85,7 +85,7 @@ class Biz::PfbMctInfo
         settleMode: wechat_offline.try(:[],'settleMode'),
       },
       wechat_app: {
-        outMchId: "wechat_app_#{@merchant.merchant_id}",
+        outMchId: "wechat_app_#{@salt}",
         payChannel: 'WECHAT_APP',
         rate: wechat_app.try(:[],'rate'),
         t0Status: wechat_app.try(:[],'t0Status'),
@@ -96,7 +96,7 @@ class Biz::PfbMctInfo
         settleMode: wechat_app.try(:[],'settleMode'),
       },
       alipay: {
-        outMchId: "alipay_#{@merchant.merchant_id}",
+        outMchId: "alipay_#{@salt}",
         payChannel: 'ALIPAY',
         rate: alipay.try(:[],'rate'),
         t0Status: alipay.try(:[],'t0Status'),
@@ -145,15 +145,14 @@ class Biz::PfbMctInfo
   end
 
   def upload_picture(key)
-    raise "merchant_id 不能为空" unless @merchant.merchant_id.present?
     raise "bucket_url 不能为空" unless @merchant.user.bucket_url.present?
     ftp = Net::FTP.new('60.205.203.64', 'A147920196116310531', 'A]ke7))}W=O-76,9?i')
     ftp.chdir("/")
-    if ftp.nlst.include?(@merchant.merchant_id)
-      ftp.chdir("/#{@merchant.merchant_id}/")
+    if ftp.nlst.include?(@salt)
+      ftp.chdir("/#{@salt}/")
     else
-      ftp.mkdir("/#{@merchant.merchant_id}/")
-      ftp.chdir("/#{@merchant.merchant_id}/")
+      ftp.mkdir("/#{@salt}/")
+      ftp.chdir("/#{@salt}/")
     end
     ftp.putbinaryfile("#{@merchant.user.bucket_url}/#{key}")
     ftp.close
