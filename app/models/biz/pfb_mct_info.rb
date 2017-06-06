@@ -9,7 +9,7 @@ class Biz::PfbMctInfo
     @serviceType = nil # 业务类型
     @agentNum = Rails.application.secrets.biz['pfb']['agent_num']  # 代理商编号
     @outMchId = nil # 下游商户号(唯一),可用于查询商户信息
-    @customerType = pfb_customer_type(@merchant.bank_info.account_type) # 个体：PERSONAL 企业：ENTERPRISE
+    @customerType = pfb_customer_type(@merchant.mch_type) # 个体：PERSONAL 企业：ENTERPRISE
     @businessType =  @merchant.pfb_channel_type # 详见:经营行业列表
     @customerName = @merchant.full_name # 商户名称
     @businessName = @merchant.name # 支付成功显示
