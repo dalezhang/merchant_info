@@ -51,7 +51,7 @@ class Biz::PfbMctInfo
   end
 
   def pfb_account_type(account_type)
-    if account_type =~ /对私/ || account_type =~ /个人/
+    if account_type =~ /对私/ || account_type =~ /个人/ || account_type =~ /个体/
       'PERSONAL'
     elsif account_type =~ /对公/ || account_type =~ /企业/
       'COMPANY'
@@ -59,7 +59,7 @@ class Biz::PfbMctInfo
   end
 
   def pfb_customer_type(account_type)
-    if account_type =~ /对私/ || account_type =~ /个人/
+    if account_type =~ /对私/ || account_type =~ /个人/ || account_type =~ /个体/
       'PERSONAL'
     elsif account_type =~ /对公/ || account_type =~ /企业/
       'ENTERPRISE'
