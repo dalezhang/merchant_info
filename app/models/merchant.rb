@@ -36,9 +36,22 @@ class Merchant < ApplicationRecord
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
+  validates :out_merchant_id, presence: true, uniqueness: { case_sensitive: false, message: '该out_merchant_id已经存在' }
+
   before_save :generate_keys
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
+  def self.attr_writeable
+    %i[
+      out_merchant_id mch_deal_type
+      full_name name appid mch_type industry memo
+      wechat_channel_type alipay_channel_type
+      province urbn address
+      bank_info legal_person company
+      zx_wechat_channel_type zx_alipay_channel_type
+      pfb_channel_type mch_deal_type
+    ]
+  end
 
   def generate_keys
     unless self.private_key.present?
