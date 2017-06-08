@@ -4,6 +4,7 @@ class Biz::ZxMctInfo
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
+    @salt = @merchant.id.to_s
     @chnl_id = '10000022' # 商户归属渠道编号 ?
     @chnl_mercht_id = nil # 商户编号
     @pay_chnl_encd = nil # 支付宝：0001；微信支付：0002。注：商户开通多种支付渠道需分别提交进件申请
@@ -40,18 +41,17 @@ class Biz::ZxMctInfo
   end
 
   def prepare_request
-    raise 'merchant_id为空' unless @merchant.merchant_id.present?
     zx_request = {}
     {
       wechat: {
         pay_chnl_encd: '0002',
-        chnl_mercht_id: "zx_wechat_#{@merchant.merchant_id}",
+        chnl_mercht_id: "zx_wechat_#{@salt}",
         opr_cls: @merchant.zx_wechat_channel_type,
         zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: %w[00020001 00020002 00020003 00020004])
       },
       alipay: {
         pay_chnl_encd: '0001',
-        chnl_mercht_id: "zx_alipay_#{@merchant.merchant_id}",
+        chnl_mercht_id: "zx_alipay_#{@salt}",
         opr_cls: @merchant.zx_alipay_channel_type,
         zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: %w[00010001 00010002 00010003])
       }
@@ -64,7 +64,10 @@ class Biz::ZxMctInfo
       zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
-    @merchant.save
+    unless @merchant.save
+      raise @merchant.errors.full_messages.join("\n")
+    end
+    true
   end
 
   def inspect

@@ -2,9 +2,9 @@
 
 module Biz
   class Jwt
-    def initialize(email)
-      raise 'email 不得为空' unless email.present?
-      user = User.find_by(email: email)
+    def initialize(partner_id)
+      raise 'partner_id 不得为空' unless partner_id.present?
+      user = User.find_by(partner_id: partner_id)
       raise '找不到对应的用户' unless user.present?
       @secrets_base = user.token
     end

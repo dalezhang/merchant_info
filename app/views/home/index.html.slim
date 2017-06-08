@@ -13,6 +13,9 @@
       = label :token, 'Token'
       = text_field_tag '', current_user.token, readonly: true, class: "form-control"
     .form-group
+      = label :token, 'Partner Id'
+      = text_field_tag '', current_user.partner_id, readonly: true, class: "form-control"
+    .form-group
       = label :tel, '联系电话'
       = text_field_tag '', current_user.tel, readonly: true, class: "form-control"
     .form-group
@@ -24,6 +27,3 @@
     .form-group
       = label :bucket_name, '图片上传空间链接'
       = text_field_tag '', current_user.bucket_url, readonly: true, class: "form-control"
-    .form-group
-      = label 'prv_key', '交易接口私钥'
-      = text_area_tag '', Rails.application.secrets.pooul['default_prv_key'], readonly: true, class: "form-control", style: "height: 220px;"

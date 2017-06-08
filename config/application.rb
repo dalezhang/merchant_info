@@ -25,7 +25,6 @@ module MerchantInfo
     config.generators do |g|
   	  g.orm :mongoid
   	end
-    
     config.i18n.default_locale = :'zh-CN'
   end
 end

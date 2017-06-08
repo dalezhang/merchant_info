@@ -5,13 +5,13 @@ module Biz
   class ZxInfcApi < IntfcBase
     attr_accessor :merchant, :zx_request
 
-    def initialize(mch_id, channel)
-      if mch_id.class == Merchant
-        @merchant = mch_id
-      elsif merchant = Merchant.find_by(merchant_id: mch_id)
+    def initialize(mch, channel)
+      if mch.class == Merchant
+        @merchant = mch
+      elsif merchant = Merchant.find(mch)
         @merchant = merchant
       else
-        raise 'merchant_id 无效'
+        raise 'merchant 无效'
       end
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
