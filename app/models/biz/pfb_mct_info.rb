@@ -20,9 +20,18 @@ class Biz::PfbMctInfo
     @contactEmail = @merchant.company.contact_email # 联系人邮箱
     @servicePhone = @merchant.company.service_tel # 客服电话
     @address = [@merchant.province, @merchant.urbn, @merchant.address].join(',') # 经营地址,企业商户必填
-    @provinceName = @merchant.province # 经营省,企业商户必填
-    @cityName = @merchant.urbn # 经营市,企业商户必填
-    @districtName = @merchant.address # 经营区,企业商户必填
+    if @merchant.province.present?
+      province = Location.where(location_name: Regexp.new(@merchant.province.strip) ).first
+      @provinceName = province.location_code # 经营省,企业商户必填
+      if @provinceName.present? && @merchant.urbn.present?
+        urbn = Location.where(pub_location_code: @provinceName, location_name: Regexp.new(@merchant.urbn.strip) ).first
+        @cityName = urbn.location_code # 经营市,企业商户必填
+        if @cityName.present? && @merchant.zone.present?
+          zone = Location.where(pub_location_code: @cityName, location_name: Regexp.new(@merchant.zone.strip) ).first
+          @districtName = zone.location_code # 经营区,企业商户必填
+        end
+      end
+    end
     @licenseNo = @merchant.company.license_code # 营业执照编号,企业商户必填
     @payChannel = nil # 支付通道类型
     @rate = nil # 交易费率,百分比，0.5为千五
@@ -120,7 +129,10 @@ class Biz::PfbMctInfo
       pfb_request[key] = inspect
     end
     @merchant.request_and_response.pfb_request = pfb_request
-    @merchant.save
+    unless @merchant.save
+      raise @merchant.errors.full_messages.join("\n")
+    end
+    true
   end
 
   def upload_relate_pictures

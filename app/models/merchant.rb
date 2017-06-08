@@ -15,6 +15,7 @@ class Merchant < ApplicationRecord
   field :memo, type: String # 商户备注
   field :province, type: String # 省份
   field :urbn, type: String # 城市
+  field :zone, type: String # 区
   field :address, type: String # 详细地址
   field :appid, type: String # 公众号
   field :mch_type, type: String # 商户类型(个体，企业)
@@ -36,7 +37,7 @@ class Merchant < ApplicationRecord
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
-  validates :out_merchant_id, presence: true, uniqueness: { case_sensitive: false, message: '该out_merchant_id已经存在' }
+  validates :out_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该out_merchant_id已经存在' }
 
   before_save :generate_keys
 
@@ -75,6 +76,7 @@ class Merchant < ApplicationRecord
       memo: memo,
       province: province,
       urbn: urbn,
+      zone: zone,
       address: address,
       appid: appid,
       mch_type: mch_type,

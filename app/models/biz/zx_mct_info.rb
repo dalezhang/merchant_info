@@ -64,7 +64,10 @@ class Biz::ZxMctInfo
       zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
-    @merchant.save
+    unless @merchant.save
+      raise @merchant.errors.full_messages.join("\n")
+    end
+    true
   end
 
   def inspect
