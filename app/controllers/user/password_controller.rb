@@ -1,12 +1,26 @@
 # frozen_string_literal: true
 
-class User::PasswordController < AdminController
+class User::PasswordController < ApplicationController
   layout 'login'
+  def send_reset_email
+    @user = User.find_by(email: params[:user][:email])
+    @user.generate_reset_token
+    flash[:success] = "邮件已发送，请查收。"
+    redirect_to new_user_session_path
+  end
 
   def edit
     @user = User.find_by(email: params[:current_email])
-    unless @user.present?
+    if !@user.present?
       flash[:error] = "无此用户。"
+      redirect_to new_user_session_path
+      return
+    elsif @user.reset_token != params[:reset_token]
+      flash[:error] = "reset_token无效。"
+      redirect_to new_user_session_path
+      return
+    elsif @user.expired_at < Time.zone.now
+      flash[:error] = "reset_token已过期。"
       redirect_to new_user_session_path
       return
     end
@@ -30,6 +44,10 @@ class User::PasswordController < AdminController
       flash[:success] = "密码修改成功"
       redirect_to controller: :sessions_controller, action: :create
     end
+  rescue Exception => e
+    flash[:error] = e.message
+    log_error user, e.message, '', e.backtrace
+    redirect_to controller: :sessions_controller, action: :create
   end
 
 

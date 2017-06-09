@@ -7,6 +7,7 @@ class Merchant < ApplicationRecord
   field :out_mch_id, type: String # 代理商自定义的merchant唯一标识
   field :partner_mch_id, type: String, default: "c#{Merchant.count + 1}" # 商户号
   field :public_key, type: String # 商户公钥
+  field :merchant_key, type: String # 商户md5签名key
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String # 代理商自定义的merchant唯一标识
   field :status, type: Integer, default: 0 # 状态
@@ -60,6 +61,7 @@ class Merchant < ApplicationRecord
       self.private_key = key.to_pem
       self.public_key = key.public_key.to_pem
     end
+    self.merchant_key = UUID.new.generate unless merchant_key.present?
   end
 
 
