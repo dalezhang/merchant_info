@@ -48,14 +48,13 @@ module Biz
 
     def backend_account(action, route, params)
       begin
-        response = HTTParty.try(action, "#{url}/#{route}", body: params)
+        response = HTTParty.try(action, "#{@url}/#{route}", body: params)
       rescue Exception # Errno::ECONNREFUSED, Net::OpenTimeout => e
         response = {
           code: 502,
           message: 'connect to upstream server error'
         }.to_json
       end
-      puts response.body
       JSON.parse response.body
     end
   end
