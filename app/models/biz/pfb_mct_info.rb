@@ -22,7 +22,7 @@ class Biz::PfbMctInfo
     @address = [@merchant.province, @merchant.urbn, @merchant.address].join(',') # 经营地址,企业商户必填
     if @merchant.province.present?
       province = Location.where(location_name: Regexp.new(@merchant.province.strip) ).first
-      @provinceName = province.location_code # 经营省,企业商户必填
+      @provinceName = province.location_code if province.present? # 经营省,企业商户必填
       if @provinceName.present? && @merchant.urbn.present?
         urbn = Location.where(pub_location_code: @provinceName, location_name: Regexp.new(@merchant.urbn.strip) ).first
         @cityName = urbn.location_code # 经营市,企业商户必填
