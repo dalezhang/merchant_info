@@ -72,6 +72,7 @@ class Merchant < ApplicationRecord
       out_mch_id: out_mch_id,
       partner_mch_id: partner_mch_id,
       private_key: private_key,
+      merchant_key: merchant_key,
       status: STATUS_DATA[status],
       full_name: full_name,
       name: name,
@@ -191,12 +192,14 @@ class RequestAndResponse < ApplicationRecord
   field :zx_response, type: Hash, default: {} # 中信进件内容
   field :pfb_request, type: Hash, default: {} # 农商行进件内容
   field :pfb_response, type: Hash, default: {} # 农商行进件内容
+  field :core_account, type: Hash, default: {} # 支付渠道信息
   def inspect
     {
       zx_request: zx_request,
       zx_response: zx_response,
       pfb_request: pfb_request,
-      pfb_response: pfb_response
+      pfb_response: pfb_response,
+      core_account: core_account,
     }
   end
 end

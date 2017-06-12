@@ -47,8 +47,14 @@
           = link_to '编辑', edit_inspect_merchant_url(@object.id.to_s), class: 'btn btn-lg btn-primary'
           | &nbsp
           = link_to '生成进件请求', prepare_request_inspect_merchant_url(@object.id.to_s), method: :post, class: 'btn btn-lg btn-default'
-          | &nbsp
-          = link_to '获取merchant_id', get_merchant_id_inspect_merchant_path(@object.id.to_s), method: :post, class: 'btn btn-lg btn-default'
+          - if !@object.merchant_id.present?
+            | &nbsp
+            = link_to '获取merchant_id', get_merchant_id_inspect_merchant_path(@object.id.to_s), class: 'btn btn-lg btn-default'
+          - if @object.merchant_id.present?
+            | &nbsp
+            = link_to '查询支付渠道信息', get_backend_account_inspect_merchant_path(@object.id.to_s), class: 'btn btn-lg btn-default'
+            | &nbsp
+            - link_to '修改支付渠道信息', update_backend_account_inspect_merchant_path(@object.id.to_s), method: :post, class: 'btn btn-lg btn-default'
     br
     .box
       .box-header

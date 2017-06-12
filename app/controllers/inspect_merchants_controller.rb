@@ -25,7 +25,7 @@ class InspectMerchantsController < ResourcesController
     if !zx_biz.prepare_request || !pfb_biz.prepare_request
       flash[:error] = '数据生成报错！'
     else
-      flash[:success] = '数据生成成功！'
+      flash[:success] = '数据生成成功！点击“查询支付渠道信息”查看详情'
     end
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
@@ -33,6 +33,47 @@ class InspectMerchantsController < ResourcesController
     log_error @object, e.message, '', e.backtrace
     redirect_to action: :show, id: @object.id.to_s
   end
+  def get_backend_account
+    load_object
+    core_account = Biz::CoreAccount.new(@object)
+    if @object.merchant_id.present?
+      core_account.get_backend_account
+    else
+      core_account.create_backend_account # 提交创建请求
+      core_account.get_backend_account # 查询创建结果
+    end
+    if core_account.has_error
+      flash[:success] = '数据获取成功！请到request_and_response=>core_account中查看。'
+    else
+      flash[:error] = core_account.error_message
+    end
+    redirect_to action: :show, id: @object.id.to_s
+  rescue Exception => e
+    flash[:error] = e.message
+    log_error @object, e.message, '', e.backtrace
+    redirect_to action: :show, id: @object.id.to_s
+  end
+
+  # def update_backend_account
+  #   load_object
+  #   core_account = Biz::CoreAccount.new(@object)
+  #   if @object.merchant_id.present?
+  #     if core_account.update_backend_account
+  #       flash[:success] = '数据获取成功！'
+  #     else
+  #       flash[:error] = core_account.error_message
+  #     end
+  #   elsif !core_account.create_backend_account
+  #     flash[:error] = core_account.error_message
+  #   else
+  #     flash[:success] = '数据生成成功！'
+  #   end
+  #   redirect_to action: :show, id: @object.id.to_s
+  # rescue Exception => e
+  #   flash[:error] = e.message
+  #   log_error @object, e.message, '', e.backtrace
+  #   redirect_to action: :show, id: @object.id.to_s
+  # end
   def get_merchant_id
     load_object
     core_account = Biz::CoreAccount.new(@object)
@@ -48,7 +89,6 @@ class InspectMerchantsController < ResourcesController
     flash[:error] = e.message
     log_error @object, e.message, '', e.backtrace
     redirect_to action: :show, id: @object.id.to_s
-
   end
 
   def zx_infc

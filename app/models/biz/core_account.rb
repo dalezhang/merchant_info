@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# 江南（json）商户信息接口，包含通过pertner_mch_id创建、查询merchant信息
+# https://coding.net/t/pgate/p/test_api/git/blob/master/test/new_gate/merchant_id.rb
 
 require 'httparty'
 module Biz
@@ -25,22 +27,33 @@ module Biz
         return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
       end
     end
-    # def get_backend_account(merchant)
-    #   response = HTTParty.try('get', "http://zt-t.pooulcloud.cn/cms/merchants/590fe5d7ffea0e5f6dcb3ab8")
-    # end
-
-    def update_backend_account
-      params = {
-        public_key: @merchant.public_key,
-      }
-      #response = HTTParty.try('put', "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.merchant_id}", body: params.to_json)
-      response = backend_account 'put', "cms/merchants/#{@merchant.merchant_id}", params.to_json
+    def get_backend_account
+      response = HTTParty.try('get', "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}")
+      
       if response['code'] == 0
-        return true
+        @merchant.request_and_response.core_account = response['data'][0]
+        @merchant.merchant_id = @merchant.request_and_response.core_account['_id']
+        @merchant.public_key = @merchant.request_and_response.core_account["share_key"]
+        @merchant.save
       else
         return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
       end
     end
+
+    # def update_backend_account
+
+    #   params = {
+    #     public_key: @merchant.public_key,
+    #   }
+    #   #response = HTTParty.try('put', "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.merchant_id}", body: params.to_json)
+    #   response = backend_account 'put', "cms/merchants/#{@merchant.merchant_id}", params.to_json
+
+    #   if response['code'] == 0
+    #     return true
+    #   else
+    #     return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
+    #   end
+    # end
 
     # def delete_backend_account(merchant)
     #   response = HTTParty.try('delete', "http://zt-t.pooulcloud.cn/cms/merchants/590fe5d7ffea0e5f6dcb3ab8")

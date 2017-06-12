@@ -48,5 +48,13 @@
       .box-body
         = text_field_tag 'merchant[company][pfb_account_licence_key]', @object.company.pfb_account_licence_key
         = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.pfb_account_licence_key), class: 'image'
+  .col-xs-3
+    .box.box-success
+      .box-header
+        h4.box-title 组织机构代码照token
+      .box-body
+        = text_field_tag 'merchant[company][org_photo_key]', @object.company.org_photo_key
+        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.org_photo_key), class: 'image'
+        
 
 
