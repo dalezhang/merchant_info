@@ -6,4 +6,5 @@ class ErrorLog < ApplicationRecord
   field :err_title, type: String
   field :err_message, type: String
   field :call_stack
+  field :params, type: Hash
 end

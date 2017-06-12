@@ -16,7 +16,7 @@ module Biz
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
       @zx_request = @merchant.request_and_response['zx_request'][@channel]
-      raise 'zx_request 无内容，请先生成进件请求' unless @zx_request.present?
+      raise "zx_request.#{@channel} 无内容，请先生成进件请求。\n#{@merchant.request_and_response['zx_request']}" unless @zx_request.present?
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
