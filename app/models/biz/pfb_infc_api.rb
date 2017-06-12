@@ -12,7 +12,7 @@ module Biz
       raise "channel should be one of ['wechat_offline', 'wechat_app', 'alipay']" unless %w[wechat_offline wechat_app alipay].include?(channel)
       @channel = channel
       @pfb_request = @merchant.request_and_response['pfb_request'][@channel]
-      raise 'pfb_request 无内容，请先生成进件请求' unless @pfb_request.present?
+      raise "pfb_request.#{@channel} 无内容，请先生成进件请求。\n#{@merchant.request_and_response['pfb_request']}" unless @pfb_request.present?
     end
 
     def send_intfc(req_typ)
