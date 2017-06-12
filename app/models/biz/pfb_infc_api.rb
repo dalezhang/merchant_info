@@ -2,7 +2,7 @@
 module Biz
   class PfbInfcApi < IntfcBase
     def initialize(id, channel)
-      if mch_id.class == Merchant
+      if id.class == Merchant
         @merchant = id
       elsif merchant = Merchant.find(id)
         @merchant = merchant
