@@ -109,7 +109,7 @@ class InspectMerchantsController < ResourcesController
 
   def pfb_infc
     load_object
-    bz = Biz::PfbInfcApi.new(@object.merchant_id, params[:channel])
+    bz = Biz::PfbInfcApi.new(@object.id, params[:channel])
     result = bz.send_intfc(params[:req_typ])
     if result
       flash[:success] = result
