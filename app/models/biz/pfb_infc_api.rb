@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 module Biz
   class PfbInfcApi < IntfcBase
-    def initialize(mch_id, channel)
-      if mch_id.class == Merchant
-        @merchant = mch_id
-      elsif merchant = Merchant.find_by(merchant_id: mch_id)
+    def initialize(id, channel)
+      if id.class == Merchant
+        @merchant = id
+      elsif merchant = Merchant.find(id)
         @merchant = merchant
       else
         raise 'merchant_id 无效'
       end
       raise "channel should be one of ['wechat_offline', 'wechat_app', 'alipay']" unless %w[wechat_offline wechat_app alipay].include?(channel)
       @channel = channel
-      @pfb_request = @merchant.request_and_response['pfb_request'][@channel]
-      raise 'pfb_request 无内容，请先生成进件请求' unless @pfb_request.present?
+      @pfb_request = @merchant.request_and_response.pfb_request[@channel]
+      raise "pfb_request.#{@channel} 无内容，请先生成进件请求。\n#{@merchant.request_and_response.pfb_request}" unless @pfb_request.present?
     end
 
     def send_intfc(req_typ)

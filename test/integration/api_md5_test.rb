@@ -9,7 +9,7 @@ class ApiMd5Test < ActionDispatch::IntegrationTest
       token: user.token,
       method: 'merchant.create',
       partner_id: user.partner_id,
-      out_merchant_id: 'c214',
+      out_mch_id: 'c214',
     }
     puts 'email', user.email
     puts "user.token", user.token

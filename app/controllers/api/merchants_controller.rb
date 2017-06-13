@@ -58,6 +58,8 @@ class Api::MerchantsController < ActionController::API
       @data = jwt_decode
     elsif sign.present?
       @data = md5_decode
+    else
+      raise "缺少字段： ‘jwt’ 或 ‘sign’"
     end
   end
 
@@ -95,9 +97,6 @@ class Api::MerchantsController < ActionController::API
   end
   def get_user
     @user = User.find_by(partner_id: params[:partner_id])
-    unless @user.present?
-      render json: { error: '找不到代理商信息，partner_id无效。' }.to_json
-      return
-    end
+    raise '找不到代理商信息，partner_id无效。' unless @user.present?
   end
 end

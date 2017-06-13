@@ -30,7 +30,7 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
-    log_error @object, e.message, '', e.backtrace
+    log_error @object, e.message, '', e.backtrace, params
     redirect_to action: :show, id: @object.id.to_s
   end
   def get_backend_account
@@ -50,7 +50,7 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
-    log_error @object, e.message, '', e.backtrace
+    log_error @object, e.message, '', e.backtrace, params
     redirect_to action: :show, id: @object.id.to_s
   end
 
@@ -71,7 +71,7 @@ class InspectMerchantsController < ResourcesController
   #   redirect_to action: :show, id: @object.id.to_s
   # rescue Exception => e
   #   flash[:error] = e.message
-  #   log_error @object, e.message, '', e.backtrace
+  #   log_error @object, e.message, '', e.backtrace, params
   #   redirect_to action: :show, id: @object.id.to_s
   # end
   def get_merchant_id
@@ -87,7 +87,7 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
-    log_error @object, e.message, '', e.backtrace
+    log_error @object, e.message, '', e.backtrace, params
     redirect_to action: :show, id: @object.id.to_s
   end
 
@@ -103,13 +103,13 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
-    log_error @object, e.message, '', e.backtrace
+    log_error @object, e.message, '', e.backtrace, params
     redirect_to action: :show, id: @object.id.to_s
   end
 
   def pfb_infc
     load_object
-    bz = Biz::PfbInfcApi.new(@object.merchant_id, params[:channel])
+    bz = Biz::PfbInfcApi.new(@object.id, params[:channel])
     result = bz.send_intfc(params[:req_typ])
     if result
       flash[:success] = result
@@ -119,7 +119,7 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
-    log_error @object, e.message, '', e.backtrace
+    log_error @object, e.message, '', e.backtrace, params
     redirect_to action: :show, id: @object.id.to_s
   end
 
