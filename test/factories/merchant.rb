@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :merchant do
-    user_id ''
+    user nil
     status '状态'
     full_name '商户全名称'
     name '商户简称'
@@ -12,7 +12,6 @@ FactoryGirl.define do
     mch_type '商户类型(个体，企业)'
     industry '经营行业'
     pfb_channel_type '普付宝经营类目' # 见附件《经营类目》中的经营类目明细编码
-    
     #银行信息
     bank_info {{
         owner_name: 'owner_name', # 账户名称（账号名）
