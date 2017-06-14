@@ -49,7 +49,7 @@ class Api::MerchantsController < ActionController::API
       render json: { error: @merchant.errors.messages }.to_json
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace
+    log_error @merchant, e.message, '', e.backtrace, params
     render json: { error: e.message }.to_json
   end
 
