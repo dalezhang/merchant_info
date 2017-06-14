@@ -86,10 +86,17 @@ class Api::MerchantsController < ActionController::API
     end
   end
 
+  # def get_mab(js)
+  #   mab = []
+  #   js.keys.sort.each do |k|
+  #     mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k]
+  #   end
+  #   mab.join('&')
+  # end
   def get_mab(js)
     mab = []
     js.keys.sort.each do |k|
-      mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k]
+      mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k] && js[k].class != Hash
     end
     mab.join('&')
   end
