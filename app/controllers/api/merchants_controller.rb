@@ -7,7 +7,6 @@ class Api::MerchantsController < ActionController::API
     ErrorLog.create(
         sender: nil, err_title: 'params', err_message: '', params: params.to_h
       )
-    log params.to_h
 
     case @data[:method]
     when 'merchant.create'
