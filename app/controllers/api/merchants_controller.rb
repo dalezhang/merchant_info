@@ -59,8 +59,7 @@ class Api::MerchantsController < ActionController::API
     elsif sign.present?
       @data = md5_decode
     else
-      log_error @merchant, '找不到代理商信息，partner_id无效。', ''
-      render json: { error: "缺少字段： ‘jwt’ 或 ‘sign’" }.to_json
+      raise "缺少字段： ‘jwt’ 或 ‘sign’"
     end
   rescue Exception => e
     log_error @merchant, e.message, '', e.backtrace, params
@@ -101,17 +100,14 @@ class Api::MerchantsController < ActionController::API
   end
   def get_user
     unless params[:partner_id].present?
-      log_error @merchant, 'partner_id为空', '', '', params
-      render json: { error: 'partner_id为空' }.to_json
-      return
+      raise 'partner_id为空'
     end
     @user = User.find_by(partner_id: params[:partner_id])
-    
     unless @user.present?
-      log_error @merchant, '找不到代理商信息，partner_id无效。', '', '', params
-      render json: { error: '找不到代理商信息，partner_id无效。' }.to_json
+      raise '找不到代理商信息，partner_id无效。'
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace
+    log_error @merchant, e.message, '', e.backtrace, params
+    render json: { error: e.messages }.to_json
   end
 end
