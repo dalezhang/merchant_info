@@ -100,11 +100,13 @@ class Api::MerchantsController < ActionController::API
   end
   def get_user
     puts "params #{params}"
+    log_error @merchant, 'params', '', @user, params
     unless params[:partner_id].present?
       raise 'partner_id为空'
     end
     @user = User.find_by(partner_id: params[:partner_id])
     puts "@user #{@user}"
+    log_error @merchant, 'user', '', @user, params
     unless @user.present?
       raise '找不到代理商信息，partner_id无效。'
     end
