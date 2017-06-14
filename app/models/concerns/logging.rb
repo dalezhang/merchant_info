@@ -9,7 +9,7 @@ module Logging
     @sender, @error, @message, @call_stack, @params = *args
     @has_error = true
     @call_stack = caller(2)[0..2].join("\n") unless @call_stack
-    message = @error.respond_to?(:message) ? @error.message, @error
+    message = @error.respond_to?(:message) ? @error.message : @error
     if defined?(ErrorLog)
       ErrorLog.create(
         sender: @sender, err_title: @title, err_message: message, params: @params,
