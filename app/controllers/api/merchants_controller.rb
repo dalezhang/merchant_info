@@ -108,6 +108,6 @@ class Api::MerchantsController < ActionController::API
     end
   rescue Exception => e
     log_error @merchant, e.message, '', e.backtrace, params
-    render json: { error: e.messages }.to_json
+    render json: { error: e.message }.to_json
   end
 end
