@@ -4,7 +4,6 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
-  field :out_mch_id, type: String # 代理商自定义的merchant唯一标识
   field :partner_mch_id, type: String, default: "c#{Merchant.count + 1}" # 商户号
   field :public_key, type: String # 商户公钥
   field :merchant_key, type: String # 商户md5签名key
@@ -38,20 +37,21 @@ class Merchant < ApplicationRecord
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
-  validates :out_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该out_merchant_id已经存在' }
+  validates :partner_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该partner_mch_id已经存在' }
 
   before_save :generate_keys
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
   def self.attr_writeable
     %i[
-      out_mch_id mch_deal_type
+      mch_deal_type
       full_name name appid mch_type industry memo
       wechat_channel_type alipay_channel_type
       province urbn address
       bank_info legal_person company
       zx_wechat_channel_type zx_alipay_channel_type
       pfb_channel_type mch_deal_type
+      partner_mch_id
     ]
   end
 
@@ -69,7 +69,6 @@ class Merchant < ApplicationRecord
     hash = {
       id: id.to_s,
       merchant_id: merchant_id,
-      out_mch_id: out_mch_id,
       partner_mch_id: partner_mch_id,
       private_key: private_key,
       merchant_key: merchant_key,
