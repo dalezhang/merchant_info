@@ -10,7 +10,6 @@ class Biz::MailerApi
 		subject: @title,
 		body: txt
 		}
-		binding.pry
 		response = HTTParty.post(url, body: js.to_json)
 		if response['code'] != 0
 			raise response.to_json
