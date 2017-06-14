@@ -12,7 +12,7 @@ module Logging
 
     if ErrorLog.class == Class
       ErrorLog.create(
-        sender: @sender, err_title: @title, err_message: @message, params: @params.to_h,
+        sender: @sender, err_title: @title, err_message: @message, params: JSON.parse(params.to_json),
         call_stack: @call_stack
       )
     end

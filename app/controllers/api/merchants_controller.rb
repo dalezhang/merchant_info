@@ -4,7 +4,6 @@ class Api::MerchantsController < ActionController::API
   include Logging
   before_action :get_user, :decode_data
   def create
-    @params = params.to_h
     case @data[:method]
     when 'merchant.create'
       @merchant = Merchant.new(user: @user)
@@ -52,7 +51,7 @@ class Api::MerchantsController < ActionController::API
 
   private
   def decode_data
-    @params = params.to_h
+    @params = params.to_hash
     jwt = params[:jwt]
     sign = params[:sign]
     @data = nil
@@ -102,7 +101,7 @@ class Api::MerchantsController < ActionController::API
   end
 
   def get_user
-    @params = params.to_h
+    @params = params.to_hash
     unless params[:partner_id].present?
       raise 'partner_id为空'
     end
