@@ -40,6 +40,7 @@ class Merchant < ApplicationRecord
   validates :partner_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该partner_mch_id已经存在' }
 
   before_save :generate_keys
+  before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
   def self.attr_writeable
@@ -62,6 +63,12 @@ class Merchant < ApplicationRecord
       self.public_key = key.public_key.to_pem
     end
     self.merchant_key = UUID.new.generate unless merchant_key.present?
+  end
+  def check_if_modified_sensitive_values
+    sensitive_values = ['partner_mch_id']
+    if (sensitive_values & self.changes.keys).present?
+      raise "#{sensitive_values.join(',')}不允许修改"
+    end
   end
 
 
