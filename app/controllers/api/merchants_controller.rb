@@ -63,7 +63,7 @@ class Api::MerchantsController < ActionController::API
       render json: { error: "缺少字段： ‘jwt’ 或 ‘sign’" }.to_json
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace
+    log_error @merchant, e.message, '', e.backtrace, params
     render json: { error: e.message }.to_json
   end
 
@@ -100,6 +100,11 @@ class Api::MerchantsController < ActionController::API
     md5(get_mab(js) + "&key=#{key}").upcase
   end
   def get_user
+    unless params[:partner_id].present?
+      log_error @merchant, 'partner_id为空', ''
+      render json: { error: 'partner_id为空' }.to_json
+      return
+    end
     @user = User.find_by(partner_id: params[:partner_id])
     
     unless @user.present?
