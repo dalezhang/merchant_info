@@ -62,6 +62,9 @@ class Api::MerchantsController < ActionController::API
       log_error @merchant, '找不到代理商信息，partner_id无效。', ''
       render json: { error: "缺少字段： ‘jwt’ 或 ‘sign’" }.to_json
     end
+  rescue Exception => e
+    log_error @merchant, e.message, '', e.backtrace
+    render json: { error: e.message }.to_json
   end
 
   def jwt_decode
@@ -103,5 +106,7 @@ class Api::MerchantsController < ActionController::API
       log_error @merchant, '找不到代理商信息，partner_id无效。', ''
       render json: { error: '找不到代理商信息，partner_id无效。' }.to_json
     end
+  rescue Exception => e
+    log_error @merchant, e.message, '', e.backtrace
   end
 end
