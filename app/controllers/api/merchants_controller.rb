@@ -98,6 +98,7 @@ class Api::MerchantsController < ActionController::API
   def get_mac(js, key)
     md5(get_mab(js) + "&key=#{key}").upcase
   end
+
   def get_user
     puts "params #{params}"
     log_error @merchant, 'params', '', @user, params
@@ -111,7 +112,7 @@ class Api::MerchantsController < ActionController::API
       raise '找不到代理商信息，partner_id无效。'
     end
   rescue Exception => e
-    log_error @merchant, e, '', e.backtrace, params
-    render json: { error: e.message }.to_json
+    log_error @merchant, e, '', '', params
+    render json: { error: e}.to_json
   end
 end
