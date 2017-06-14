@@ -79,7 +79,8 @@ class Api::MerchantsController < ActionController::API
   def md5_decode
     get_user unless @user.present?
     key = @user.token
-    if params[:sign] == get_mac(params,key)
+    js = JSON.parse(params.to_json).deep_symbolize_keys
+    if params[:sign] == get_mac(js,key)
       return params.deep_symbolize_keys
     else
       raise '签名错'
