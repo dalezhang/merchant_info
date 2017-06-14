@@ -99,10 +99,12 @@ class Api::MerchantsController < ActionController::API
     md5(get_mab(js) + "&key=#{key}").upcase
   end
   def get_user
+    puts "params #{params}"
     unless params[:partner_id].present?
       raise 'partner_id为空'
     end
     @user = User.find_by(partner_id: params[:partner_id])
+    puts "@user #{@user}"
     unless @user.present?
       raise '找不到代理商信息，partner_id无效。'
     end
