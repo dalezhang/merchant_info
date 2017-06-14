@@ -6,13 +6,13 @@ module Logging
   attr_accessor :has_error, :messages, :error_message
 
   def log_error(*args)
-    @sender, @error, @message, @call_stack, @params = *args
+    @sender, @title, @message, @call_stack, @params = *args
     @has_error = true
     @call_stack = caller(2)[0..2].join("\n") unless @call_stack
-    message = @error.respond_to?(:message) ? @error.message : @error
-    if defined?(ErrorLog)
+
+    if ErrorLog.class == Class
       ErrorLog.create(
-        sender: @sender, err_title: @title, err_message: message, params: @params,
+        sender: @sender, err_title: @title, err_message: @message, params: @params.to_hash,
         call_stack: @call_stack
       )
     end
