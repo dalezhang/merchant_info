@@ -107,7 +107,7 @@ class Api::MerchantsController < ActionController::API
       raise '找不到代理商信息，partner_id无效。'
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, params
+    log_error @merchant, e, '', e.backtrace, params
     render json: { error: e.message }.to_json
   end
 end
