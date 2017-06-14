@@ -11,7 +11,7 @@ module Logging
     @call_stack = caller(2)[0..2].join("\n") unless @call_stack
     if defined?(ErrorLog)
       ErrorLog.create(
-        sender: @sender, err_title: @title, err_message: @message, params: @params
+        sender: @sender, err_title: @title, err_message: @message, params: @params,
         call_stack: @call_stack
       )
     end
