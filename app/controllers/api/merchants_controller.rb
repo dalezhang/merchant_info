@@ -4,6 +4,7 @@ class Api::MerchantsController < ActionController::API
   include Logging
   before_action :get_user, :decode_data
   def create
+    @params = params.to_h
     case @data[:method]
     when 'merchant.create'
       @merchant = Merchant.new(user: @user)
