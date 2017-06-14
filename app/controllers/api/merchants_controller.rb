@@ -3,6 +3,7 @@
 class Api::MerchantsController < ActionController::API
   include Logging
   before_action :get_user, :decode_data
+  skip_before_action :verify_authenticity_token 
   def create
     case @data[:method]
     when 'merchant.create'
