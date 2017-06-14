@@ -101,14 +101,14 @@ class Api::MerchantsController < ActionController::API
   end
   def get_user
     unless params[:partner_id].present?
-      log_error @merchant, 'partner_id为空', ''
+      log_error @merchant, 'partner_id为空', '', '', params
       render json: { error: 'partner_id为空' }.to_json
       return
     end
     @user = User.find_by(partner_id: params[:partner_id])
     
     unless @user.present?
-      log_error @merchant, '找不到代理商信息，partner_id无效。', ''
+      log_error @merchant, '找不到代理商信息，partner_id无效。', '', '', params
       render json: { error: '找不到代理商信息，partner_id无效。' }.to_json
     end
   rescue Exception => e
