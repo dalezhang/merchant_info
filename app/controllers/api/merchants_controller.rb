@@ -45,12 +45,13 @@ class Api::MerchantsController < ActionController::API
       render json: { error: @merchant.errors.messages }.to_json
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, params
+    log_error @merchant, e.message, '', e.backtrace, @params
     render json: { error: e.message }.to_json
   end
 
   private
   def decode_data
+    @params = params.to_h
     jwt = params[:jwt]
     sign = params[:sign]
     @data = nil
@@ -62,7 +63,7 @@ class Api::MerchantsController < ActionController::API
       raise "缺少字段： ‘jwt’ 或 ‘sign’"
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, params
+    log_error @merchant, e.message, '', e.backtrace, @params
     render json: { error: e.message }.to_json
   end
 
@@ -100,6 +101,7 @@ class Api::MerchantsController < ActionController::API
   end
 
   def get_user
+    @params = params.to_h
     unless params[:partner_id].present?
       raise 'partner_id为空'
     end
@@ -108,7 +110,7 @@ class Api::MerchantsController < ActionController::API
       raise '找不到代理商信息，partner_id无效。'
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, params
+    log_error @merchant, e.message, '', e.backtrace, @params
     render json: { error: e}.to_json
   end
 end
