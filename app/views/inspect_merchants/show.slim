@@ -5,32 +5,32 @@
       .col-xs-3
         h4
           | 法人身份证正面
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.legal_person.identity_card_front_key), class: 'image'
       .col-xs-3
         h4
           | 法人身份证反面
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.legal_person.identity_card_back_key), class: 'image'
       .col-xs-3
         h4
           | 法人手持身份证
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.legal_person.id_with_hand_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.legal_person.id_with_hand_key), class: 'image'
       .col-xs-3
         h4
           | 营业执照
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.license_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.company.license_key), class: 'image'
     .col-xs-12
       .col-xs-3
         h4
           | 店铺照
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.shop_picture_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.company.shop_picture_key), class: 'image'
       .col-xs-3
         h4
           | 银行卡正面
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.bank_info.right_bank_card_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.bank_info.right_bank_card_key), class: 'image'
       .col-xs-3
         h4
           | 农商行开户许可证
-        = image_tag qiniu_or_noimage(current_user.bucket_url,@object.company.pfb_account_licence_key), class: 'image'
+        = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.company.pfb_account_licence_key), class: 'image'
 
 
   .col-xs-3
