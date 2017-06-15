@@ -45,12 +45,13 @@ class Api::MerchantsController < ActionController::API
       render json: { error: @merchant.errors.messages }.to_json
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace
+    log_error @merchant, e.message, '', e.backtrace, @params
     render json: { error: e.message }.to_json
   end
 
   private
   def decode_data
+    @params = params.to_hash
     jwt = params[:jwt]
     sign = params[:sign]
     @data = nil
@@ -61,6 +62,9 @@ class Api::MerchantsController < ActionController::API
     else
       raise "缺少字段： ‘jwt’ 或 ‘sign’"
     end
+  rescue Exception => e
+    log_error @merchant, e.message, '', e.backtrace, @params
+    render json: { error: e.message }.to_json
   end
 
   def jwt_decode
@@ -75,17 +79,25 @@ class Api::MerchantsController < ActionController::API
   def md5_decode
     get_user unless @user.present?
     key = @user.token
-    if params[:sign] == get_mac(params,key)
+    js = JSON.parse(params.to_json).deep_symbolize_keys
+    if params[:sign] == get_mac(js,key)
       return params.deep_symbolize_keys
     else
       raise '签名错'
     end
   end
 
+  # def get_mab(js)
+  #   mab = []
+  #   js.keys.sort.each do |k|
+  #     mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k]
+  #   end
+  #   mab.join('&')
+  # end
   def get_mab(js)
     mab = []
     js.keys.sort.each do |k|
-      mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k]
+      mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k] && js[k].class != Hash
     end
     mab.join('&')
   end
@@ -95,8 +107,18 @@ class Api::MerchantsController < ActionController::API
   def get_mac(js, key)
     md5(get_mab(js) + "&key=#{key}").upcase
   end
+
   def get_user
+    @params = params.to_hash
+    unless params[:partner_id].present?
+      raise 'partner_id为空'
+    end
     @user = User.find_by(partner_id: params[:partner_id])
-    raise '找不到代理商信息，partner_id无效。' unless @user.present?
+    unless @user.present?
+      raise '找不到代理商信息，partner_id无效。'
+    end
+  rescue Exception => e
+    log_error @merchant, e.message, '', e.backtrace, @params
+    render json: { error: e}.to_json
   end
 end
