@@ -35,7 +35,7 @@ zh-CN:
         mch_type: '商户类型'
         appid: '微信公众号appid'
         partner_mch_id: '进件平台商户号'
-        out_mch_id: '代理商商户号'
+        partner_mch_id: '代理商定义商户号'
       zx_contr_info_list:
         pay_typ_encd: 支付类型
         pay_typ_fee_rate: 支付类型费率
