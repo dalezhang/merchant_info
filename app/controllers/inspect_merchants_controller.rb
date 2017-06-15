@@ -36,11 +36,15 @@ class InspectMerchantsController < ResourcesController
   def get_backend_account
     load_object
     core_account = Biz::CoreAccount.new(@object)
+    pay_route = Biz::PayRoute::PayRouteBase.new @object
+      @message = "路由创建成功，返回内容已保存在request_and_response.pfb_response[:pay_route_query]"
     if @object.merchant_id.present?
       core_account.get_backend_account
+      pay_route.query
     else
       core_account.create_backend_account # 提交创建请求
       core_account.get_backend_account # 查询创建结果
+      pay_route.query
     end
     if core_account.has_error
       flash[:success] = '数据获取成功！请到request_and_response=>core_account中查看。'
@@ -116,6 +120,27 @@ class InspectMerchantsController < ResourcesController
     else
       flash[:error] = bz.error_message
     end
+    redirect_to action: :show, id: @object.id.to_s
+  rescue Exception => e
+    flash[:error] = e.message
+    log_error @object, e.message, '', e.backtrace, params
+    redirect_to action: :show, id: @object.id.to_s
+  end
+
+  def create_pay_route
+    load_object
+    @message = nil
+    case params[:route]
+    when 'bjrcb.wechat_offline'
+      biz = Biz::PayRoute::BjrcbPayRoute.new @object
+      biz.send_wechat_offline
+      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:wechat_offline]"
+    when 'bjrcb.alipay'
+      biz = Biz::PayRoute::BjrcbPayRoute.new @object
+      biz.send_alipay
+      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:wechat_offline]"
+    end
+    flash[:success] = @message
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message

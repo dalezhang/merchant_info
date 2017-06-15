@@ -89,16 +89,18 @@
         = link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'wechat_offline'), method: :post, class: 'btn btn-lg btn-success'
         | &nbsp
         = link_to '变更', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat_offline'), method: :post, class: 'btn btn-lg btn-primary'
-    br
-    .box
-      .box-header
-        h4.box-title 农商微信App
-      .box-body
-        = link_to '进件', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-warning'
         | &nbsp
-        = link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-success'
-        | &nbsp
-        = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-primary'
+        = link_to '提交支付路由', create_pay_route_inspect_merchant_url(@object.id.to_s, route: 'bjrcb.wechat_offline'), method: :post, class: 'btn btn-lg btn-default'
+    /br
+    /.box
+      /.box-header
+        /h4.box-title 农商微信App
+      /.box-body
+        /= link_to '进件', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '新增', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-warning'
+        /| &nbsp
+        /= link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-success'
+        /| &nbsp
+        /= link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat_app'), method: :post, class: 'btn btn-lg btn-primary'
     br
     .box
       .box-header
@@ -109,3 +111,5 @@
         = link_to '查询', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-success'
         | &nbsp
         = link_to '变更', pfb_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-primary'
+        | &nbsp
+        = link_to '提交支付路由', create_pay_route_inspect_merchant_url(@object.id.to_s, route: 'bjrcb.alipay'), method: :post, class: 'btn btn-lg btn-default'

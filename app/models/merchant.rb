@@ -199,6 +199,7 @@ class RequestAndResponse < ApplicationRecord
   field :pfb_request, type: Hash, default: {} # 农商行进件内容
   field :pfb_response, type: Hash, default: {} # 农商行进件内容
   field :core_account, type: Hash, default: {} # 支付渠道信息
+  field :pay_route, type: Hash, default: {} # 支付路由信息
   def inspect
     {
       zx_request: zx_request,
@@ -206,6 +207,7 @@ class RequestAndResponse < ApplicationRecord
       pfb_request: pfb_request,
       pfb_response: pfb_response,
       core_account: core_account,
+      pay_route: pay_route,
     }
   end
 end
