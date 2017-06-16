@@ -6,7 +6,6 @@ module Logging
   attr_accessor :has_error, :messages, :error_message
 
   def log_error(*args)
-    binding.pry
     @sender, @title, @message, @call_stack, @params = *args
     @has_error = true
     @call_stack = caller(2)[0..2].join("\n") unless @call_stack
