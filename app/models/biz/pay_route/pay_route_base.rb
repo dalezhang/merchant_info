@@ -2,7 +2,6 @@
 # 支付网管
 class Biz::PayRoute::PayRouteBase
   def initialize(mch)
-    @host = "http://120.77.180.208:3001/cms/routes"
     host = Rails.application.secrets.core['host'] rescue nil
     raise 'Rails.application.secrets.core["host"] is not set' unless host.present?
     @url = host + '/cms/routes'
@@ -16,7 +15,6 @@ class Biz::PayRoute::PayRouteBase
   end
 
   def create_route_request(hash)
-    @zx_response = @merchant.request_and_response['zx_response']
     hash.deep_symbolize_keys
 		@request_js = {
       merchant_id: @merchant.merchant_id,             #merchant_id
@@ -32,7 +30,7 @@ class Biz::PayRoute::PayRouteBase
 	end
 
   def query
-    response = HTTParty.try('get', "#{@host}?merchant_id=#{@merchant.merchant_id}")
+    response = HTTParty.try('get', "#{@url}?merchant_id=#{@merchant.merchant_id}")
     response.body
     js = JSON.parse response.body
     @merchant.request_and_response.pay_route = js.deep_symbolize_keys
