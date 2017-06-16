@@ -4,6 +4,9 @@
       = label 'user', '电子邮箱(登录名)'
       = text_field_tag '', current_user.email, readonly: true, class: "form-control"
     .form-group
+      = label 'partner_id', '代理商编号'
+      = text_field_tag '', current_user.partner_id, readonly: true, class: "form-control"
+    .form-group
       = label :name, '用户名'
       = text_field_tag '', current_user.name, readonly: true, class: "form-control"
     .form-group
