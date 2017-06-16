@@ -138,7 +138,7 @@ class InspectMerchantsController < ResourcesController
     when 'bjrcb.alipay'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object
       biz.send_alipay
-      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:wechat_offline]"
+      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:alipay]"
     end
     flash[:success] = @message
     redirect_to action: :show, id: @object.id.to_s

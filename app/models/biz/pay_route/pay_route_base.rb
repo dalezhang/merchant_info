@@ -3,7 +3,7 @@
 class Biz::PayRoute::PayRouteBase
   def initialize(mch)
     @host = "http://120.77.180.208:3001/cms/routes"
-    host = Rails.application.secrets.core['host']
+    host = Rails.application.secrets.core['host'] rescue nil
     raise 'Rails.application.secrets.core["host"] is not set' unless host.present?
     @url = host + '/cms/routes'
     if mch.class == Merchant
