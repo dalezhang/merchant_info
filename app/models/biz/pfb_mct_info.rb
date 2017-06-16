@@ -25,10 +25,10 @@ class Biz::PfbMctInfo
       @provinceName = province.location_code if province.present? # 经营省,企业商户必填
       if @provinceName.present? && @merchant.urbn.present?
         urbn = Location.where(pub_location_code: @provinceName, location_name: Regexp.new(@merchant.urbn.strip) ).first
-        @cityName = urbn.location_code # 经营市,企业商户必填
+        @cityName = urbn.location_code if urbn.present? # 经营市,企业商户必填
         if @cityName.present? && @merchant.zone.present?
           zone = Location.where(pub_location_code: @cityName, location_name: Regexp.new(@merchant.zone.strip) ).first
-          @districtName = zone.location_code # 经营区,企业商户必填
+          @districtName = zone.location_code if zone.present? # 经营区,企业商户必填
         end
       end
     end
