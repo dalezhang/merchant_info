@@ -6,7 +6,15 @@
         = link_to '农商行普付宝经营行业列表', 'http://note.youdao.com/groupshare/?token=5A7A9ED6F13C49D0B830F1CF394B4E06&gid=45230067', target: '_blank', class: 'btn btn-link'
       .box-body
         .col-xs-6
-          = f.input :pfb_channel_type
+          
+          .form-group.string.optional
+            label.col-sm-3.control-label.string.optional 微信经营类目
+            .col-sm-9
+              = text_field_tag "merchant[pfb_channel_type][wechat]", @object.pfb_channel_type['wechat'], class: 'form-control string optional'
+          .form-group.string.optional
+            label.col-sm-3.control-label.string.optional 支付宝经营类目
+            .col-sm-9
+              = text_field_tag "merchant[pfb_channel_type][alipay]", @object.pfb_channel_type['alipay'], class: 'form-control string optional'
         table.table.table-bordered
           thead
             tr
