@@ -12,11 +12,11 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
   end
 
   def send_wechat_offline
-    query_customer_num = @query_result[:wechat_offline_查询][:customerNum] rescue nil
-    response_customer_num = @query_result[:wechat_offline_新增][:customerNum] rescue nil
+    query_customer_num = @query_result[:wechat_offline_查询][:customer][:customerNum] rescue nil
+    response_customer_num = @query_result[:wechat_offline_新增][:customer_num] rescue nil
     customer_num = response_customer_num || query_customer_num
-    query_api_key = @query_result[:wechat_offline_查询][:apiKey] rescue nil
-    response_api_key = @query_result[:wechat_offline_新增][:apiKey] rescue nil
+    query_api_key = @query_result[:wechat_offline_查询][:customer][:apiKey] rescue nil
+    response_api_key = @query_result[:wechat_offline_新增][:api_key] rescue nil
     api_key = response_api_key || query_api_key
     unless customer_num.present?
       raise "can't find customerNum in merchant.request_and_response[:pfb_request]"
@@ -46,11 +46,11 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
 	end
 
   def send_alipay
-    query_customer_num = @query_result[:alipay_查询][:customerNum] rescue nil
-    response_customer_num = @query_result[:alipay_新增][:customerNum] rescue nil
+    query_customer_num = @query_result[:alipay_查询][:customer][:customerNum] rescue nil
+    response_customer_num = @query_result[:alipay_新增][:customer_num] rescue nil
     customer_num = response_customer_num || query_customer_num
-    query_api_key = @query_result[:alipay_查询][:apiKey] rescue nil
-    response_api_key = @query_result[:alipay_新增][:apiKey] rescue nil
+    query_api_key = @query_result[:alipay_查询][:customer][:apiKey] rescue nil
+    response_api_key = @query_result[:alipay_新增][:api_key] rescue nil
     api_key = response_api_key || query_api_key
     unless customer_num.present?
       raise "can't find customerNum in @merchant.request_and_response[:pfb_request]"

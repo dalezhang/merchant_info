@@ -20,6 +20,7 @@ class Biz::PfbMctInfo
     @contactEmail = @merchant.company.contact_email # 联系人邮箱
     @servicePhone = @merchant.company.service_tel # 客服电话
     @address = [@merchant.province, @merchant.urbn, @merchant.address].join(',') # 经营地址,企业商户必填
+    @businessAddress =  @address  # 商户经营地址
     if @merchant.province.present?
       province = Location.where(location_name: Regexp.new(@merchant.province.strip) ).first
       @provinceName = province.location_code if province.present? # 经营省,企业商户必填
@@ -190,6 +191,7 @@ class Biz::PfbMctInfo
       contactEmail: @contactEmail, # 联系人邮箱
       servicePhone: @servicePhone, # 客服电话
       address: @address, # 经营地址,企业商户必填
+      businessAddress: @businessAddress,
       provinceName: @provinceName, # 经营省,企业商户必填
       cityName: @cityName, # 经营市,企业商户必填
       districtName: @districtName, # 经营区,企业商户必填
