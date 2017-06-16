@@ -11,6 +11,7 @@ module Biz
       end
       raise "channel should be one of ['wechat_offline', 'wechat_app', 'alipay']" unless %w[wechat_offline wechat_app alipay].include?(channel)
       @channel = channel
+      @salt = @merchant.id.to_s
       @pfb_request = @merchant.request_and_response.pfb_request[@channel]
       raise "pfb_request.#{@channel} 无内容，请先生成进件请求。\n#{@merchant.request_and_response.pfb_request}" unless @pfb_request.present?
     end
@@ -69,7 +70,7 @@ module Biz
         agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
         queryType: '1', # 值为：0/1
         customerNum: nil, # 查询条件类型为0时必填
-        outMchId: "#{@channel}_#{@merchant.id.to_s}", # 查询条件类型为1时必填
+        outMchId: "#{@channel}_#{@salt}", # 查询条件类型为1时必填
       }
     end
 
