@@ -5,20 +5,24 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
 
   def initialize(merchant)
     super
-    @query_result = @merchant.request_and_response[:pfb_request].deep_symbolize_keys rescue nil
+    @query_result = @merchant.request_and_response[:pfb_response].deep_symbolize_keys rescue nil
     unless @query_result.present?
       raise "@merchant.request_and_response[:pfb_request] is nil"
     end
   end
 
   def send_wechat_offline
-    customer_num =  @query_result[:wechat_offline][:customerNum] rescue nil
-    api_key =  @query_result[:wechat_offline][:apiKey] rescue nil
+    query_customer_num = @query_result[:wechat_offline_查询][:customerNum] rescue nil
+    response_customer_num = @query_result[:wechat_offline_新增][:customerNum] rescue nil
+    customer_num = response_customer_num || query_customer_num
+    query_api_key = @query_result[:wechat_offline_查询][:apiKey] rescue nil
+    response_api_key = @query_result[:wechat_offline_新增][:apiKey] rescue nil
+    api_key = response_api_key || query_api_key
     unless customer_num.present?
-      raise "can't find customerNum in @merchant.request_and_response[:pfb_request][:wechat_offline][:customerNum]"
+      raise "can't find customerNum in merchant.request_and_response[:pfb_request]"
     end
     unless api_key.present?
-      raise "can't find apiKey in @merchant.request_and_response[:pfb_request][:wechat_offline][:apiKey]"
+      raise "can't find apiKey in @merchant.request_and_response[:pfb_request]"
     end
     hash = {
 			#通道名称，SWIFT:威富通;BJRCB: 北京农商行;CITIC_ALI:中信直连支付宝;CITIC_WECHAT:中信直连微信;DIANZI:点子
@@ -42,13 +46,17 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
 	end
 
   def send_alipay
-    customer_num =  @query_result[:alipay][:customerNum] rescue nil
-    api_key =  @query_result[:alipay][:apiKey] rescue nil
+    query_customer_num = @query_result[:alipay_查询][:customerNum] rescue nil
+    response_customer_num = @query_result[:alipay_新增][:customerNum] rescue nil
+    customer_num = response_customer_num || query_customer_num
+    query_api_key = @query_result[:alipay_查询][:apiKey] rescue nil
+    response_api_key = @query_result[:alipay_新增][:apiKey] rescue nil
+    api_key = response_api_key || query_api_key
     unless customer_num.present?
-      raise "can't find customerNum in @merchant.request_and_response[:pfb_request][:alipay][:customerNum]"
+      raise "can't find customerNum in @merchant.request_and_response[:pfb_request]"
     end
     unless api_key.present?
-      raise "can't find apiKey in @merchant.request_and_response[:pfb_request][:alipay][:apiKey]"
+      raise "can't find apiKey in @merchant.request_and_response[:pfb_request]"
     end
     hash = {
       channel_name: 'BJRCB',
