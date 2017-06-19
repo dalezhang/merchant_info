@@ -20,7 +20,7 @@ class Api::MerchantsController < ActionController::API
         @merchant = @user.merchants.find_by(id: @data[:id])
       end
       unless @merchant.present?
-        render json: { error: 'invalid id' }.to_json
+        render json: { error: '无法根据partner_mch_id，merchant_id，id中的任何一个找到对应的记录。' }.to_json
         return
       end
       keys = @data.keys & Merchant.attr_writeable
@@ -28,11 +28,17 @@ class Api::MerchantsController < ActionController::API
         @merchant.send("#{key}=", @data[key])
       end
     when 'merchant.query'
-      @merchant = @user.merchants.find_by(partner_mch_id: @data[:partner_mch_id])
+      if @data[:partner_mch_id].present?
+        @merchant = @user.merchants.find_by(partner_mch_id: @data[:partner_mch_id])
+      elsif @data[:merchant_id].present?
+        @merchant = @user.merchants.find_by(merchant_id: @data[:merchant_id])
+      elsif @data[:id].present?
+        @merchant = @user.merchants.find_by(id: @data[:id])
+      end
       if @merchant.present?
         render json: @merchant.inspect.to_json
       else
-        render json: { error: 'invalid id' }.to_json
+        render json: { error: '无法根据partner_mch_id，merchant_id，id中的任何一个找到对应的记录。' }.to_json
       end
       return
     else
@@ -45,13 +51,12 @@ class Api::MerchantsController < ActionController::API
       render json: { error: @merchant.errors.messages }.to_json
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, @params
+    log_error @merchant, e.message, '', e.backtrace, params
     render json: { error: e.message }.to_json
   end
 
   private
   def decode_data
-    @params = params.to_hash
     jwt = params[:jwt]
     sign = params[:sign]
     @data = nil
@@ -63,7 +68,7 @@ class Api::MerchantsController < ActionController::API
       raise "缺少字段： ‘jwt’ 或 ‘sign’"
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, @params
+    log_error @merchant, e.message, '', e.backtrace, params
     render json: { error: e.message }.to_json
   end
 
@@ -109,7 +114,6 @@ class Api::MerchantsController < ActionController::API
   end
 
   def get_user
-    @params = params.to_hash
     unless params[:partner_id].present?
       raise 'partner_id为空'
     end
@@ -118,7 +122,7 @@ class Api::MerchantsController < ActionController::API
       raise '找不到代理商信息，partner_id无效。'
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, @params
+    log_error @merchant, e.message, '', e.backtrace, params
     render json: { error: e}.to_json
   end
 end
