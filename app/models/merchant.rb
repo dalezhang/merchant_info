@@ -64,7 +64,6 @@ class Merchant < ApplicationRecord
       self.private_key = key.to_pem
       self.public_key = key.public_key.to_pem
     end
-    self.merchant_key = UUID.new.generate unless merchant_key.present?
   end
   def check_if_modified_sensitive_values
     sensitive_values = ['partner_mch_id']
@@ -81,7 +80,6 @@ class Merchant < ApplicationRecord
       partner_mch_id: partner_mch_id,
       private_key: private_key,
       share_key: share_key,
-      merchant_key: merchant_key,
       status: STATUS_DATA[status],
       full_name: full_name,
       name: name,
