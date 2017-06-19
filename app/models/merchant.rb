@@ -24,6 +24,8 @@ class Merchant < ApplicationRecord
   field :zx_alipay_channel_type, type: String
   field :pfb_channel_type, type: Hash, default: {} # 农商行普付宝经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
+  field :d0_rate, type: String # D0费率
+  field :t1_rate, type: String # T1费率
   field :bank_info, type: Hash, default: {} # 银行信息
   field :legal_person # 法人信息
   field :company # 公司信息
@@ -45,7 +47,7 @@ class Merchant < ApplicationRecord
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
   def self.attr_writeable
     %i[
-      mch_deal_type
+      d0_rate t1_rate
       full_name name appid mch_type industry memo
       wechat_channel_type alipay_channel_type
       province urbn address
@@ -90,6 +92,8 @@ class Merchant < ApplicationRecord
       appid: appid,
       mch_type: mch_type,
       industry: industry,
+      d0_rate: d0_rate,
+      t1_rate: t1_rate,
       zx_wechat_channel_type: zx_wechat_channel_type,
       zx_alipay_channel_type: zx_alipay_channel_type,
       pfb_channel_type: pfb_channel_type,
