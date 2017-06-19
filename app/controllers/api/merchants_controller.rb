@@ -28,7 +28,7 @@ class Api::MerchantsController < ActionController::API
         @merchant.send("#{key}=", @data[key])
       end
     when 'merchant.query'
-      @merchant = @user.merchant.find_by(partner_mch_id: @data[:partner_mch_id])
+      @merchant = @user.merchants.find_by(partner_mch_id: @data[:partner_mch_id])
       if @merchant.present?
         render json: @merchant.inspect.to_json
       else
