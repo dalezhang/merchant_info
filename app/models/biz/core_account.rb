@@ -33,7 +33,7 @@ module Biz
       if response['code'] == 0
         @merchant.request_and_response.core_account = response['data'][0]
         @merchant.merchant_id = @merchant.request_and_response.core_account['_id']
-        @merchant.public_key = @merchant.request_and_response.core_account["share_key"]
+        @merchant.share_key = @merchant.request_and_response.core_account["share_key"]
         @merchant.save
       else
         return log_error @merchant, 'CoreAccount->merchant_id', response['msg']

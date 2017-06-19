@@ -6,7 +6,7 @@ class Merchant < ApplicationRecord
   field :merchant_id, type: String # 商户编号
   field :partner_mch_id, type: String # 代理商定义的商户号
   field :public_key, type: String # 商户公钥
-  field :merchant_key, type: String # 商户md5签名key
+  field :share_key, type: String # 商户md5签名key
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String # 代理商自定义的merchant唯一标识
   field :status, type: Integer, default: 0 # 状态
@@ -80,6 +80,7 @@ class Merchant < ApplicationRecord
       merchant_id: merchant_id,
       partner_mch_id: partner_mch_id,
       private_key: private_key,
+      share_key: share_key,
       merchant_key: merchant_key,
       status: STATUS_DATA[status],
       full_name: full_name,
