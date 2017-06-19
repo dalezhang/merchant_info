@@ -12,8 +12,8 @@ class Api::MerchantsController < ActionController::API
         @merchant.send("#{key}=", @data[key])
       end
     when 'merchant.update'
-      if @data[:out_merchant_id].present?
-        @merchant = @user.merchants.find_by(out_merchant_id: @data[:out_merchant_id])
+      if @data[:partner_mch_id].present?
+        @merchant = @user.merchants.find_by(partner_mch_id: @data[:partner_mch_id])
       elsif @data[:merchant_id].present?
         @merchant = @user.merchants.find_by(merchant_id: @data[:merchant_id])
       elsif @data[:id].present?
@@ -28,7 +28,7 @@ class Api::MerchantsController < ActionController::API
         @merchant.send("#{key}=", @data[key])
       end
     when 'merchant.query'
-      @merchant = @user.merchant.find_by(out_merchant_id: @data[:out_merchant_id])
+      @merchant = @user.merchant.find_by(partner_mch_id: @data[:partner_mch_id])
       if @merchant.present?
         render json: @merchant.inspect.to_json
       else
