@@ -34,11 +34,10 @@ zh-CN:
         mch_deal_type: '商户经营类型(实体,虚拟)'
         mch_type: '商户类型'
         appid: '微信公众号appid'
-        partner_mch_id: '进件平台商户号'
-        partner_mch_id: '代理商定义商户号'
+        partner_mch_id: 代理商定义商户号
         d0_rate: D0费率
         t1_rate: T1费率
-       zx_contr_info_list:
+      zx_contr_info_list:
         pay_typ_encd: 支付类型
         pay_typ_fee_rate: 支付类型费率
         start_dt: 费率生效日期

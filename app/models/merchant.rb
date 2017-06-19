@@ -4,7 +4,7 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
-  field :partner_mch_id, type: String, default: "c#{Merchant.count + 1}" # 商户号
+  field :partner_mch_id, type: String # 代理商定义的商户号
   field :public_key, type: String # 商户公钥
   field :merchant_key, type: String # 商户md5签名key
   field :private_key, type: String # 商户私钥
