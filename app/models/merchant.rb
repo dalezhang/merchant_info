@@ -56,7 +56,7 @@ class Merchant < ApplicationRecord
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
   def self.attr_writeable
     %i[
-      d0_rate t1_rate
+      d0_rate t1_rate fixed_fee
       full_name name appid mch_type industry memo
       wechat_channel_type alipay_channel_type
       province urbn address
@@ -126,6 +126,7 @@ class Merchant < ApplicationRecord
       industry: industry,
       d0_rate: d0_rate,
       t1_rate: t1_rate,
+      fixed_fee: fixed_fee,
       zx_wechat_channel_type: zx_wechat_channel_type,
       zx_alipay_channel_type: zx_alipay_channel_type,
       pfb_channel_type: pfb_channel_type,
