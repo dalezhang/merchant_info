@@ -3,10 +3,11 @@
     .col-xs-6
       h4 基本信息
       = f.input :email
+      = f.input :partner_id, placeholder: "创建时填写，创建成功后不能修改"
       = f.input :password
       = f.input :password_confirmation
       = f.input :roles do
-        = f.select :roles, options_for_select([['--无--']] + Role.all.pluck(:name), selected: f.object.roles.first.try(:name) ), {}, include_blank: true
+        = f.select :roles, options_for_select([['--无--']] + Role.all.pluck(:chinese_name), selected: f.object.roles.try(:pluck,:chinese_name) ), {}, include_blank: true, multiple: "multiple", style:"width: 300px", class: 'select2'
       = f.input :bucket_name
       = f.input :bucket_url
 	br

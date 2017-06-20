@@ -25,12 +25,38 @@ class User < ApplicationRecord
   field :partner_id, type: String # 代理商（公司）唯一标识
   validates :email, format: { with: /^[\d,a-z]([\w\.\-]+)@([a-z0-9\-]+).([a-z\.]+[a-z])$/i, multiline: true, message: '邮箱地址格式不正确' }
   validates :email, presence: true, uniqueness: { case_sensitive: false, message: '该email已经存在' }
+  validates :partner_id, presence: true
 
   has_and_belongs_to_many :roles
-  has_many :merchants
 
-  before_save :generate_password, :generate_token, :generate_partner_id
-  before_create :generate_password, :generate_token, :generate_partner_id
+  before_save :generate_password, :generate_token
+  before_update :check_if_modified_sensitive_values
+
+  def merchants
+    if self.roles.pluck(:name).include?(:agent)
+      user_ids = User.where(partner_id: self.partner_id).pluck(:id)
+      Merchant.where(user_id: user_ids.map(&:to_s) )
+    else
+      Merchant.where(user_id: self.id.to_s )
+    end
+  end
+
+  def children
+    if self.roles.pluck(:name).include?('agent')
+      user_ids = User.where(partner_id: self.partner_id.to_s).pluck(:id)
+      user_ids.delete self.id
+      User.in(_id: user_ids )
+    else
+      []
+    end
+  end
+
+  def check_if_modified_sensitive_values
+    sensitive_values = ['partner_id']
+    if (sensitive_values & self.changes.keys).present?
+      raise "#{sensitive_values.join(',')}不允许修改"
+    end
+  end
 
   def verify!(password)
     cryt_func(salt, password).eql?(encrypted_password)
@@ -53,9 +79,6 @@ class User < ApplicationRecord
 
   def generate_token
     self.token = UUID.new.generate unless token.present?
-  end
-  def generate_partner_id
-    self.partner_id = UUID.new.generate unless partner_id.present?
   end
 
   def generate_reset_token

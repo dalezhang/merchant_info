@@ -37,7 +37,9 @@ class Ability
     can :manage, ErrorLog
   end
 
-  def grant_permissions_to_super_admin(user); end
+  def grant_permissions_to_agent(user)
+    can :display, User, partner_id: user.partner_id
+  end
 
   def grant_general_permission(user)
     can :index, Merchant
