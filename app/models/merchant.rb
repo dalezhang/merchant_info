@@ -24,8 +24,9 @@ class Merchant < ApplicationRecord
   field :zx_alipay_channel_type, type: String
   field :pfb_channel_type, type: Hash, default: {} # 农商行普付宝经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
-  field :d0_rate, type: String # D0费率
-  field :t1_rate, type: String # T1费率
+  field :d0_rate, type: String # D0费率,%
+  field :t1_rate, type: String # T1费率,%
+  field :fixed_fee, type: Integer, default: 0 # 单比加收费用,单位（分）
   field :bank_info, type: Hash, default: {} # 银行信息
   field :legal_person # 法人信息
   field :company # 公司信息
@@ -40,8 +41,16 @@ class Merchant < ApplicationRecord
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
   validates :partner_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该partner_mch_id已经存在' }
+  validate do
+    if !self.t1_rate.present?
+      self.errors.add(:t1_rate, "不能为空")
+    end
+    if !self.d0_rate.present?
+      self.errors.add(:d0_rate, "不能为空")
+    end
+  end
 
-  before_save :generate_keys
+  before_save :generate_keys, :prepare_pfb_rate
   before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
@@ -69,6 +78,30 @@ class Merchant < ApplicationRecord
     sensitive_values = ['partner_mch_id']
     if (sensitive_values & self.changes.keys).present?
       raise "#{sensitive_values.join(',')}不允许修改"
+    end
+  end
+  def prepare_pfb_rate
+    unless channel_data.present?
+      @t1_rate = @d0_rate = '0'
+      @t1_rate = t1_rate
+      @d0_rate = d0_rate
+      @fixed_fee = (fixed_fee * 0.01).to_s
+      self.channel_data = {
+        "pfb"=> {
+          "wechat_offline_d0"=> {
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+          },
+          "wechat_offline_t1"=> {
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>"0", "fixedFee"=> "0", "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+          },
+          "alipay_d0"=>{
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+          },
+          "alipay_t1"=> {
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>"0", "fixedFee"=> "0", "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+          },
+        }
+      }
     end
   end
 

@@ -35,8 +35,9 @@ zh-CN:
         mch_type: '商户类型'
         appid: '微信公众号appid'
         partner_mch_id: 代理商定义商户号
-        d0_rate: D0费率
-        t1_rate: T1费率
+        d0_rate: D0费率(%)
+        t1_rate: T1费率(%)
+        fixed_fee: D0单笔加收费(分)
       zx_contr_info_list:
         pay_typ_encd: 支付类型
         pay_typ_fee_rate: 支付类型费率

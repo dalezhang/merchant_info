@@ -83,8 +83,20 @@ class Biz::PfbMctInfo
     alipay = @merchant.channel_data['pfb'].try(:[],'alipay')
     pfb_request = {}
     {
-      wechat_offline: {
-        outMchId: "wechat_offline_#{@salt}",
+      wechat_offline_d0: {
+        outMchId: "wechat_offline_d0_#{@salt}",
+        payChannel: 'WECHAT_OFFLINE',
+        rate: wechat_offline.try(:[],'rate'),
+        t0Status: wechat_offline.try(:[],'t0Status'),
+        settleRate: wechat_offline.try(:[],'settleRate'),
+        fixedFee: wechat_offline.try(:[],'fixedFee'),
+        isCapped: wechat_offline.try(:[],'isCapped'),
+        upperFee: wechat_offline.try(:[],'upperFee'),
+        settleMode: wechat_offline.try(:[],'settleMode'),
+        businessType: @merchant.pfb_channel_type['wechat'],
+      },
+      wechat_offline_t1: {
+        outMchId: "wechat_offline_t1_#{@salt}",
         payChannel: 'WECHAT_OFFLINE',
         rate: wechat_offline.try(:[],'rate'),
         t0Status: wechat_offline.try(:[],'t0Status'),
@@ -107,8 +119,8 @@ class Biz::PfbMctInfo
       #   upperFee: wechat_app.try(:[],'upperFee'),
       #   settleMode: wechat_app.try(:[],'settleMode'),
       # },
-      alipay: {
-        outMchId: "alipay_#{@salt}",
+      alipay_d0: {
+        outMchId: "alipay_d0_#{@salt}",
         payChannel: 'ALIPAY',
         rate: alipay.try(:[],'rate'),
         t0Status: alipay.try(:[],'t0Status'),
@@ -118,8 +130,19 @@ class Biz::PfbMctInfo
         upperFee: alipay.try(:[],'upperFee'),
         settleMode: alipay.try(:[],'settleMode'),
         businessType: @merchant.pfb_channel_type['alipay'],
-      }
-
+      },
+      alipay_t1: {
+        outMchId: "alipay_t1_#{@salt}",
+        payChannel: 'ALIPAY',
+        rate: alipay.try(:[],'rate'),
+        t0Status: alipay.try(:[],'t0Status'),
+        settleRate: alipay.try(:[],'settleRate'),
+        fixedFee: alipay.try(:[],'fixedFee'),
+        isCapped: alipay.try(:[],'isCapped'),
+        upperFee: alipay.try(:[],'upperFee'),
+        settleMode: alipay.try(:[],'settleMode'),
+        businessType: @merchant.pfb_channel_type['alipay'],
+      },
     }.each do |key, value|
       @outMchId = value[:outMchId]
       @payChannel = value[:payChannel]

@@ -23,6 +23,10 @@ class Api::MerchantsController < ActionController::API
         render json: { error: '无法根据partner_mch_id，merchant_id，id中的任何一个找到对应的记录。' }.to_json
         return
       end
+      unless @merchant.status <= 5
+        render json: { error: "无法修改，该条记录#{Merchant::STATUS_DATA[@merchant.status]}" }.to_json
+        return
+      end
       keys = @data.keys & Merchant.attr_writeable
       keys.each do |key|
         @merchant.send("#{key}=", @data[key])
