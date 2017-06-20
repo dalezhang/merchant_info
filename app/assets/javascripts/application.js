@@ -13,6 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require outcomes/outcome
 //= require select2
+//= require outcomes/outcome
 
+$("#user_roles").select2({
+	placeholder: "请选择",
+	theme: "bootstrap",
+})
