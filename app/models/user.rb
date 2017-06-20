@@ -52,10 +52,10 @@ class User < ApplicationRecord
   end
 
   def check_if_modified_sensitive_values
-    sensitive_values = ['partner_id']
-    if (sensitive_values & self.changes.keys).present?
-      raise "#{sensitive_values.join(',')}不允许修改"
-    end
+    # sensitive_values = ['partner_id']
+    # if (sensitive_values & self.changes.keys).present?
+    #   raise "#{sensitive_values.join(',')}不允许修改"
+    # end
   end
 
   def verify!(password)

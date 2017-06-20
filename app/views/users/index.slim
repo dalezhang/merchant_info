@@ -17,3 +17,5 @@ table.table
         = link_to '查看', obj, class: 'btn btn-sm btn-success'
         - if can? :new, User
           = link_to '编辑', edit_user_path(obj.id.to_s), class: 'btn btn-sm btn-default'
+          - if obj.merchants.count == 0 
+            = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: '确认删除？' }

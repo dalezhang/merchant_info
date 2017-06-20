@@ -2,6 +2,11 @@
 
 class MerchantsController < ResourcesController
   authorize_resource
+
+  def new
+    @object = current_user.merchants.new
+  end
+
   def create
     params.permit!
     @object = current_user.merchants.new(params[object_name.singularize.parameterize('_')])
