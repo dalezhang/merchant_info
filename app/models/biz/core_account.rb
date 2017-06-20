@@ -13,9 +13,11 @@ module Biz
 
     def create_backend_account
       return @merchant.merchant_id if @merchant.merchant_id
+      partner_id = @merchant.user.partner_id
+      raise "该用户 partner_id 为空" unless partner_id.present?
 
       params = {
-        partner_id: 'merchant_info',
+        partner_id: partner_id,# default: 'merchant_info'
         partner_mch_id: @merchant.partner_mch_id,
         public_key: @merchant.public_key,
       }
