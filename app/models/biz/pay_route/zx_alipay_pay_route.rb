@@ -3,7 +3,7 @@
 class Biz::PayRoute::ZxAlipayPayRoute < Biz::PayRoute::PayRouteBase
   attr_reader :query_result
 
-  def initialize(merchant)
+  def initialize(merchant, channel_type = nil)
     super
     @query_result = @merchant.request_and_response['zx_response']['alipay_query'] rescue nil
   end

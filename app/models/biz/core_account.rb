@@ -23,6 +23,13 @@ module Biz
       }
       response = backend_account 'post', 'cms/merchants/', params.to_json
       if response['code'] == 0
+        log_js = {
+            prg: 'mertchant_info', type: 'info', model: 'Biz::CoreAccount',
+            method: 'create_backend_account',
+            environment: Rails.env,
+            request: params, response: response
+        }
+        Rails.logger.info log_js
         @merchant.update_attributes(merchant_id: response['data'])
         return true
       else
@@ -31,7 +38,14 @@ module Biz
     end
     def get_backend_account
       response = HTTParty.try('get', "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}")
-      
+      log_js = {
+          prg: 'mertchant_info', type: 'info', model: 'Biz::CoreAccount',
+          method: 'get_backend_account',
+          environment: Rails.env,
+          request: "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}",
+          response: response
+      }
+      Rails.logger.info log_js
       if response['code'] == 0
         @merchant.request_and_response.core_account = response['data'][0]
         @merchant.merchant_id = @merchant.request_and_response.core_account['_id']

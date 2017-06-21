@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # 支付网管
 class Biz::PayRoute::PayRouteBase
-  def initialize(mch, channel_type)
+  def initialize(mch, channel_type = nil)
     host = Rails.application.secrets.core['host'] rescue nil
     raise 'Rails.application.secrets.core["host"] is not set' unless host.present?
     @url = host + '/cms/routes'
@@ -12,10 +12,6 @@ class Biz::PayRoute::PayRouteBase
     else
       raise 'merchant 无效'
     end
-    unless ['T1','D0'].include?(channel_type)
-      raise "你传入的是channel_type：#{channel_type}不符合要求，必须是T1或D0."
-    end
-    @channel_type = channel_type
   end
 
  #  def create_route_request(hash)

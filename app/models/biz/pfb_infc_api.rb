@@ -52,6 +52,15 @@ module Biz
       resp = HTTParty.post(url, body: js.to_json, follow_redirects: false)
       resp_hash = JSON.parse resp.body
       if resp_hash.present?
+        log_js = {
+            prg: 'mertchant_info', type: 'info', model: 'Biz::PfbInfcApi',
+            method: 'sent_request',
+            environment: Rails.env,
+            merchant: @merchant.id.to_s,
+            request: js,
+            response: resp_hash
+        }
+        Rails.logger.info log_js
         resp['sign'] = '**'
         @merchant.request_and_response.pfb_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save

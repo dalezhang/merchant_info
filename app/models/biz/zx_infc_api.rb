@@ -104,6 +104,14 @@ module Biz
       ret = post_xml_gbk('zx_intfc', url, data)
       resp_hash = Hash.from_xml(ret)
       if resp_hash.present?
+        log_js = {
+            prg: 'mertchant_info', type: 'info', model: 'Biz::ZxInfcApi',
+            method: 'send_zx_intfc',
+            environment: Rails.env,
+            merchant: @merchant.id.to_s,
+            response: resp_hash
+        }
+        Rails.logger.info log_js
         resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save
@@ -160,6 +168,14 @@ module Biz
       else
         return log_error @merchant, '查询', '无返回信息'
       end
+      log_js = {
+          prg: 'mertchant_info', type: 'info', model: 'Biz::ZxInfcApi',
+          method: 'send_zx_query',
+          environment: Rails.env,
+          merchant: @merchant.id.to_s,
+          response: resp_hash
+      }
+      Rails.logger.info log_js
       "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"
     end
 

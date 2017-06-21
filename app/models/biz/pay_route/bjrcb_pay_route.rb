@@ -9,6 +9,10 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
     unless @query_result.present?
       raise "@merchant.request_and_response[:pfb_request] is nil"
     end
+    unless ['T1','D0'].include?(channel_type)
+      raise "你传入的是channel_type：#{channel_type}不符合要求，必须是T1或D0."
+    end
+    @channel_type = channel_type
   end
 
   def send_wechat_offline
