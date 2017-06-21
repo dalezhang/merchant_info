@@ -88,17 +88,11 @@ class Merchant < ApplicationRecord
       @fixed_fee = (fixed_fee * 0.01).to_s
       self.channel_data = {
         "pfb"=> {
-          "wechat_offline_d0"=> {
+          "wechat_offline"=> {
             "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
           },
-          "wechat_offline_t1"=> {
-            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>"0", "fixedFee"=> "0", "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
-          },
-          "alipay_d0"=>{
+          "alipay"=>{
             "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
-          },
-          "alipay_t1"=> {
-            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>"0", "fixedFee"=> "0", "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
           },
         }
       }

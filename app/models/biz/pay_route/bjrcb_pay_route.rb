@@ -3,7 +3,7 @@
 class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
   attr_reader :query_result
 
-  def initialize(merchant)
+  def initialize(merchant, channel_type)
     super
     @query_result = @merchant.request_and_response[:pfb_response].deep_symbolize_keys rescue nil
     unless @query_result.present?
@@ -18,6 +18,7 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
     query_api_key = @query_result[:wechat_offline_查询][:customer][:apiKey] rescue nil
     response_api_key = @query_result[:wechat_offline_新增][:api_key] rescue nil
     api_key = response_api_key || query_api_key
+    channel_type = @channel_type
     unless customer_num.present?
       raise "can't find customerNum in merchant.request_and_response[:pfb_request]"
     end
@@ -31,6 +32,7 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
       channel_name: 'BJRCB',
       channel_mch_id: customer_num,
 			channel_key: api_key,                   #在通道开户获得的key
+      channel_type: channel_type, # 结算方式
       pay_type: ["wechat.scan", "wechat.jsapi", "wechat.micro"], #该通道支持的支付方式,传入值为字符串，以分号分割不同类型
       priority: 1,
     }

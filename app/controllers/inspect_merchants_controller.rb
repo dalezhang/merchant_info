@@ -132,11 +132,11 @@ class InspectMerchantsController < ResourcesController
     @message = nil
     case params[:route]
     when 'bjrcb.wechat_offline'
-      biz = Biz::PayRoute::BjrcbPayRoute.new @object
+      biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
       biz.send_wechat_offline
       @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:wechat_offline]"
     when 'bjrcb.alipay'
-      biz = Biz::PayRoute::BjrcbPayRoute.new @object
+      biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
       biz.send_alipay
       @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:alipay]"
     end
