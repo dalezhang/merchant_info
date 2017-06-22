@@ -11,7 +11,9 @@ FactoryGirl.define do
     appid '公众号'
     mch_type '商户类型(个体，企业)'
     industry '经营行业'
-    pfb_channel_type '普付宝经营类目' # 见附件《经营类目》中的经营类目明细编码
+    t1_rate 1
+    d0_rate 1
+    partner_mch_id '123'
     #银行信息
     bank_info {{
         owner_name: 'owner_name', # 账户名称（账号名）

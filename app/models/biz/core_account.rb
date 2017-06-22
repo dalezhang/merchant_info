@@ -27,7 +27,8 @@ module Biz
             prg: 'mertchant_info', type: 'info', model: 'Biz::CoreAccount',
             method: 'create_backend_account',
             environment: Rails.env,
-            request: params, response: response
+            request_hash: params, 
+            response_hash: response
         }
         Rails.logger.info log_js
         @merchant.update_attributes(merchant_id: response['data'])
@@ -42,8 +43,8 @@ module Biz
           prg: 'mertchant_info', type: 'info', model: 'Biz::CoreAccount',
           method: 'get_backend_account',
           environment: Rails.env,
-          request: "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}",
-          response: response
+          request_hash: "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}",
+          response_hash: response
       }
       Rails.logger.info log_js
       if response['code'] == 0

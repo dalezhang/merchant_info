@@ -4,6 +4,7 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
+  field :password, type: String # 登录后台密码
   field :partner_mch_id, type: String # 代理商定义的商户号
   field :public_key, type: String # 商户公钥
   field :share_key, type: String # 商户md5签名key
@@ -50,7 +51,7 @@ class Merchant < ApplicationRecord
     end
   end
 
-  before_save :generate_keys, :prepare_pfb_rate
+  before_save :generate_keys, :prepare_pfb_rate, :generate_password
   before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
@@ -74,6 +75,13 @@ class Merchant < ApplicationRecord
       self.public_key = key.public_key.to_pem
     end
   end
+
+  def generate_password
+    unless self.password.present?
+      self.password = Digest::SHA1.hexdigest("#{Time.now.to_i}")[0..6]
+    end
+  end
+
   def check_if_modified_sensitive_values
     sensitive_values = ['partner_mch_id']
     if (sensitive_values & self.changes.keys).present?
