@@ -49,13 +49,19 @@ class Api::MerchantsController < ActionController::API
       render json: { error: 'invalid method, should be one of ["merchant.create","merchant.update","merchant.query"]' }.to_json
       return
     end
+
     if @merchant.save
       render json: @merchant.inspect.to_json
     else
       render json: { error: @merchant.errors.messages }.to_json
     end
   rescue Exception => e
-    log_error @merchant, e.message, '', e.backtrace, params
+    @message = if e.class == Mongoid::Errors::Validations
+                  @merchant.errors.messages.values.flatten.join
+               else
+                 e.message
+               end
+    log_error @merchant, @message, '', e.backtrace, params
     render json: { error: e.message }.to_json
   end
 
