@@ -110,7 +110,7 @@ module Biz
             environment: Rails.env,
             merchant: @merchant.id.to_s,
             request_hash: data, 
-            response_hash: resp_hash
+            response_hash: resp_hash.to_json
         }
         Rails.logger.info log_js
         resp_hash['ROOT']['Msg_Sign'] = '**'
@@ -175,7 +175,7 @@ module Biz
           environment: Rails.env,
           merchant: @merchant.id.to_s,
           request_hash: data, 
-          response_hash: resp_hash
+          response_hash: resp_hash.to_json
       }
       Rails.logger.info log_js
       "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"

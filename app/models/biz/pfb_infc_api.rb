@@ -57,8 +57,8 @@ module Biz
             method: 'sent_request',
             environment: Rails.env,
             merchant: @merchant.id.to_s,
-            request_hash: js, 
-            response_hash: resp_hash
+            request_hash: js.to_json, 
+            response_hash: resp_hash.to_json
         }
         Rails.logger.info log_js
         resp['sign'] = '**'
