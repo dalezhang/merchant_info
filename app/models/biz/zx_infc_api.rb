@@ -109,7 +109,8 @@ module Biz
             method: 'send_zx_intfc',
             environment: Rails.env,
             merchant: @merchant.id.to_s,
-            response: resp_hash
+            request_hash: data, 
+            response_hash: resp_hash
         }
         Rails.logger.info log_js
         resp_hash['ROOT']['Msg_Sign'] = '**'
@@ -173,7 +174,8 @@ module Biz
           method: 'send_zx_query',
           environment: Rails.env,
           merchant: @merchant.id.to_s,
-          response: resp_hash
+          request_hash: data, 
+          response_hash: resp_hash
       }
       Rails.logger.info log_js
       "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"
