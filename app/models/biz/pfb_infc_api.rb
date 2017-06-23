@@ -53,14 +53,13 @@ module Biz
       resp_hash = JSON.parse resp.body
       if resp_hash.present?
         log_js = {
-            prg: 'mertchant_info', type: 'info', model: 'Biz::PfbInfcApi',
+            model: 'Biz::PfbInfcApi',
             method: 'sent_request',
-            environment: Rails.env,
             merchant: @merchant.id.to_s,
-            request_hash: js, 
-            response_hash: resp_hash,
+            request_hash: js.to_s, 
+            response_hash: resp_hash.to_s,
         }
-        Rails.logger.info log_js
+        log_es(log_js)
         resp['sign'] = '**'
         @merchant.request_and_response.pfb_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save

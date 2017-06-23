@@ -20,6 +20,20 @@ module Logging
     false
   end
 
+  def log_es(log)
+    @logger ||= LogStashLogger.new(
+      host: '119.23.25.140',
+      port: 5228,
+      # type: 'udp',
+      formatter: :json_lines,
+      buffer_max_items: 50,
+      buffer_max_interval: 5,
+      drop_messages_on_flush_error: false,
+      drop_messages_on_full_buffer: true,
+      )
+    @logger.info log.merge(prg: 'merchant_info', environment: Rails.env)
+  end
+
   def error_message
     "#{@title}#{@message.present? ? (': ' + @message) : '.'}"
   end
