@@ -24,6 +24,10 @@ class Merchant < ApplicationRecord
   field :zx_wechat_channel_type, type: String # 中信经营类目--微信，见附件《经营类目》中的经营类目明细编码
   field :zx_alipay_channel_type, type: String
   field :pfb_channel_type, type: Hash, default: {} # 农商行普付宝经营类目
+  field :alipay_channel_type_lv1, type: String # 支付宝一级经营类目
+  field :alipay_channel_type_lv2, type: String # 支付宝二级经营类目
+  field :wechat_channel_type_lv1, type: String # 微信一级经营类目
+  field :wechat_channel_type_lv2, type: String # 微信二级经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
   field :d0_rate, type: String # D0费率,%
   field :t1_rate, type: String # T1费率,%
@@ -132,6 +136,9 @@ class Merchant < ApplicationRecord
       zx_wechat_channel_type: zx_wechat_channel_type,
       zx_alipay_channel_type: zx_alipay_channel_type,
       pfb_channel_type: pfb_channel_type,
+      alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
+      alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
+      wechat_channel_type: wechat_channel_type, # 微信经营类目
       mch_deal_type: mch_deal_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
