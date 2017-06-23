@@ -156,7 +156,8 @@ production:
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - 172.18.183.141:27017
+        # - 172.18.183.141:27017
+        - localhost:27017
       options:
         user: 'zy'
         password: 'zy834629845'
