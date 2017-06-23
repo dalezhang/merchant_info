@@ -112,6 +112,7 @@ class Merchant < ApplicationRecord
     hash = {
       id: id.to_s,
       merchant_id: merchant_id,
+
       partner_mch_id: partner_mch_id,
       private_key: private_key,
       share_key: share_key,
@@ -142,6 +143,7 @@ class Merchant < ApplicationRecord
       hash[:request_and_response] = request_and_response.inspect
       hash[:zx_contr_info_lists] = zx_contr_info_lists.collect(&:inspect)
       hash[:channel_data] = channel_data
+      hash[:password] = password
     end
     hash
   end
