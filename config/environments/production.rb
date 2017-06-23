@@ -86,14 +86,14 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   # config.active_record.dump_schema_after_migration = false
-  #关闭日志中的彩色标记
-  config.colorize_logging = false
-  require 'logstash-logger'
-  config.logstash.formatter = :json_lines
-  config.logstash.buffer_max_items = 50
-  config.logstash.buffer_max_interval = 5
-  config.logstash.drop_messages_on_flush_error = false
-  config.logstash.drop_messages_on_full_buffer = true
-  config.logstash.host = '119.23.25.140'
-  config.logstash.port = 5228
+  # #关闭日志中的彩色标记
+  # config.colorize_logging = false
+  # require 'logstash-logger'
+  # config.logstash.formatter = :json_lines
+  # config.logstash.buffer_max_items = 50
+  # config.logstash.buffer_max_interval = 5
+  # config.logstash.drop_messages_on_flush_error = false
+  # config.logstash.drop_messages_on_full_buffer = true
+  # config.logstash.host = '119.23.25.140'
+  # config.logstash.port = 5228
 end
