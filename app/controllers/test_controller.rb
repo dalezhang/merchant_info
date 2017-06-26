@@ -22,7 +22,7 @@ class TestController < AdminController
       js = {
         appid: params[:item][:appid], # 微信分配的公众账号 ID
         mch_id: params[:item][:mch_id], # 商户号
-        sub_mch_id: params[:item][:sub_mcn_id], #子商户号
+        sub_mch_id: params[:item][:sub_mch_id], #子商户号
       }
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @request = xml
