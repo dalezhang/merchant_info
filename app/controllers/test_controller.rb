@@ -30,6 +30,6 @@ class TestController < AdminController
   rescue Exception => e
     flash[:error] = e.message
     log_error @object, e.message, '', e.backtrace, params
-    redirect_to action: :show, id: @object.id.to_s
+    redirect_to action: :zx_appid
   end
 end
