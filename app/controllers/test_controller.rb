@@ -15,7 +15,7 @@ class TestController < ResourcesController
       }
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
-    elsif params[:commit] == '修改'
+    elsif params[:commit] == '查询'
       url = 'https://api.mch.weixin.qq.com/secapi/mch/querysubdevconfig'
       js = {
         appid: params[:item][:appid], # 微信分配的公众账号 ID

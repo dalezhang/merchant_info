@@ -29,7 +29,7 @@
         = f.submit '创建', class: 'btn btn-lg btn-success'
 .box
   .box-header
-    h4.box-title 修改信息
+    h4.box-title 查询信息
   .box-body
     = form_for :item, url: wechat_cert_test_index_path do |f|
       .col-xs-12
@@ -46,7 +46,7 @@
       .col-sm-12.text-center
         br
         br
-    	  = f.submit '修改', class: 'btn btn-lg btn-success'
+        = f.submit '查询', class: 'btn btn-lg btn-success'
 .row
   - if params[:response].present?
     = text_area_tag :response, params[:response], style: 'height: 300px;', class: 'form-control'
