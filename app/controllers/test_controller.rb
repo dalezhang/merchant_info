@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TestController < AdminController
+  include Logging
   def wechat_cert
 
     if params[:commit] == '创建'
@@ -26,5 +27,9 @@ class TestController < AdminController
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
     end
     redirect_to action: :zx_appid, response: @response.to_s
+  rescue Exception => e
+    flash[:error] = e.message
+    log_error @object, e.message, '', e.backtrace, params
+    redirect_to action: :show, id: @object.id.to_s
   end
 end
