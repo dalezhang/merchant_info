@@ -15,6 +15,7 @@ class TestController < AdminController
         subscribe_appid: params[:item][:subscribe_appid], # 微信分配的服务商公众号或 APP 账号 ID；如为空，则值传NULL（字母大写小写均可）
       }
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
+      @request = xml
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
     elsif params[:commit] == '查询'
       url = 'https://api.mch.weixin.qq.com/secapi/mch/querysubdevconfig'
@@ -24,9 +25,10 @@ class TestController < AdminController
         sub_mch_id: params[:item][:sub_mcn_id], #子商户号
       }
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
+      @request = xml
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
     end
-    redirect_to action: :zx_appid, response: @response.to_s
+    redirect_to action: :zx_appid, response: @response.to_s, request: @request.to_s
   rescue Exception => e
     flash[:error] = e.message
     log_error @object, e.message, '', e.backtrace, params

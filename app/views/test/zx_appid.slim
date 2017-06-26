@@ -48,5 +48,9 @@
         br
         = f.submit '查询', class: 'btn btn-lg btn-success'
 .row
+  - if params[:request].present?
+    h4 request
+    = text_area_tag :request, params[:request], style: 'height: 300px;', class: 'form-control'
   - if params[:response].present?
+    h4 response
     = text_area_tag :response, params[:response], style: 'height: 300px;', class: 'form-control'
