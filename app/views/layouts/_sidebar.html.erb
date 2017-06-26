@@ -43,6 +43,23 @@
         <% end %>
       </li>
       <% end %>
+      <% if can?(:index, :test) %>
+      <li class="treeview">
+        <a href="#"><i class="fa fa-link"></i> <span>测试</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="#"></a>
+            <%= link_to zx_appid_test_index_path do %>
+              ZxAppid
+            <% end %>
+          </li>
+        </ul>
+      </li>
+      <% end %>
       <%#<li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>%>
       <%#<li class="treeview">%>
         <%#<a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>%>

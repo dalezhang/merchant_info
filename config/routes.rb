@@ -32,5 +32,9 @@ Rails.application.routes.draw do
   namespace :api do
     resources :merchants
   end
+  resources :test do
+    get  :zx_appid, on: :collection 
+    post :wechat_cert, on: :collection
+  end
 
 end
