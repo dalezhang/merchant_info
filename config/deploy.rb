@@ -69,10 +69,10 @@ task :deploy do
 
 
     on :launch do
-      in_path("/home/rb/prgs/merchant_info/current") do
-        invoke :environment
-        command %{ RAILS_ENV=production rails db:seed }
-      end
+      # in_path("/home/rb/prgs/merchant_info/current") do
+      #   invoke :environment
+      #   command %{ RAILS_ENV=production rails db:seed }
+      # end
       in_path("/home/rb") do
         invoke :environment
         command %{source .bashrc}
