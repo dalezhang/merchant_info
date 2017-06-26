@@ -14,6 +14,7 @@ class TestController < AdminController
         sub_appid: params[:item][:sub_appid], # 子商户SubAPPID
         subscribe_appid: params[:item][:subscribe_appid], # 微信分配的服务商公众号或 APP 账号 ID；如为空，则值传NULL（字母大写小写均可）
       }
+      js[:sign] = get_mac js
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @request = xml
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
@@ -24,6 +25,7 @@ class TestController < AdminController
         mch_id: params[:item][:mch_id], # 商户号
         sub_mch_id: params[:item][:sub_mch_id], #子商户号
       }
+      js[:sign] = get_mac js
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @request = xml
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
@@ -33,5 +35,19 @@ class TestController < AdminController
     flash[:error] = e.message
     log_error @object, e.message, '', e.backtrace, params
     redirect_to action: :zx_appid
+  end
+  private
+  def get_mab(js)
+    mab = []
+    js.keys.sort.each do |k|
+      mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k] && js[k].class != Hash
+    end
+    mab.join('&')
+  end
+  def md5(str)
+    Digest::MD5.hexdigest(str)
+  end
+  def get_mac(js)
+    md5(get_mab(js)).upcase
   end
 end
