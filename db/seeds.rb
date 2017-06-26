@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 user = User.find_by(email: 'example@mail.com')
 unless user.present?
-	user = User.create(email: 'example@mail.com', password: '111111', password_confirmation: '111111',partner_id: 'pooul')
+	user = User.create(email: 'example@mail.com', password: '111111', password_confirmation: '111111',partner_id: 'merchant_info')
 end
 role1 = Role.find_or_create_by(name: 'admin')
 role1.update(chinese_name: '管理员')
