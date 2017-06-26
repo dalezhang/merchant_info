@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TestController < ResourcesController
+class TestController < AdminController
   def wechat_cert
 
     if params[:commit] == '创建'
