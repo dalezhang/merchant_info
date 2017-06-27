@@ -23,7 +23,7 @@ class Merchant < ApplicationRecord
   field :industry, type: String # 经营行业
   field :alipay_channel_type_lv1, type: String # 支付宝一级经营类目
   field :alipay_channel_type_lv2, type: String # 支付宝二级经营类目
-  field :wechat_channel_type_lv1, type: String # 微信一级经营类目
+  #field :wechat_channel_type_lv1, type: String # 微信一级经营类目
   field :wechat_channel_type_lv2, type: String # 微信二级经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
   field :d0_rate, type: String # D0费率,%
@@ -64,7 +64,6 @@ class Merchant < ApplicationRecord
       bank_info legal_person company
       alipay_channel_type_lv1
       alipay_channel_type_lv2
-      wechat_channel_type_lv1
       wechat_channel_type_lv2
       mch_deal_type
       partner_mch_id
@@ -133,8 +132,8 @@ class Merchant < ApplicationRecord
       d0_rate: d0_rate,
       t1_rate: t1_rate,
       fixed_fee: fixed_fee,
-      wechat_channel_type_lv1: wechat_channel_type_lv1, # 微信一级经营类目
-      wechat_channel_type_lv2: wechat_channel_type_lv1, # 微信二级经营类目
+      #wechat_channel_type_lv1: wechat_channel_type_lv1, # 微信一级经营类目
+      wechat_channel_type_lv2: wechat_channel_type_lv2, # 微信二级经营类目
       alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
       alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
       mch_deal_type: mch_deal_type,
