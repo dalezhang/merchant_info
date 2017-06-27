@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     post :change_status, :prepare_request,
           :update_backend_account, 
           :zx_infc, :pfb_infc, :create_pay_route, on: :member
-    get :get_merchant_id, :get_backend_account, on: :member
+    get :get_merchant_id, :get_backend_account, :routes, :add_route, on: :member
     resources :zx_contr_info_lists
   end
   namespace :user do

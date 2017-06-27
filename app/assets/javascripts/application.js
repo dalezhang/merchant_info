@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require select2
 //= require outcomes/outcome
+//= require shared/routes
 
 $("#user_roles").select2({
 	placeholder: "请选择",

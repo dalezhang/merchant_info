@@ -8,6 +8,13 @@ class InspectMerchantsController < ResourcesController
     redirect_to '/' unless current_user.roles.pluck(:name).include?('admin')
   end
 
+  def routes
+    load_object
+  end
+  def add_route
+    load_object
+  end
+
   def change_status
     load_object
     if @object.update(status: Merchant::STATUS_DATA.invert[params[:status]])

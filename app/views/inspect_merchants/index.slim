@@ -18,4 +18,5 @@ table.table
       td
         = link_to '编辑', edit_inspect_merchant_url(obj.id.to_s), class: 'btn btn-sm btn-primary'
         = link_to '查看', inspect_merchant_url(obj.id.to_s), class: 'btn btn-sm btn-default'
+        = link_to '路由信息', routes_inspect_merchant_path(obj.id), class: 'btn btn-sm btn-default'
         = link_to '锁定数据', change_status_inspect_merchant_url(obj.id.to_s, status: '审核中'), method: :post, class: 'btn btn-sm btn-warning'
