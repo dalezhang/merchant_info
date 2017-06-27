@@ -4,7 +4,8 @@ class MerchantsController < ResourcesController
   authorize_resource
 
   def new
-    @object = current_user.merchants.new
+    @object = Merchant.new
+    @object.user = current_user
   end
 
   def create
