@@ -57,7 +57,7 @@ class Biz::PfbMctInfo
     @rightBankCard = "/#{@salt}/#{@merchant.bank_info.right_bank_card_key}" # 银行卡正面
     @licenseImage = "/#{@salt}/#{@merchant.company.license_key}" # 营业执照
     @doorHeadImage = "/#{@salt}/#{@merchant.company.shop_picture_key}" # 门面照
-    @accountLicence = "/#{@salt}/#{@merchant.company.pfb_account_licence_key}" # 开户许可证
+    @accountLicence = "/#{@salt}/#{@merchant.company.account_licence_key}" # 开户许可证
   end
 
   def pfb_account_type(account_type)
@@ -93,7 +93,7 @@ class Biz::PfbMctInfo
         isCapped: wechat_offline.try(:[],'isCapped'),
         upperFee: wechat_offline.try(:[],'upperFee'),
         settleMode: wechat_offline.try(:[],'settleMode'),
-        businessType: @merchant.pfb_channel_type['wechat'],
+        businessType: @merchant.wechat_channel_type_lv2,
       },
       # 暂时不需要
       # wechat_app: {
@@ -106,6 +106,7 @@ class Biz::PfbMctInfo
       #   isCapped: wechat_app.try(:[],'isCapped'),
       #   upperFee: wechat_app.try(:[],'upperFee'),
       #   settleMode: wechat_app.try(:[],'settleMode'),
+      #   businessType: @merchant.wechat_channel_type_lv2,
       # },
       alipay: {
         outMchId: "alipay_#{@salt}",
@@ -117,7 +118,7 @@ class Biz::PfbMctInfo
         isCapped: alipay.try(:[],'isCapped'),
         upperFee: alipay.try(:[],'upperFee'),
         settleMode: alipay.try(:[],'settleMode'),
-        businessType: @merchant.pfb_channel_type['alipay'],
+        businessType: @merchant.alipay_channel_type_lv1,
       },
     }.each do |key, value|
       @outMchId = value[:outMchId]
@@ -147,7 +148,7 @@ class Biz::PfbMctInfo
       @merchant.bank_info.right_bank_card_key, # 银行卡正面
       @merchant.company.license_key, # 营业执照
       @merchant.company.shop_picture_key, # 门面照
-      @merchant.company.pfb_account_licence_key, # 农商行，开户许可证
+      @merchant.company.account_licence_key, # 农商行，开户许可证
     ].each do |key|
       if key.present?
         @merchant.channel_data['pfb'] ||= {}

@@ -21,9 +21,6 @@ class Merchant < ApplicationRecord
   field :appid, type: String # 公众号
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
-  field :zx_wechat_channel_type, type: String # 中信经营类目--微信，见附件《经营类目》中的经营类目明细编码
-  field :zx_alipay_channel_type, type: String
-  field :pfb_channel_type, type: Hash, default: {} # 农商行普付宝经营类目
   field :alipay_channel_type_lv1, type: String # 支付宝一级经营类目
   field :alipay_channel_type_lv2, type: String # 支付宝二级经营类目
   field :wechat_channel_type_lv1, type: String # 微信一级经营类目
@@ -63,11 +60,13 @@ class Merchant < ApplicationRecord
     %i[
       d0_rate t1_rate fixed_fee
       full_name name appid mch_type industry memo
-      wechat_channel_type alipay_channel_type
       province urbn address
       bank_info legal_person company
-      zx_wechat_channel_type zx_alipay_channel_type
-      pfb_channel_type mch_deal_type
+      alipay_channel_type_lv1
+      alipay_channel_type_lv2
+      wechat_channel_type_lv1
+      wechat_channel_type_lv2
+      mch_deal_type
       partner_mch_id
     ]
   end
@@ -133,12 +132,10 @@ class Merchant < ApplicationRecord
       d0_rate: d0_rate,
       t1_rate: t1_rate,
       fixed_fee: fixed_fee,
-      zx_wechat_channel_type: zx_wechat_channel_type,
-      zx_alipay_channel_type: zx_alipay_channel_type,
-      pfb_channel_type: pfb_channel_type,
+      wechat_channel_type_lv1: wechat_channel_type_lv1, # 微信一级经营类目
+      wechat_channel_type_lv2: wechat_channel_type_lv1, # 微信二级经营类目
       alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
       alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
-      wechat_channel_type: wechat_channel_type, # 微信经营类目
       mch_deal_type: mch_deal_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
@@ -184,8 +181,8 @@ class Company < ApplicationRecord
   field :shop_picture_key, type: String  # 店铺照
   field :license_key, type: String   # 营业执照
   field :org_photo_key, type: String # 组织机构代码照
-  field :wft_protocol_photo_key, type: String # 威付通，商户协议照
-  field :pfb_account_licence_key, type: String # 农商行，开户许可证
+  # field :wft_protocol_photo_key, type: String # 威付通，商户协议照
+  field :account_licence_key, type: String # 开户许可证
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话
@@ -196,8 +193,8 @@ class Company < ApplicationRecord
       shop_picture_key: shop_picture_key,
       license_key: license_key,
       org_photo_key: org_photo_key,
-      pfb_account_licence_key: pfb_account_licence_key,
-      wft_protocol_photo_key: wft_protocol_photo_key,
+      account_licence_key: account_licence_key,
+      # wft_protocol_photo_key: wft_protocol_photo_key,
       contact_tel: contact_tel,
       contact_name: contact_name,
       service_tel: service_tel,
