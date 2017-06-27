@@ -105,7 +105,6 @@ if ($('#addform').size() > 0 ) {
         var tfb_account= $("#tfb_account input:text").val();
         var tfb_type = $("#tfb_type input:text").val();
         var tfb_rate = $("#tfb_rate input:text").val();
-         
         var CITIC_appid = $("#CITIC_appid input:text").val();
         var CITIC_key = $("#CITIC_key input:text").val();
         var CITIC_num = $("#CITIC_num input:text").val();
@@ -127,7 +126,6 @@ if ($('#addform').size() > 0 ) {
             "sp_key":CITIC_key,
             "sp_mch_id":CITIC_num,
             "sp_app_auth_token":CITIC_ali
-             
         }
         data_data = JSON.stringify(data_data);
         if (channel_key == "" || channel_mch_id == "") {
