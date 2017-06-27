@@ -33,9 +33,9 @@ class User < ApplicationRecord
   before_update :check_if_modified_sensitive_values
 
   def merchants
-    if self.roles.pluck(:name).include?(:agent)
+    if self.roles.pluck(:name).include?('agent')
       user_ids = User.where(partner_id: self.partner_id).pluck(:id)
-      Merchant.where(user_id: user_ids.map(&:to_s) )
+      Merchant.in(user_id: user_ids.map(&:to_s) )
     else
       Merchant.where(user_id: self.id.to_s )
     end

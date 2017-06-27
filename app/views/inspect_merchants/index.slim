@@ -14,7 +14,7 @@ table.table
       td= obj.mch_type
       td= obj.name
       td= Merchant::STATUS_DATA[obj.status]
-      td= obj.user.name
+      td= obj.user.partner_id
       td
         = link_to '编辑', edit_inspect_merchant_url(obj.id.to_s), class: 'btn btn-sm btn-primary'
         = link_to '查看', inspect_merchant_url(obj.id.to_s), class: 'btn btn-sm btn-default'
