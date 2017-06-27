@@ -46,6 +46,8 @@
         p
           = link_to '编辑', edit_inspect_merchant_url(@object.id.to_s), class: 'btn btn-lg btn-primary'
           | &nbsp
+          = link_to '路由信息', routes_inspect_merchant_path(@object.id), class: 'btn btn-lg btn-default'
+          | &nbsp
           = link_to '生成进件请求', prepare_request_inspect_merchant_url(@object.id.to_s), method: :post, class: 'btn btn-lg btn-default'
           - if !@object.merchant_id.present?
             | &nbsp

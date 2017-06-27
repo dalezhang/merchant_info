@@ -1,0 +1,99 @@
+<input id="merchant_id" type="" name="" value="<%= @object.merchant_id %>" class="hidden">
+<input id="index" type="" name="" value="<%= routes_inspect_merchant_path(@object.id) %>" class="hidden">
+<div class="body">
+
+    <div id="add">
+        <form action="" class="form-horizontal col-xs-offset-2" id="addform">
+            <div class="form-group">
+                <label for="" class="col-xs-3 control-label">渠道密钥</label>
+                <div class="col-xs-4" id="channel-key">
+                    <input type="text" class="form-control input-sm" name="channel-key">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-xs-3 control-label">渠道名称</label>
+                <div class="col-xs-2">
+                    <select name="" class="form-control input-sm " id="channel-name">
+                            <option value="SWIFT">威富通</option>
+                            <option value="BJRCB">北京农商行</option>
+                            <option value="CITIC_ALI">中信直连支付宝</option>
+                            <option value="CITIC_WECHAT">中信直连微信</option>
+                            <option value="DIANZI">点子</option>
+                            <option value="TFB">天付宝</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-xs-3 control-label">渠道商户号</label>
+                <div class="col-xs-4" id="channel-mch-id">
+                    <input type="text" class="form-control input-sm">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-xs-3 control-label">路由状态</label>
+                <div class="col-xs-2">
+                    <select name="" class="form-control input-sm" id="priority">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-xs-3 control-label">渠道类型</label>
+                <div class="col-xs-2">
+                    <select name="" class="form-control input-sm channel-mch-id" id="channel-type">
+                        <option value="1">T1</option>
+                        <option value="0">D0</option>
+                    </select>
+                </div>
+            </div>
+            <label for="" class="col-xs-3 control-label">支付方式</label>
+            <div class="col-xs-3 pay-type" id="pay-type">
+                <label class="checkbox-inline">
+                   <input type="checkbox" value="wechat.scan" name="pay"> wechat.scan
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="alipay.scan" name="pay"> alipay.scan
+                 </label>
+                <label class="checkbox-inline">
+                      <input type="checkbox"value="qq.scan" name="pay"> qq.scan
+                </label>
+                <br/>
+                <label class="checkbox-inline">
+                      <input type="checkbox" value="wechat.jsapi" name="pay"> wechat.jsapi
+                </label>
+                <label class="checkbox-inline">
+                      <input type="checkbox"  value="alipay.jsapi" name="pay"> alipay.jsapi
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="qq.jsapi" name="pay"> qq.jsapi
+                </label>
+                <br/>
+                <label class="checkbox-inline">
+                    <input type="checkbox"  value="wechat.micro" name="pay"> wechat.micro
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="alipay.micro" name="pay"> alipay.micro
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="qq.micro" name="pay"> qq.micro
+                </label>
+                <br/>
+                <label class="checkbox-inline">
+                     <input type="checkbox" value="wechat.jsurl" name="pay"> wechat.jsurl
+                 </label>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <a class="btn btn-primary btn-lg addbtn"> 添 加 </a>
+                    <%= link_to '返回', routes_inspect_merchant_path(@object.id), class: 'btn btn-default btn-lg'%>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
