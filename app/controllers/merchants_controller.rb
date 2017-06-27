@@ -10,7 +10,8 @@ class MerchantsController < ResourcesController
 
   def create
     params.permit!
-    @object = current_user.merchants.new(params[object_name.singularize.parameterize('_')])
+    @object = Merchant.new(params[object_name.singularize.parameterize('_')])
+    @object.user = current_user
     if @object.save
       flash[:success] = '保存成功，请继续完善信息。'
       redirect_to action: :edit, id: @object.id.to_s
