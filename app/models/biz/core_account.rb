@@ -45,13 +45,13 @@ module Biz
           response_hash: response.to_s,
       }
       log_es(log_js)
-      if response['code'] == 0
+      if response['code'] == 0 && response['data'][0].present?
         @merchant.request_and_response.core_account = response['data'][0]
         @merchant.merchant_id = @merchant.request_and_response.core_account['_id']
         @merchant.share_key = @merchant.request_and_response.core_account["share_key"]
         @merchant.save
       else
-        return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
+        return log_error @merchant, 'CoreAccount->merchant_id', response
       end
     end
 

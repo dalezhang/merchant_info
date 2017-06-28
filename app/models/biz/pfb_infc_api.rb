@@ -37,9 +37,11 @@ module Biz
 
     def prepare_request(req_typ)
       @pfb_request["serviceType"] = req_typ
-      customer_num_from_enter = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer_num"] rescue nil
-      customer_num_from_query = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer"]["customerNum"] rescue nil
-      @pfb_request["customerNum"] = customer_num_from_enter || customer_num_from_query
+      if req_typ == 'CUSTOMER_UPDATE'
+        customer_num_from_enter = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer_num"] rescue nil
+        customer_num_from_query = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer"]["customerNum"] rescue nil
+        @pfb_request["customerNum"] = customer_num_from_enter || customer_num_from_query || ''
+      end
       @pfb_request
     end
 
