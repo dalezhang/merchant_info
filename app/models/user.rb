@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   include Mongoid::Document
   include Mongoid::Timestamps::Created
+  include Logging
 
   attr_accessor :password, :password_confirmation, :current_email
 

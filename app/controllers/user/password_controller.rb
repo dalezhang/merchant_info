@@ -7,6 +7,10 @@ class User::PasswordController < ApplicationController
     @user.generate_reset_token
     flash[:success] = "邮件已发送，请查收。"
     redirect_to new_user_session_path
+  rescue Exception => e
+    flash[:error] = e.message
+    log_error @user, e.message, '', e.backtrace, params
+    redirect_to new_user_session_path
   end
 
   def edit
@@ -24,22 +28,20 @@ class User::PasswordController < ApplicationController
   end
 
   def update
-    user = User.find_by(reset_token: params[:reset_token])
-    if !user.present?
+    @user = User.find_by(reset_token: params[:reset_token])
+    if !@user.present?
       flash[:error] = "无效的重置token。"
-      redirect_to action: :edit, id: current_user.id
-    elsif user.expired_at < Time.zone.now
+    elsif @user.expired_at < Time.zone.now
       flash[:error] = "token已过期，请重新申请重置密码。"
-      redirect_to action: :edit, id: current_user.id
     else
-      user.update(user_params.merge({reset_token: nil}))
+      @user.update(user_params.merge({reset_token: nil}))
       flash[:success] = "密码修改成功"
-      redirect_to controller: :sessions, action: :new
     end
+    redirect_to new_user_session_path
   rescue Exception => e
     flash[:error] = e.message
-    # log_error user, e.message, '', e.backtrace
-    redirect_to controller: :sessions, action: :new
+    log_error @user, e.message, '', e.backtrace, params
+    redirect_to new_user_session_path
   end
 
 

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InspectMerchantsController < ResourcesController
-  include Logging
   authorize_resource class: 'Merchant'
   before_action :authorize_current_user
   def authorize_current_user
