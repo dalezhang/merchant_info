@@ -16,7 +16,7 @@ module Biz
       raise "channel should be one of ['wechat', 'alipay']" unless %w[wechat alipay].include?(channel)
       @channel = channel
       @zx_request = @merchant.request_and_response['zx_request'][@channel]
-      raise 'zx_request 无内容，请先生成进件请求' unless @zx_request.present?
+      raise "zx_request.#{@channel} 无内容，请先生成进件请求。\n#{@merchant.request_and_response['zx_request']}" unless @zx_request.present?
     end
 
     # appl_typ =>  新增：0；变更：1；停用：2
@@ -104,6 +104,14 @@ module Biz
       ret = post_xml_gbk('zx_intfc', url, data)
       resp_hash = Hash.from_xml(ret)
       if resp_hash.present?
+        log_js = {
+            model: 'Biz::ZxInfcApi',
+            method: 'send_zx_intfc',
+            merchant: @merchant.id.to_s,
+            request_hash: data.to_s, 
+            response_hash: resp_hash.to_s,
+        }
+        log_es(log_js)
         resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save
@@ -160,6 +168,14 @@ module Biz
       else
         return log_error @merchant, '查询', '无返回信息'
       end
+      log_js = {
+          model: 'Biz::ZxInfcApi',
+          method: 'send_zx_query',
+          merchant: @merchant.id.to_s,
+          request_hash: data.to_s, 
+          response_hash: resp_hash.to_s,
+      }
+      log_es(log_js)
       "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"
     end
 

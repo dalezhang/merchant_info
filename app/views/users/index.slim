@@ -1,15 +1,21 @@
-= link_to '添加用户', new_user_path, class: 'btn btn-primary'
+- if can? :new, User
+  = link_to '添加用户', new_user_path, class: 'btn btn-primary'
 table.table
   tr
     th 登录名
+    th 代理商编号
     th 图片空间
     th 角色
     th 操作
   - @collection.each do |obj|
     tr
       td= obj.email
+      td= obj.partner_id
       td= obj.bucket_name
-      td= obj.roles.pluck(:name).join('--')
+      td= obj.roles.pluck(:chinese_name).join('--')
       td
         = link_to '查看', obj, class: 'btn btn-sm btn-success'
-        = link_to '编辑', edit_user_path(obj.id.to_s), class: 'btn btn-sm btn-default'
+        - if can? :new, User
+          = link_to '编辑', edit_user_path(obj.id.to_s), class: 'btn btn-sm btn-default'
+          - if obj.merchants.count == 0 
+            = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: '确认删除？' }

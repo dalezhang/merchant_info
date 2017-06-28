@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 module Biz
   class PfbInfcApi < IntfcBase
-    def initialize(mch_id, channel)
-      if mch_id.class == Merchant
-        @merchant = mch_id
-      elsif merchant = Merchant.find_by(merchant_id: mch_id)
+    def initialize(id, channel)
+      if id.class == Merchant
+        @merchant = id
+      elsif merchant = Merchant.find(id)
         @merchant = merchant
       else
         raise 'merchant_id 无效'
       end
       raise "channel should be one of ['wechat_offline', 'wechat_app', 'alipay']" unless %w[wechat_offline wechat_app alipay].include?(channel)
       @channel = channel
-      @pfb_request = @merchant.request_and_response['pfb_request'][@channel]
-      raise 'pfb_request 无内容，请先生成进件请求' unless @pfb_request.present?
+      @salt = @merchant.id.to_s
+      @pfb_request = @merchant.request_and_response.pfb_request[@channel]
+      raise "pfb_request.#{@channel} 无内容，请先生成进件请求。" unless @pfb_request.present?
     end
 
     def send_intfc(req_typ)
@@ -36,9 +37,11 @@ module Biz
 
     def prepare_request(req_typ)
       @pfb_request["serviceType"] = req_typ
-      customer_num_from_enter = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer_num"] rescue nil
-      customer_num_from_query = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer"]["customerNum"] rescue nil
-      @pfb_request["customerNum"] = customer_num_from_enter || customer_num_from_query
+      if req_typ == 'CUSTOMER_UPDATE'
+        customer_num_from_enter = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer_num"] rescue nil
+        customer_num_from_query = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer"]["customerNum"] rescue nil
+        @pfb_request["customerNum"] = customer_num_from_enter || customer_num_from_query || ''
+      end
       @pfb_request
     end
 
@@ -51,6 +54,14 @@ module Biz
       resp = HTTParty.post(url, body: js.to_json, follow_redirects: false)
       resp_hash = JSON.parse resp.body
       if resp_hash.present?
+        log_js = {
+            model: 'Biz::PfbInfcApi',
+            method: 'sent_request',
+            merchant: @merchant.id.to_s,
+            request_hash: js.to_s, 
+            response_hash: resp_hash.to_s,
+        }
+        log_es(log_js)
         resp['sign'] = '**'
         @merchant.request_and_response.pfb_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save
@@ -69,7 +80,7 @@ module Biz
         agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
         queryType: '1', # 值为：0/1
         customerNum: nil, # 查询条件类型为0时必填
-        outMchId: "#{@channel}_#{@merchant.merchant_id}", # 查询条件类型为1时必填
+        outMchId: "#{@channel}_#{@salt}", # 查询条件类型为1时必填
       }
     end
 

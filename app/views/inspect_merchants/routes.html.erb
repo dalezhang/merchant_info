@@ -1,0 +1,81 @@
+<input id="merchant_id" type="" name="" value="<%= @object.merchant_id %>" class="hidden">
+<div class="container-fluid">
+    <div class="body list">
+        <div class="page-title">
+        	<%= link_to '添加路由', add_route_inspect_merchant_path(@object.id), class: "btn btn-success btn-sm"%>
+        </div>
+        <div class="panel panel-default">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>路由编号</th>
+                        <th>渠道名字</th>
+                        <th>渠道密钥</th>
+                        <th>渠道商户号</th>
+                        <th>路由状态</th>
+                        <th>通道类型</th>
+                        <th>支付方式</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="list_tbody">
+                    <!--digging-->
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!--     <script src="./assets/jquery/jquery.min.js"></script>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script> -->
+    <!-- <script src="/outcomes/common.js"></script> -->
+    <!-- <script src="./assets/artTemplate/template.js"></script> -->
+<script type="text/template" id="content-temp">
+    <tr class='temp_tr' id='{{_id}}'>
+        <td>{{_id}}</td>
+        <td>
+            {{if (channel_name == "swift") ||(channel_name =="SWIFT") }} 威富通 {{else if (channel_name == "bjrcb") ||(channel_name =="BJRCB")}}
+            北京农商行 {{else if (channel_name == "citic_ali") ||(channel_name =="CITIC_ALI")}} 中信直连支付宝 {{else if (channel_name
+            == "citic_wechat")||(channel_name =="CITIC_WECHAT")}} 中信直连微信 {{else if (channel_name == "dinzi") ||(channel_name
+            =="DIANZI")}} 点子 {{else if (channel_name =="tfb") ||(channel_name =="TFB")}} 天付宝 {{/if}}
+
+        </td>
+        <td>{{channel_key}}</td>
+        <td>{{channel_mch_id}}</td>
+        <td>
+            <select disabled="disabled" id="opendown" >
+              {{if priority == 1}}
+                <option value ="1">开启</option>
+                <option value ="0">关闭</option>
+              {{else}}
+                <option value ="0">关闭</option>
+                <option value ="1">开启</option>
+              {{/if}}
+            </select>
+        </td>
+        <td>
+            {{if channel_type == "T1"}} T1 {{else}} D0 {{/if}}
+            </select>
+        </td>
+        <td>
+            <form action="" method="get" id="paym">
+                <input type="checkbox" name="pay" disabled="disabled" value="wechat.scan" ckecked>wechat.scan
+                <input type="checkbox" name="pay" disabled="disabled" value="alipay.scan" ckecked>alipay.scan
+                <input type="checkbox" name="pay" disabled="disabled" value="qq.scan" ckecked>qq.scan<br>
+                <input type="checkbox" name="pay" disabled="disabled" value="wechat.jsapi" ckecked>wechat.jsapi
+                <input type="checkbox" name="pay" disabled="disabled" value="alipay.jsapi" ckecked>alipay.jsapi
+                <input type="checkbox" name="pay" disabled="disabled" value="qq.jsapi" ckecked>qq.jsapi<br>
+                <input type="checkbox" name="pay" disabled="disabled" value="wechat.micro" ckecked>wechat.micro
+                <input type="checkbox" name="pay" disabled="disabled" value="alipay.micro" ckecked>alipay.micro
+                <input type="checkbox" name="pay" disabled="disabled" value="qq.micro" ckecked>qq.micro<br>
+                <input type="checkbox" name="pay" disabled="disabled" value="wechat.jsurl" ckecked>wechat.jsurl
+            </form>
+        </td>
+        <td>
+            <a class=" modify btn btn-info btn-sm modify">修改</a>
+            <a class="btn btn-warning btn-sm save">保存</a>
+        </td>
+    </tr>
+</script>

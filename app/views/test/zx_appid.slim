@@ -1,0 +1,56 @@
+.box
+  .box-header
+    h4.box-title 创建信息
+  .box-body
+    = form_for :item, url: wechat_cert_test_index_path do |f|
+      .col-xs-12
+        .form-group.string.optional
+          label.col-sm-3.control-label.string.optional appid
+          .col-sm-9
+            = text_field_tag 'item[appid]','', class: "form-control string optional", placeholder: '微信分配的公众账号 ID'
+          label.col-sm-3.control-label.string.optional mch_id
+          .col-sm-9
+            = text_field_tag 'item[mch_id]','', class: "form-control string optional", placeholder: '商户号'
+          label.col-sm-3.control-label.string.optional sub_mch_id
+          .col-sm-9
+            = text_field_tag 'item[sub_mch_id]','', class: "form-control string optional", placeholder: '子商户号'
+          label.col-sm-3.control-label.string.optional jsapi_path
+          .col-sm-9
+            = text_field_tag 'item[jsapi_path]','', class: "form-control string optional", placeholder: '子商户公众账号 JSAPI 支付授权目录子商户'
+          label.col-sm-3.control-label.string.optional sub_appid
+          .col-sm-9
+            = text_field_tag 'item[sub_appid]','', class: "form-control string optional", placeholder: '子商户SubAPPID'
+          label.col-sm-3.control-label.string.optional subscribe_appid
+          .col-sm-9
+            = text_field_tag 'item[subscribe_appid]','', placeholder: '微信分配的服务商公众号或 APP 账号 ID；如为空，则值传NULL（字母大写小写均可）', class: "form-control string optional"
+      .col-sm-12.text-center
+        br
+        br
+        = f.submit '创建', class: 'btn btn-lg btn-success'
+.box
+  .box-header
+    h4.box-title 查询信息
+  .box-body
+    = form_for :item, url: wechat_cert_test_index_path do |f|
+      .col-xs-12
+        .form-group.string.optional
+          label.col-sm-3.control-label.string.optional appid
+          .col-sm-9
+            = text_field_tag 'item[appid]','', class: "form-control string optional", placeholder: '微信分配的公众账号 ID'
+          label.col-sm-3.control-label.string.optional mch_id
+          .col-sm-9
+            = text_field_tag 'item[mch_id]','', class: "form-control string optional", placeholder: '商户号'
+          label.col-sm-3.control-label.string.optional sub_mch_id
+          .col-sm-9
+            = text_field_tag 'item[sub_mch_id]','', class: "form-control string optional", placeholder: '子商户号'
+      .col-sm-12.text-center
+        br
+        br
+        = f.submit '查询', class: 'btn btn-lg btn-success'
+.row
+  - if params[:request].present?
+    h4 request
+    = text_area_tag :request, params[:request], style: 'height: 300px;', class: 'form-control'
+  - if params[:response].present?
+    h4 response
+    = text_area_tag :response, params[:response], style: 'height: 300px;', class: 'form-control'

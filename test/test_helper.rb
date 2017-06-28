@@ -8,5 +8,9 @@ class ActiveSupport::TestCase
   # fixtures :all
 
   # Add more helper methods to be used by all tests here...
+   def clean_database
+    User.destroy_all
+    Merchant.destroy_all
+  end
 end
 

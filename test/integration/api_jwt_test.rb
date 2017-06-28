@@ -3,7 +3,7 @@ require 'test_helper'
 class ApiJwtTest < ActionDispatch::IntegrationTest
   test "no email" do
     clean_database
-    user = User.create(email: 'test@mail.com')
+    user = User.create(email: 'test@mail.com',partner_id: 'test')
     data = {
       token: user.token,
       method: 'merchant.create'
@@ -16,17 +16,19 @@ class ApiJwtTest < ActionDispatch::IntegrationTest
     assert_response :success
     data = JSON.parse response.body
     puts data
-    assert_equal '找不到代理商信息，partner_id无效。', data['error'], data['error']
+    assert_equal 'partner_id为空', data['error'], data['error']
   end
   test "create merchant" do
     clean_database
-    user = User.new(email: 'test@mail.com')
+    user = User.new(email: 'test@mail.com',partner_id: 'test')
     user.save!
     data = {
       token: user.token,
       method: 'merchant.create',
       partner_id: user.partner_id,
-      out_merchant_id: 'c214',
+      partner_mch_id: 'c214',
+      d0_rate: 1,
+      t1_rate: 1,
     }
     puts 'email', user.email
     puts "user.token", user.token
@@ -41,12 +43,14 @@ class ApiJwtTest < ActionDispatch::IntegrationTest
   end
   test "update merchant" do
     clean_database
-    user = User.create(email: 'test@mail.com')
+    user = User.create(email: 'test@mail.com',partner_id: 'test')
     data = {
       token: user.token,
       method: 'merchant.create',
       partner_id: user.partner_id,
-      out_merchant_id: 'c1213',
+      partner_mch_id: 'c1213',
+      d0_rate: 1,
+      t1_rate: 1,
     }
     puts 'email', user.email
     bz = Biz::Jwt.new(user.partner_id)
@@ -68,8 +72,5 @@ class ApiJwtTest < ActionDispatch::IntegrationTest
     assert_equal '123', data['name'], data
   end
 
-  def clean_database
-    User.destroy_all
-    Merchant.destroy_all
-  end
+
 end

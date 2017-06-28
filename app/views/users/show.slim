@@ -4,6 +4,9 @@
       = label 'user', '登录名'
       = text_field_tag '', @object.email, readonly: true, class: "form-control"
     .form-group
+      = label 'partner_id', '代理商编号'
+      = text_field_tag '', @object.partner_id, readonly: true, class: "form-control"
+    .form-group
       = label :name, '用户名'
       = text_field_tag '', @object.name, readonly: true, class: "form-control"
     .form-group
@@ -17,7 +20,7 @@
       = text_field_tag '', @object.tel, readonly: true, class: "form-control"
     .form-group
       = label :roles, '角色'
-      = text_field_tag '', @object.roles.pluck(:name).join('--'), readonly: true, class: "form-control"
+      = text_field_tag '', @object.roles.pluck(:chinese_name).join('--'), readonly: true, class: "form-control"
     .form-group
       = label :bucket_name, '图片上传空间名'
       = text_field_tag '', @object.bucket_name, readonly: true, class: "form-control"

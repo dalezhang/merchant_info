@@ -11,7 +11,10 @@ Rails.application.routes.draw do
     post :upload_picture, on: :member
   end
   resources :inspect_merchants do
-    post :change_status, :prepare_request, :get_merchant_id, :zx_infc, :pfb_infc, on: :member
+    post :change_status, :prepare_request,
+          :update_backend_account, 
+          :zx_infc, :pfb_infc, :create_pay_route, on: :member
+    get :get_merchant_id, :get_backend_account, :routes, :add_route, on: :member
     resources :zx_contr_info_lists
   end
   namespace :user do
@@ -28,6 +31,10 @@ Rails.application.routes.draw do
   resources :error_logs
   namespace :api do
     resources :merchants
+  end
+  resources :test do
+    get  :zx_appid, on: :collection 
+    post :wechat_cert, on: :collection
   end
 
 end

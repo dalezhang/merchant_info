@@ -3,10 +3,7 @@
     .box
       .box-header
         h4.box-title 农商行渠道信息
-        = link_to '农商行普付宝经营行业列表', 'http://note.youdao.com/groupshare/?token=5A7A9ED6F13C49D0B830F1CF394B4E06&gid=45230067', target: '_blank', class: 'btn btn-link'
       .box-body
-        .col-xs-6
-          = f.input :pfb_channel_type
         table.table.table-bordered
           thead
             tr
@@ -19,7 +16,7 @@
               th 封顶值(元)
               th 结算模式
           tbody
-            - {'微信线下': 'wechat_offline', '微信APP支付': 'wechat_app', '支付宝': 'alipay'}.each do |key,value|
+            - {'微信线下': 'wechat_offline', '支付宝': 'alipay'}.each do |key,value|
               tr
                 td = key
                 td

@@ -10,7 +10,7 @@ class Biz::PfbMctInfo
     @agentNum = Rails.application.secrets.biz['pfb']['agent_num']  # 代理商编号
     @outMchId = nil # 下游商户号(唯一),可用于查询商户信息
     @customerType = pfb_customer_type(@merchant.mch_type) # 个体：PERSONAL 企业：ENTERPRISE
-    @businessType =  @merchant.pfb_channel_type # 详见:经营行业列表
+    @businessType =  nil # 详见:经营行业列表
     @customerName = @merchant.full_name # 商户名称
     @businessName = @merchant.name # 支付成功显示
     @legalId = @merchant.legal_person.identity_card_num # 法人身份证号
@@ -20,15 +20,16 @@ class Biz::PfbMctInfo
     @contactEmail = @merchant.company.contact_email # 联系人邮箱
     @servicePhone = @merchant.company.service_tel # 客服电话
     @address = [@merchant.province, @merchant.urbn, @merchant.address].join(',') # 经营地址,企业商户必填
+    @businessAddress =  @address  # 商户经营地址
     if @merchant.province.present?
       province = Location.where(location_name: Regexp.new(@merchant.province.strip) ).first
-      @provinceName = province.location_code # 经营省,企业商户必填
+      @provinceName = province.location_code if province.present? # 经营省,企业商户必填
       if @provinceName.present? && @merchant.urbn.present?
         urbn = Location.where(pub_location_code: @provinceName, location_name: Regexp.new(@merchant.urbn.strip) ).first
-        @cityName = urbn.location_code # 经营市,企业商户必填
+        @cityName = urbn.location_code if urbn.present? # 经营市,企业商户必填
         if @cityName.present? && @merchant.zone.present?
           zone = Location.where(pub_location_code: @cityName, location_name: Regexp.new(@merchant.zone.strip) ).first
-          @districtName = zone.location_code # 经营区,企业商户必填
+          @districtName = zone.location_code if zone.present? # 经营区,企业商户必填
         end
       end
     end
@@ -56,7 +57,7 @@ class Biz::PfbMctInfo
     @rightBankCard = "/#{@salt}/#{@merchant.bank_info.right_bank_card_key}" # 银行卡正面
     @licenseImage = "/#{@salt}/#{@merchant.company.license_key}" # 营业执照
     @doorHeadImage = "/#{@salt}/#{@merchant.company.shop_picture_key}" # 门面照
-    @accountLicence = "/#{@salt}/#{@merchant.company.pfb_account_licence_key}" # 开户许可证
+    @accountLicence = "/#{@salt}/#{@merchant.company.account_licence_key}" # 开户许可证
   end
 
   def pfb_account_type(account_type)
@@ -92,18 +93,21 @@ class Biz::PfbMctInfo
         isCapped: wechat_offline.try(:[],'isCapped'),
         upperFee: wechat_offline.try(:[],'upperFee'),
         settleMode: wechat_offline.try(:[],'settleMode'),
+        businessType: @merchant.wechat_channel_type_lv2,
       },
-      wechat_app: {
-        outMchId: "wechat_app_#{@salt}",
-        payChannel: 'WECHAT_APP',
-        rate: wechat_app.try(:[],'rate'),
-        t0Status: wechat_app.try(:[],'t0Status'),
-        settleRate: wechat_app.try(:[],'settleRate'),
-        fixedFee: wechat_app.try(:[],'fixedFee'),
-        isCapped: wechat_app.try(:[],'isCapped'),
-        upperFee: wechat_app.try(:[],'upperFee'),
-        settleMode: wechat_app.try(:[],'settleMode'),
-      },
+      # 暂时不需要
+      # wechat_app: {
+      #   outMchId: "wechat_app_#{@salt}",
+      #   payChannel: 'WECHAT_APP',
+      #   rate: wechat_app.try(:[],'rate'),
+      #   t0Status: wechat_app.try(:[],'t0Status'),
+      #   settleRate: wechat_app.try(:[],'settleRate'),
+      #   fixedFee: wechat_app.try(:[],'fixedFee'),
+      #   isCapped: wechat_app.try(:[],'isCapped'),
+      #   upperFee: wechat_app.try(:[],'upperFee'),
+      #   settleMode: wechat_app.try(:[],'settleMode'),
+      #   businessType: @merchant.wechat_channel_type_lv2,
+      # },
       alipay: {
         outMchId: "alipay_#{@salt}",
         payChannel: 'ALIPAY',
@@ -114,8 +118,8 @@ class Biz::PfbMctInfo
         isCapped: alipay.try(:[],'isCapped'),
         upperFee: alipay.try(:[],'upperFee'),
         settleMode: alipay.try(:[],'settleMode'),
-      }
-
+        businessType: @merchant.alipay_channel_type_lv1,
+      },
     }.each do |key, value|
       @outMchId = value[:outMchId]
       @payChannel = value[:payChannel]
@@ -126,6 +130,7 @@ class Biz::PfbMctInfo
       @isCapped = value[:isCapped]
       @upperFee = value[:upperFee]
       @settleMode = value[:settleMode]
+      @businessType = value[:businessType]
       pfb_request[key] = inspect
     end
     @merchant.request_and_response.pfb_request = pfb_request
@@ -143,7 +148,7 @@ class Biz::PfbMctInfo
       @merchant.bank_info.right_bank_card_key, # 银行卡正面
       @merchant.company.license_key, # 营业执照
       @merchant.company.shop_picture_key, # 门面照
-      @merchant.company.pfb_account_licence_key, # 农商行，开户许可证
+      @merchant.company.account_licence_key, # 农商行，开户许可证
     ].each do |key|
       if key.present?
         @merchant.channel_data['pfb'] ||= {}
@@ -186,6 +191,7 @@ class Biz::PfbMctInfo
       contactEmail: @contactEmail, # 联系人邮箱
       servicePhone: @servicePhone, # 客服电话
       address: @address, # 经营地址,企业商户必填
+      businessAddress: @businessAddress,
       provinceName: @provinceName, # 经营省,企业商户必填
       cityName: @cityName, # 经营市,企业商户必填
       districtName: @districtName, # 经营区,企业商户必填

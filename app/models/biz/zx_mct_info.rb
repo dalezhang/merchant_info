@@ -46,13 +46,13 @@ class Biz::ZxMctInfo
       wechat: {
         pay_chnl_encd: '0002',
         chnl_mercht_id: "zx_wechat_#{@salt}",
-        opr_cls: @merchant.zx_wechat_channel_type,
+        opr_cls: @merchant.wechat_channel_type_lv2,
         zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: %w[00020001 00020002 00020003 00020004])
       },
       alipay: {
         pay_chnl_encd: '0001',
         chnl_mercht_id: "zx_alipay_#{@salt}",
-        opr_cls: @merchant.zx_alipay_channel_type,
+        opr_cls: @merchant.alipay_channel_type_lv2,
         zx_contr_info_lists: @merchant.zx_contr_info_lists.in(pay_typ_encd: %w[00010001 00010002 00010003])
       }
 

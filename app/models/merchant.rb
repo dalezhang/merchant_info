@@ -4,10 +4,10 @@ class Merchant < ApplicationRecord
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
-  field :out_mch_id, type: String # 代理商自定义的merchant唯一标识
-  field :partner_mch_id, type: String, default: "c#{Merchant.count + 1}" # 商户号
+  field :password, type: String # 登录后台密码
+  field :partner_mch_id, type: String # 代理商定义的商户号
   field :public_key, type: String # 商户公钥
-  field :merchant_key, type: String # 商户md5签名key
+  field :share_key, type: String # 商户md5签名key
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String # 代理商自定义的merchant唯一标识
   field :status, type: Integer, default: 0 # 状态
@@ -21,10 +21,14 @@ class Merchant < ApplicationRecord
   field :appid, type: String # 公众号
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
-  field :zx_wechat_channel_type, type: String # 中信经营类目--微信，见附件《经营类目》中的经营类目明细编码
-  field :zx_alipay_channel_type, type: String
-  field :pfb_channel_type, type: String # 农商行普付宝经营类目
+  field :alipay_channel_type_lv1, type: String # 支付宝一级经营类目
+  field :alipay_channel_type_lv2, type: String # 支付宝二级经营类目
+  #field :wechat_channel_type_lv1, type: String # 微信一级经营类目
+  field :wechat_channel_type_lv2, type: String # 微信二级经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
+  field :d0_rate, type: String # D0费率,%
+  field :t1_rate, type: String # T1费率,%
+  field :fixed_fee, type: Integer, default: 0 # 单比加收费用,单位（分）
   field :bank_info, type: Hash, default: {} # 银行信息
   field :legal_person # 法人信息
   field :company # 公司信息
@@ -38,20 +42,31 @@ class Merchant < ApplicationRecord
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
 
-  validates :out_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该out_merchant_id已经存在' }
+  validates :partner_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该partner_mch_id已经存在' }
+  validate do
+    if !self.t1_rate.present?
+      self.errors.add(:t1_rate, "不能为空")
+    end
+    if !self.d0_rate.present?
+      self.errors.add(:d0_rate, "不能为空")
+    end
+  end
 
-  before_save :generate_keys
+  before_save :generate_keys, :prepare_pfb_rate, :generate_password
+  before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
   def self.attr_writeable
     %i[
-      out_merchant_id mch_deal_type
+      d0_rate t1_rate fixed_fee
       full_name name appid mch_type industry memo
-      wechat_channel_type alipay_channel_type
       province urbn address
       bank_info legal_person company
-      zx_wechat_channel_type zx_alipay_channel_type
-      pfb_channel_type mch_deal_type
+      alipay_channel_type_lv1
+      alipay_channel_type_lv2
+      wechat_channel_type_lv2
+      mch_deal_type
+      partner_mch_id
     ]
   end
 
@@ -61,7 +76,37 @@ class Merchant < ApplicationRecord
       self.private_key = key.to_pem
       self.public_key = key.public_key.to_pem
     end
-    self.merchant_key = UUID.new.generate unless merchant_key.present?
+  end
+
+  def generate_password
+    unless self.password.present?
+      self.password = Digest::SHA1.hexdigest("#{Time.now.to_i}")[0..6]
+    end
+  end
+
+  def check_if_modified_sensitive_values
+    sensitive_values = ['partner_mch_id']
+    if (sensitive_values & self.changes.keys).present?
+      raise "#{sensitive_values.join(',')}不允许修改"
+    end
+  end
+  def prepare_pfb_rate
+    unless channel_data.present?
+      @t1_rate = @d0_rate = '0'
+      @t1_rate = t1_rate
+      @d0_rate = d0_rate
+      @fixed_fee = (fixed_fee * 0.01).to_s
+      self.channel_data = {
+        "pfb"=> {
+          "wechat_offline"=> {
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+          },
+          "alipay"=>{
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+          },
+        }
+      }
+    end
   end
 
 
@@ -69,9 +114,10 @@ class Merchant < ApplicationRecord
     hash = {
       id: id.to_s,
       merchant_id: merchant_id,
-      out_mch_id: out_mch_id,
+
       partner_mch_id: partner_mch_id,
       private_key: private_key,
+      share_key: share_key,
       status: STATUS_DATA[status],
       full_name: full_name,
       name: name,
@@ -83,9 +129,13 @@ class Merchant < ApplicationRecord
       appid: appid,
       mch_type: mch_type,
       industry: industry,
-      zx_wechat_channel_type: zx_wechat_channel_type,
-      zx_alipay_channel_type: zx_alipay_channel_type,
-      pfb_channel_type: pfb_channel_type,
+      d0_rate: d0_rate,
+      t1_rate: t1_rate,
+      fixed_fee: fixed_fee,
+      #wechat_channel_type_lv1: wechat_channel_type_lv1, # 微信一级经营类目
+      wechat_channel_type_lv2: wechat_channel_type_lv2, # 微信二级经营类目
+      alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
+      alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
       mch_deal_type: mch_deal_type,
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
@@ -96,6 +146,7 @@ class Merchant < ApplicationRecord
       hash[:request_and_response] = request_and_response.inspect
       hash[:zx_contr_info_lists] = zx_contr_info_lists.collect(&:inspect)
       hash[:channel_data] = channel_data
+      hash[:password] = password
     end
     hash
   end
@@ -131,8 +182,8 @@ class Company < ApplicationRecord
   field :shop_picture_key, type: String  # 店铺照
   field :license_key, type: String   # 营业执照
   field :org_photo_key, type: String # 组织机构代码照
-  field :wft_protocol_photo_key, type: String # 威付通，商户协议照
-  field :pfb_account_licence_key, type: String # 农商行，开户许可证
+  # field :wft_protocol_photo_key, type: String # 威付通，商户协议照
+  field :account_licence_key, type: String # 开户许可证
   field :contact_tel, type: String  # 联系人电话
   field :contact_name, type: String # 联系人姓名
   field :service_tel, type: String  # 客服电话
@@ -143,8 +194,8 @@ class Company < ApplicationRecord
       shop_picture_key: shop_picture_key,
       license_key: license_key,
       org_photo_key: org_photo_key,
-      pfb_account_licence_key: pfb_account_licence_key,
-      wft_protocol_photo_key: wft_protocol_photo_key,
+      account_licence_key: account_licence_key,
+      # wft_protocol_photo_key: wft_protocol_photo_key,
       contact_tel: contact_tel,
       contact_name: contact_name,
       service_tel: service_tel,
@@ -191,12 +242,16 @@ class RequestAndResponse < ApplicationRecord
   field :zx_response, type: Hash, default: {} # 中信进件内容
   field :pfb_request, type: Hash, default: {} # 农商行进件内容
   field :pfb_response, type: Hash, default: {} # 农商行进件内容
+  field :core_account, type: Hash, default: {} # 支付渠道信息
+  field :pay_route, type: Hash, default: {} # 支付路由信息
   def inspect
     {
       zx_request: zx_request,
       zx_response: zx_response,
       pfb_request: pfb_request,
-      pfb_response: pfb_response
+      pfb_response: pfb_response,
+      core_account: core_account,
+      pay_route: pay_route,
     }
   end
 end

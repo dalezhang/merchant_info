@@ -10,6 +10,8 @@ zh-CN:
   show: '预览'
   edit: '编辑'
   new: '新建'
+  routes: 路由信息
+  add_route: 添加路由
   simple_form:
     labels:
       merchant:
@@ -28,20 +30,24 @@ zh-CN:
         urbn: '市'
         zone: '区'
         address: '详细地址'
-        zx_wechat_channel_type: '中信微信经营类目编号'
-        zx_alipay_channel_type: '中信支付宝经营类目编号'
-        pfb_channel_type: 农商行普付宝经营类目
         mch_deal_type: '商户经营类型(实体,虚拟)'
         mch_type: '商户类型'
         appid: '微信公众号appid'
-        partner_mch_id: '进件平台商户号'
-        out_mch_id: '代理商商户号'
+        partner_mch_id: 代理商定义商户号
+        d0_rate: D0费率(%)
+        t1_rate: T1费率(%)
+        fixed_fee: D0单笔加收费(分)
+        alipay_channel_type_lv1: 支付宝一级经营类目
+        alipay_channel_type_lv2: 支付宝二级经营类目
+        wechat_channel_type_lv1: 微信一级经营类目
+        wechat_channel_type_lv2: 微信二级经营类目
       zx_contr_info_list:
         pay_typ_encd: 支付类型
         pay_typ_fee_rate: 支付类型费率
         start_dt: 费率生效日期
       user:
         email: '电子邮箱(登录名)'
+        partner_id: 代理商编号
         password: '密码'
         password_confirmation: '确认密码'
         current_password: '当前密码'

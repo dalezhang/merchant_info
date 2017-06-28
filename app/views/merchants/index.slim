@@ -11,7 +11,7 @@ table.table
     th 操作
   - @collection.each do |obj|
     tr
-      td= obj.out_mch_id
+      td= obj.partner_mch_id
       td= obj.id.to_s
       td= obj.mch_type
       td= obj.name
@@ -20,4 +20,5 @@ table.table
         = link_to '查看', obj, class: 'btn btn-sm btn-success'
         - if obj.status <= 5
           = link_to '编辑', edit_merchant_path(obj.id.to_s), class: 'btn btn-sm btn-default'
-          = link_to '删除', url_for(controller: :merchants, action: :destroy, id: obj.id.to_s), method: :delete, class: 'btn btn-sm btn-danger'
+          - unless obj.merchant_id.present?
+            = link_to '删除', url_for(controller: :merchants, action: :destroy, id: obj.id.to_s), method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: '确认删除？' }
