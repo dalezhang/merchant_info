@@ -216,15 +216,23 @@ module Biz
 
     def create_appid
       url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      sub_mch_id = @merchant.request_and_response.zx_response["#{@channel}_query"]["ROOT"]["Mercht_Idtfy_Num"] rescue ''
+      raise "sub_mch_id 为空，请检查zx_response[#{@channel}_query][ROOT][Mercht_Idtfy_Num]" unless sub_mch_id.present?
       js = {}
       {
-        appid: params[:item][:appid], # 微信分配的公众账号 ID
-        mch_id: params[:item][:mch_id], # 商户号
-        sub_mch_id: params[:item][:sub_mch_id], #子商户号
-        jsapi_path:  params[:item][:jsapi_path], # 子商户公众账号 JSAPI 支付授权目录子商户
-        sub_appid: params[:item][:sub_appid], # 子商户SubAPPID
-        subscribe_appid: params[:item][:subscribe_appid], # 微信分配的服务商公众号或 APP 账号 ID；如为空，则值传NULL（字母大写小写均可）
+        appid: Rails.application.secrets.biz['zx']['appid'], # 微信分配的公众账号 ID
+        mch_id: Rails.application.secrets.biz['zx']['mch_id'], # 商户号
+        sub_mch_id: sub_mch_id, #子商户号
       }.map {|k,v| js[k] = v if v.present? }
+      if @merchant.jsapi_path.present?
+        js[:jsapi_path] = @merchant.jsapi_path # JSAPI支付授权目录
+      elsif @merchant.sub_appid.present?
+        js[:sub_appid] = @merchant.sub_appid # 微信公众号
+      elsif @merchant.subscribe_appid.present?
+        js[:subscribe_appid] =  @merchant.subscribe_appid # 户推荐关注公众账号APPID
+      else
+        raise "jsapi_path,sub_appid,subscribe_appid必须有一个不为空"
+      end
       js[:sign] = get_mac js, key
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @request = xml
@@ -243,11 +251,13 @@ module Biz
 
     def query_appid
       url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      sub_mch_id = @merchant.request_and_response.zx_response["#{@channel}_query"]["ROOT"]["Mercht_Idtfy_Num"] rescue ''
+      raise "sub_mch_id 为空，请检查zx_response[#{@channel}_query][ROOT][Mercht_Idtfy_Num]" unless sub_mch_id.present?
       js = {}
       {
-        appid: params[:item][:appid], # 微信分配的公众账号 ID
-        mch_id: params[:item][:mch_id], # 商户号
-        sub_mch_id: params[:item][:sub_mch_id], #子商户号
+        appid: Rails.application.secrets.biz['zx']['appid'], # 微信分配的公众账号 ID
+        mch_id: Rails.application.secrets.biz['zx']['mch_id'], # 商户号
+        sub_mch_id: sub_mch_id, #子商户号
       }.map {|k,v| js[k] = v if v.present? }
       js[:sign] = get_mac js, key
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)

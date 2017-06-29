@@ -18,7 +18,11 @@ class Merchant < ApplicationRecord
   field :urbn, type: String # 城市
   field :zone, type: String # 区
   field :address, type: String # 详细地址
-  field :appid, type: String # 公众号
+  # 创建appid，以下内容三选一
+  field :jsapi_path, type: String # JSAPI支付授权目录
+  field :subscribe_appid, type: String # 户推荐关注公众账号APPID
+  field :appid, type: String # 微信公众号
+
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
   field :alipay_channel_type_lv1, type: String # 支付宝一级经营类目
@@ -67,6 +71,9 @@ class Merchant < ApplicationRecord
       wechat_channel_type_lv2
       mch_deal_type
       partner_mch_id
+      wechat_jsapi_path
+      wechat_sub_appid
+      wechat_subscribe_appid
     ]
   end
 

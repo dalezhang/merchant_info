@@ -33,6 +33,8 @@ zh-CN:
         mch_deal_type: '商户经营类型(实体,虚拟)'
         mch_type: '商户类型'
         appid: '微信公众号appid'
+        jsapi_path: JSAPI支付授权目录
+        subscribe_appid: 户推荐关注公众账号APPID
         partner_mch_id: 代理商定义商户号
         d0_rate: D0费率(%)
         t1_rate: T1费率(%)
@@ -41,6 +43,7 @@ zh-CN:
         alipay_channel_type_lv2: 支付宝二级经营类目
         wechat_channel_type_lv1: 微信一级经营类目
         wechat_channel_type_lv2: 微信二级经营类目
+
       zx_contr_info_list:
         pay_typ_encd: 支付类型
         pay_typ_fee_rate: 支付类型费率
