@@ -226,7 +226,7 @@ module Biz
       }.map {|k,v| js[k] = v if v.present? }
       if @merchant.jsapi_path.present?
         js[:jsapi_path] = @merchant.jsapi_path # JSAPI支付授权目录
-      elsif @merchant.sub_appid.present?
+      elsif @merchant.appid.present?
         js[:sub_appid] = @merchant.sub_appid # 微信公众号
       elsif @merchant.subscribe_appid.present?
         js[:subscribe_appid] =  @merchant.subscribe_appid # 户推荐关注公众账号APPID
