@@ -29,10 +29,14 @@ module Biz
       when '变更'
         xml = prepare_request('1')
       when '停用'
-        xml = prepare_request('2')
+        xml = end_zx_queryrepare_request('2')
       when '查询'
         xml = prepare_query
         return send_zx_query(xml)
+      when '创建appid'
+        return create_appid
+      when '查询appid'
+        return query_appid
       else
         return log_error @merchant, '请求', '未知的请求类型'
       end
@@ -209,5 +213,57 @@ module Biz
       end
       'NO_VALUE'
     end
+
+    def create_appid
+      url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      js = {}
+      {
+        appid: params[:item][:appid], # 微信分配的公众账号 ID
+        mch_id: params[:item][:mch_id], # 商户号
+        sub_mch_id: params[:item][:sub_mch_id], #子商户号
+        jsapi_path:  params[:item][:jsapi_path], # 子商户公众账号 JSAPI 支付授权目录子商户
+        sub_appid: params[:item][:sub_appid], # 子商户SubAPPID
+        subscribe_appid: params[:item][:subscribe_appid], # 微信分配的服务商公众号或 APP 账号 ID；如为空，则值传NULL（字母大写小写均可）
+      }.map {|k,v| js[k] = v if v.present? }
+      js[:sign] = get_mac js, key
+      xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
+      @request = xml
+      @response = Biz::WechatCert.post(url, body: xml, verify: false)
+      log_js = {
+        model: 'Biz::ZxInfcApi',
+        method: 'create_appid_info',
+        merchant: @merchant.id.to_s,
+        request_hash: @request.to_s,
+        response_hash: @response.to_s,
+      }
+      log_es(log_js)
+      @merchant.request_and_response['zx_request']['appid_create'] = @response.to_hash
+      "返回信息已保存在request_and_response -> zx_response -> appid_create"
+    end
+
+    def query_appid
+      url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      js = {}
+      {
+        appid: params[:item][:appid], # 微信分配的公众账号 ID
+        mch_id: params[:item][:mch_id], # 商户号
+        sub_mch_id: params[:item][:sub_mch_id], #子商户号
+      }.map {|k,v| js[k] = v if v.present? }
+      js[:sign] = get_mac js, key
+      xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
+      @request = xml
+      @response = Biz::WechatCert.post(url, body: xml, verify: false)
+      log_js = {
+        model: 'Biz::ZxInfcApi',
+        method: 'query_appid_info',
+        merchant: @merchant.id.to_s,
+        request_hash: @request.to_s,
+        response_hash: @response.to_s,
+      }
+      log_es(log_js)
+      @merchant.request_and_response['zx_request']['appid_query'] = @response.to_hash
+      "返回信息已保存在request_and_response -> zx_response -> appid_query"
+    end
+
   end
 end
