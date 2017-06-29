@@ -246,7 +246,7 @@ module Biz
         response_hash: @response.to_s,
       }
       log_es(log_js)
-      @merchant.request_and_response['zx_request']['appid_create'] = @response.to_hash
+      @merchant.request_and_response.zx_response['appid_create'] = @response.to_hash
       @merchant.save
       "返回信息已保存在request_and_response -> zx_response -> appid_create"
     end
@@ -274,7 +274,7 @@ module Biz
         response_hash: @response.to_s,
       }
       log_es(log_js)
-      @merchant.request_and_response['zx_request']['appid_query'] = @response.to_hash
+      @merchant.request_and_response.zx_response['appid_query'] = @response.to_hash
       @merchant.save
       "返回信息已保存在request_and_response -> zx_response -> appid_query"
     end
