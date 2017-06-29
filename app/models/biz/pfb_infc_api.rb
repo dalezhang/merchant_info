@@ -49,7 +49,7 @@ module Biz
       url = "#{Rails.application.secrets.biz['pfb']['infc_url']}/customer/service"
       agentNum = Rails.application.secrets.biz['pfb']['agent_num'] # 代理商编号
       key = Rails.application.secrets.biz['pfb']['agent_key'] # 代理商密钥
-      sign = get_mac(js, key)
+      sign = Biz::Md5Sign.get_mac(js, key)
       js[:sign] = sign
       resp = HTTParty.post(url, body: js.to_json, follow_redirects: false)
       resp_hash = JSON.parse resp.body
@@ -84,18 +84,5 @@ module Biz
       }
     end
 
-    private
-
-    def get_mab(js)
-      mab = []
-      js.keys.sort_by {|x| x.downcase}.each do |k|
-        mab << "#{k}=#{js[k]}" if k != :mac && k != :sign && js[k].present?
-      end
-      mab.join('&')
-    end
-
-    def get_mac(js, key)
-      Digest::MD5.hexdigest(get_mab(js).to_s + key.to_s).upcase
-    end
   end
 end

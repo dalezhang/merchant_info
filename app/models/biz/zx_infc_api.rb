@@ -234,7 +234,7 @@ module Biz
       else
         raise "jsapi_path,sub_appid,subscribe_appid必须有一个不为空"
       end
-      js[:sign] = get_mac js, key
+      js[:sign] = Biz::Md5Sign.get_mac js, key
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @request = xml
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
@@ -261,7 +261,7 @@ module Biz
         mch_id: Rails.application.secrets.biz['zx']['mch_id'], # 商户号
         sub_mch_id: sub_mch_id, #子商户号
       }.map {|k,v| js[k] = v if v.present? }
-      js[:sign] = get_mac js, key
+      js[:sign] = Biz::Md5Sign.get_mac js, key
       xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
       @request = xml
       @response = Biz::WechatCert.post(url, body: xml, verify: false)
@@ -276,6 +276,5 @@ module Biz
       @merchant.request_and_response['zx_request']['appid_query'] = @response.to_hash
       "返回信息已保存在request_and_response -> zx_response -> appid_query"
     end
-
   end
 end

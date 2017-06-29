@@ -95,32 +95,11 @@ class Api::MerchantsController < ActionController::API
     get_user unless @user.present?
     key = @user.token
     js = JSON.parse(params.to_json).deep_symbolize_keys
-    if params[:sign] == get_mac(js,key)
+    if params[:sign] == Biz::Md5Sign.get_mac(js,key)
       return params.deep_symbolize_keys
     else
       raise '签名错'
     end
-  end
-
-  # def get_mab(js)
-  #   mab = []
-  #   js.keys.sort.each do |k|
-  #     mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k]
-  #   end
-  #   mab.join('&')
-  # end
-  def get_mab(js)
-    mab = []
-    js.keys.sort.each do |k|
-      mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign, :controller, :action ].include?(k.to_sym) && js[k] && js[k].class != Hash
-    end
-    mab.join('&')
-  end
-  def md5(str)
-    Digest::MD5.hexdigest(str)
-  end
-  def get_mac(js, key)
-    md5(get_mab(js) + "&key=#{key}").upcase
   end
 
   def get_user
