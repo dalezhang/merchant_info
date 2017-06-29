@@ -216,6 +216,7 @@ module Biz
 
     def create_appid
       url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      key = '7H5sFkI3cJ32yD9bV6G224gH5hAZPgZK'
       sub_mch_id = @merchant.request_and_response.zx_response["#{@channel}_query"]["ROOT"]["Mercht_Idtfy_Num"] rescue ''
       raise "sub_mch_id 为空，请检查zx_response[#{@channel}_query][ROOT][Mercht_Idtfy_Num]" unless sub_mch_id.present?
       js = {}
@@ -251,6 +252,7 @@ module Biz
 
     def query_appid
       url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      key = '7H5sFkI3cJ32yD9bV6G224gH5hAZPgZK'
       sub_mch_id = @merchant.request_and_response.zx_response["#{@channel}_query"]["ROOT"]["Mercht_Idtfy_Num"] rescue ''
       raise "sub_mch_id 为空，请检查zx_response[#{@channel}_query][ROOT][Mercht_Idtfy_Num]" unless sub_mch_id.present?
       js = {}
