@@ -29,10 +29,14 @@ module Biz
       when '变更'
         xml = prepare_request('1')
       when '停用'
-        xml = prepare_request('2')
+        xml = end_zx_queryrepare_request('2')
       when '查询'
         xml = prepare_query
         return send_zx_query(xml)
+      when '创建appid'
+        return create_appid
+      when '查询appid'
+        return query_appid
       else
         return log_error @merchant, '请求', '未知的请求类型'
       end
@@ -209,5 +213,67 @@ module Biz
       end
       'NO_VALUE'
     end
+
+    def create_appid
+      url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      sub_mch_id = @merchant.request_and_response.zx_response["#{@channel}_query"]["ROOT"]["Mercht_Idtfy_Num"] rescue ''
+      raise "sub_mch_id 为空，请检查zx_response[#{@channel}_query][ROOT][Mercht_Idtfy_Num]" unless sub_mch_id.present?
+      js = {}
+      {
+        appid: Rails.application.secrets.biz['zx']['appid'], # 微信分配的公众账号 ID
+        mch_id: Rails.application.secrets.biz['zx']['mch_id'], # 商户号
+        sub_mch_id: sub_mch_id, #子商户号
+      }.map {|k,v| js[k] = v if v.present? }
+      if @merchant.jsapi_path.present?
+        js[:jsapi_path] = @merchant.jsapi_path # JSAPI支付授权目录
+      elsif @merchant.sub_appid.present?
+        js[:sub_appid] = @merchant.sub_appid # 微信公众号
+      elsif @merchant.subscribe_appid.present?
+        js[:subscribe_appid] =  @merchant.subscribe_appid # 户推荐关注公众账号APPID
+      else
+        raise "jsapi_path,sub_appid,subscribe_appid必须有一个不为空"
+      end
+      js[:sign] = get_mac js, key
+      xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
+      @request = xml
+      @response = Biz::WechatCert.post(url, body: xml, verify: false)
+      log_js = {
+        model: 'Biz::ZxInfcApi',
+        method: 'create_appid_info',
+        merchant: @merchant.id.to_s,
+        request_hash: @request.to_s,
+        response_hash: @response.to_s,
+      }
+      log_es(log_js)
+      @merchant.request_and_response['zx_request']['appid_create'] = @response.to_hash
+      "返回信息已保存在request_and_response -> zx_response -> appid_create"
+    end
+
+    def query_appid
+      url = 'https://api.mch.weixin.qq.com/secapi/mch/addsubdevconfig'
+      sub_mch_id = @merchant.request_and_response.zx_response["#{@channel}_query"]["ROOT"]["Mercht_Idtfy_Num"] rescue ''
+      raise "sub_mch_id 为空，请检查zx_response[#{@channel}_query][ROOT][Mercht_Idtfy_Num]" unless sub_mch_id.present?
+      js = {}
+      {
+        appid: Rails.application.secrets.biz['zx']['appid'], # 微信分配的公众账号 ID
+        mch_id: Rails.application.secrets.biz['zx']['mch_id'], # 商户号
+        sub_mch_id: sub_mch_id, #子商户号
+      }.map {|k,v| js[k] = v if v.present? }
+      js[:sign] = get_mac js, key
+      xml = js.to_xml(root: 'xml', skip_instruct: true, dasherize: false)
+      @request = xml
+      @response = Biz::WechatCert.post(url, body: xml, verify: false)
+      log_js = {
+        model: 'Biz::ZxInfcApi',
+        method: 'query_appid_info',
+        merchant: @merchant.id.to_s,
+        request_hash: @request.to_s,
+        response_hash: @response.to_s,
+      }
+      log_es(log_js)
+      @merchant.request_and_response['zx_request']['appid_query'] = @response.to_hash
+      "返回信息已保存在request_and_response -> zx_response -> appid_query"
+    end
+
   end
 end
