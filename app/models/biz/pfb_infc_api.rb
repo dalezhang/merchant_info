@@ -38,9 +38,11 @@ module Biz
     def prepare_request(req_typ)
       @pfb_request["serviceType"] = req_typ
       if req_typ == 'CUSTOMER_UPDATE'
-        customer_num_from_enter = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer_num"] rescue nil
-        customer_num_from_query = @merchant.request_and_response.pfb_response["#{@channel}_查询"]["customer"]["customerNum"] rescue nil
-        @pfb_request["customerNum"] = customer_num_from_enter || customer_num_from_query || ''
+        customer_num_from_wechat_offline_enter = @merchant.request_and_response.pfb_response["wechat_offline_查询"]["customer_num"] rescue nil
+        customer_num_from_wechat_offline_query = @merchant.request_and_response.pfb_response["wechat_offline_查询"]["customer"]["customerNum"] rescue nil
+        customer_num_from_alipay_enter = @merchant.request_and_response.pfb_response["alipay_查询"]["customer_num"] rescue nil
+        customer_num_from_alipay_query = @merchant.request_and_response.pfb_response["alipay_查询"]["customer"]["customerNum"] rescue nil
+        @pfb_request["customerNum"] = customer_num_from_wechat_offline_enter || customer_num_from_wechat_offline_query || customer_num_from_alipay_enter || customer_num_from_alipay_query || ''
       end
       @pfb_request
     end
