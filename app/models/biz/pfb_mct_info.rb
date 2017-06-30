@@ -121,6 +121,7 @@ class Biz::PfbMctInfo
         businessType: @merchant.alipay_channel_type_lv1,
       },
     }.each do |key, value|
+      puts "===========================#{key}"
       @outMchId = value[:outMchId]
       @payChannel = value[:payChannel]
       @rate = value[:rate]
@@ -134,6 +135,7 @@ class Biz::PfbMctInfo
       pfb_request[key] = inspect
     end
     @merchant.request_and_response.pfb_request = pfb_request
+    puts "===========================#{pfb_request}"
     unless @merchant.save
       raise @merchant.errors.full_messages.join("\n")
     end

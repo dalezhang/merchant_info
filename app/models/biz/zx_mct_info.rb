@@ -57,6 +57,7 @@ class Biz::ZxMctInfo
       }
 
     }.each do |key, value|
+      puts "===========================#{key}"
       @pay_chnl_encd = value[:pay_chnl_encd]
       @chnl_mercht_id = value[:chnl_mercht_id]
       @opr_cls = value[:opr_cls]
@@ -64,6 +65,7 @@ class Biz::ZxMctInfo
       zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
+    puts "===========================#{zx_request}"
     unless @merchant.save
       raise @merchant.errors.full_messages.join("\n")
     end

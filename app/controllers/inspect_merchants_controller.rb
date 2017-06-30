@@ -33,6 +33,7 @@ class InspectMerchantsController < ResourcesController
     else
       flash[:success] = '数据生成成功！点击“查询支付渠道信息”查看详情'
     end
+    puts "===========================fin"
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
