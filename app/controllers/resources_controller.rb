@@ -36,6 +36,7 @@ class ResourcesController < AdminController
   def update
     load_object
     params.permit!
+        # binding.pry
     @object.attributes = params[object_name.singularize.parameterize('_')]
     if @object.changed_for_autosave?(@object)
       # @changes = @object.all_changes

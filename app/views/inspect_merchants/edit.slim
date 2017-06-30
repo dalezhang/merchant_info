@@ -1,6 +1,6 @@
 
 
-= horizon_form_for @object  do |f|
+= horizon_form_for @object, url: url_for(controller: "inspect_merchants", action: :update)  do |f|
   = render 'shared/base', f: f
   br
   br

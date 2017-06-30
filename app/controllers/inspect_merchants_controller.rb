@@ -14,8 +14,9 @@ class InspectMerchantsController < ResourcesController
     load_object
   end
 
-  def updata
+  def update
     load_object
+
     super
   end
 
@@ -165,6 +166,9 @@ class InspectMerchantsController < ResourcesController
 
   def load_object
     @object = Merchant.find(params[:id])
-    raise "can't find Merchant by id #{params[:id]}"
+    raise "can't find Merchant by id #{params[:id]}" unless @object.present?
+  end
+  def object_name
+    "merchant"
   end
 end
