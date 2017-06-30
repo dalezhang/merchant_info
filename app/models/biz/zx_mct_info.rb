@@ -3,6 +3,7 @@
 class Biz::ZxMctInfo
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
+    puts "===========================initializeiz Biz::ZxMctInfo"
     @merchant = merchant
     @salt = @merchant.id.to_s
     @chnl_id = '10000022' # 商户归属渠道编号 ?

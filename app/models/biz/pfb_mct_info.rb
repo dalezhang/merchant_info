@@ -4,6 +4,7 @@ class Biz::PfbMctInfo
   SettleModes = {'T0_实时': 'T0_INSTANT', 'T0_批量': 'T0_BATCH', 'T0_手动': 'T0_HANDING', 'T1_自动': 'T1_AUTO'}
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
+    puts "===========================initialize Biz::PfbMctInfo"
     @merchant = merchant
     @salt = @merchant.id.to_s
     @serviceType = nil # 业务类型
@@ -22,12 +23,15 @@ class Biz::PfbMctInfo
     @address = [@merchant.province, @merchant.urbn, @merchant.address].join(',') # 经营地址,企业商户必填
     @businessAddress =  @address  # 商户经营地址
     if @merchant.province.present?
+      puts "===========================#{@merchant.province}"
       province = Location.where(location_name: Regexp.new(@merchant.province.strip) ).first
       @provinceName = province.location_code if province.present? # 经营省,企业商户必填
       if @provinceName.present? && @merchant.urbn.present?
+        puts "===========================#{@merchant.urbn}"
         urbn = Location.where(pub_location_code: @provinceName, location_name: Regexp.new(@merchant.urbn.strip) ).first
         @cityName = urbn.location_code if urbn.present? # 经营市,企业商户必填
         if @cityName.present? && @merchant.zone.present?
+          puts "===========================#{@merchant.zone}"
           zone = Location.where(pub_location_code: @cityName, location_name: Regexp.new(@merchant.zone.strip) ).first
           @districtName = zone.location_code if zone.present? # 经营区,企业商户必填
         end
