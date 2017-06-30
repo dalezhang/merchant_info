@@ -6,7 +6,7 @@ class Biz::WftMctInfo
     raise 'merchant require' unless merchant.class == Merchant
     @merchant = merchant
     @merchantName = @merchant.full_name # 商户名称
-    @outMerchantId =  @merchant.merchant_id # 外商户号: 合作伙伴系统内部的商户号，确保唯一
+    @outMerchantId =  @merchant.partner_mch_id # 外商户号: 合作伙伴系统内部的商户号，确保唯一
     @feeTypen = 'CNY' # 币种: CNY：人民币；USD：美元；EUR：欧元；HKD：港币；
     # 商户经营类型: 1:实体;2:虚拟
     if @merchant.mch_deal_type =~ /实体/
@@ -77,12 +77,12 @@ class Biz::WftMctInfo
     {
       wechat: {
         pay_chnl_encd: '0002',
-        chnl_mercht_id: "zx_wechat_#{@merchant.merchant_id}",
+        chnl_mercht_id: "zx_wechat_#{@merchant.partner_mch_id}",
         opr_cls: @merchant.zx_wechat_channel_type
       },
       alipay: {
         pay_chnl_encd: '0001',
-        chnl_mercht_id: "zx_alipay_#{@merchant.merchant_id}",
+        chnl_mercht_id: "zx_alipay_#{@merchant.partner_mch_id}",
         opr_cls: @merchant.zx_alipay_channel_type
       }
 

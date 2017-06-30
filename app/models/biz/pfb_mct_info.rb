@@ -4,7 +4,6 @@ class Biz::PfbMctInfo
   SettleModes = {'T0_实时': 'T0_INSTANT', 'T0_批量': 'T0_BATCH', 'T0_手动': 'T0_HANDING', 'T1_自动': 'T1_AUTO'}
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
-    Rails.logger.info "2===========================initialize Biz::PfbMctInfo"
     @merchant = merchant
     @salt = @merchant.id.to_s
     @serviceType = nil # 业务类型
@@ -23,15 +22,12 @@ class Biz::PfbMctInfo
     @address = [@merchant.province, @merchant.urbn, @merchant.address].join(',') # 经营地址,企业商户必填
     @businessAddress =  @address  # 商户经营地址
     if @merchant.province.present?
-      Rails.logger.info "3===========================#{@merchant.province}"
       province = Location.where(location_name: Regexp.new(@merchant.province.strip) ).first
       @provinceName = province.location_code if province.present? # 经营省,企业商户必填
       if @provinceName.present? && @merchant.urbn.present?
-        Rails.logger.info "4===========================#{@merchant.urbn}"
         urbn = Location.where(pub_location_code: @provinceName, location_name: Regexp.new(@merchant.urbn.strip) ).first
         @cityName = urbn.location_code if urbn.present? # 经营市,企业商户必填
         if @cityName.present? && @merchant.zone.present?
-          Rails.logger.info "5===========================#{@merchant.zone}"
           zone = Location.where(pub_location_code: @cityName, location_name: Regexp.new(@merchant.zone.strip) ).first
           @districtName = zone.location_code if zone.present? # 经营区,企业商户必填
         end
@@ -125,7 +121,6 @@ class Biz::PfbMctInfo
         businessType: @merchant.alipay_channel_type_lv1,
       },
     }.each do |key, value|
-      Rails.logger.info "6,7===========================#{key}"
       @outMchId = value[:outMchId]
       @payChannel = value[:payChannel]
       @rate = value[:rate]
@@ -139,7 +134,6 @@ class Biz::PfbMctInfo
       pfb_request[key] = inspect
     end
     @merchant.request_and_response.pfb_request = pfb_request
-    Rails.logger.info "8===========================#{pfb_request}"
     unless @merchant.save
       raise @merchant.errors.full_messages.join("\n")
     end
@@ -159,7 +153,6 @@ class Biz::PfbMctInfo
       if key.present?
         @merchant.channel_data['pfb'] ||= {}
         unless @merchant.channel_data['pfb']['identity_card_front_key'] == key
-          Rails.logger.info "===================#{key}"
           if upload_picture(key)
             @merchant.channel_data['pfb']['identity_card_front_key'] = key
           end

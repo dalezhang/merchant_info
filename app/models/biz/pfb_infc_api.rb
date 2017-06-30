@@ -7,7 +7,7 @@ module Biz
       elsif merchant = Merchant.find(id)
         @merchant = merchant
       else
-        raise 'merchant_id 无效'
+        raise 'Merchant 无效'
       end
       raise "channel should be one of ['wechat_offline', 'wechat_app', 'alipay']" unless %w[wechat_offline wechat_app alipay].include?(channel)
       @channel = channel
