@@ -87,6 +87,7 @@ module Biz
 
     def get_mab(js)
       mab = []
+      js.deep_symbolize_keys
       js.keys.sort_by {|x| x.downcase}.each do |k|
         mab << "#{k}=#{js[k].to_s}" if k != :mac && k != :sign && js[k].present?
       end
