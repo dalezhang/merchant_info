@@ -159,6 +159,7 @@ class Biz::PfbMctInfo
       if key.present?
         @merchant.channel_data['pfb'] ||= {}
         unless @merchant.channel_data['pfb']['identity_card_front_key'] == key
+          Rails.logger.info "===================#{key}"
           if upload_picture(key)
             @merchant.channel_data['pfb']['identity_card_front_key'] = key
           end
