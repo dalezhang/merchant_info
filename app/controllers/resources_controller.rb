@@ -88,11 +88,11 @@ class ResourcesController < AdminController
   protected
 
   def load_collection
-    @collection = object_name.camelize.constantize.all
+    @collection ||= object_name.camelize.constantize.all
   end
 
   def load_object
-    @object = object_name.classify.constantize.find(params[:id])
+    @object ||= object_name.classify.constantize.find(params[:id])
   end
 
   def object_name

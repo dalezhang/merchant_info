@@ -14,6 +14,11 @@ class InspectMerchantsController < ResourcesController
     load_object
   end
 
+  def updata
+    load_object
+    super
+  end
+
   def change_status
     load_object
     if @object.update(status: Merchant::STATUS_DATA.invert[params[:status]])
@@ -160,5 +165,6 @@ class InspectMerchantsController < ResourcesController
 
   def load_object
     @object = Merchant.find(params[:id])
+    raise "can't find Merchant by id #{params[:id]}"
   end
 end
