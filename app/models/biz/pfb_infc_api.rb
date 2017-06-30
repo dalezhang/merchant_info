@@ -89,7 +89,7 @@ module Biz
       mab = []
       js.deep_symbolize_keys
       js.keys.sort_by {|x| x.downcase}.each do |k|
-        mab << "#{k}=#{js[k].to_s}" if k != :mac && k != :sign && js[k].present?
+        mab << "#{k}=#{js[k].to_s}" if k != :mac && k != :sign
       end
       mab.join('&')
     end
