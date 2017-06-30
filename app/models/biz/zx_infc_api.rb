@@ -29,7 +29,7 @@ module Biz
       when '变更'
         xml = prepare_request('1')
       when '停用'
-        xml = end_zx_queryrepare_request('2')
+        xml = prepare_request('2')
       when '查询'
         xml = prepare_query
         return send_zx_query(xml)

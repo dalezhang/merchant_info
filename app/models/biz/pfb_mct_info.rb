@@ -84,7 +84,7 @@ class Biz::PfbMctInfo
     pfb_request = {}
     {
       wechat_offline: {
-        outMchId: "wechat_offline_#{@salt}",
+        outMchId: @salt,
         payChannel: 'WECHAT_OFFLINE',
         rate: wechat_offline.try(:[],'rate'),
         t0Status: wechat_offline.try(:[],'t0Status'),
@@ -97,7 +97,7 @@ class Biz::PfbMctInfo
       },
       # 暂时不需要
       # wechat_app: {
-      #   outMchId: "wechat_app_#{@salt}",
+      #   outMchId: @salt,
       #   payChannel: 'WECHAT_APP',
       #   rate: wechat_app.try(:[],'rate'),
       #   t0Status: wechat_app.try(:[],'t0Status'),
@@ -109,7 +109,7 @@ class Biz::PfbMctInfo
       #   businessType: @merchant.wechat_channel_type_lv2,
       # },
       alipay: {
-        outMchId: "alipay_#{@salt}",
+        outMchId: @salt,
         payChannel: 'ALIPAY',
         rate: alipay.try(:[],'rate'),
         t0Status: alipay.try(:[],'t0Status'),

@@ -30,7 +30,7 @@ module Biz
       }
       log_es(log_js)
       if response['code'] == 0
-        @merchant.update_attributes(merchant_id: response['data'])
+        @merchant.update_attributes(merchant_id: response['data']["_id"])
         return true
       else
         return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
