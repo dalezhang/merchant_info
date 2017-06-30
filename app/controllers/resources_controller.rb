@@ -50,6 +50,14 @@ class ResourcesController < AdminController
       format.json { respond_with_bip(@object) }
       format.js
     end
+  rescue Exception => e
+    @message = if e.class == Mongoid::Errors::Validations
+                  @merchant.errors.messages.values.flatten.join
+               else
+                 e.message
+               end
+    log_error @object, @message, '', e.backtrace, params
+    render json: { error: e.message }.to_json
   end
 
   def create
@@ -84,7 +92,7 @@ class ResourcesController < AdminController
   end
 
   def load_object
-    @object = object_name.classify.constantize.find_by(id: params[:id])
+    @object = object_name.classify.constantize.find(params[:id])
   end
 
   def object_name

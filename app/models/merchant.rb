@@ -64,7 +64,7 @@ class Merchant < ApplicationRecord
     %i[
       d0_rate t1_rate fixed_fee
       full_name name appid mch_type industry memo
-      province urbn address
+      province urbn address zone
       bank_info legal_person company
       alipay_channel_type_lv1
       alipay_channel_type_lv2
