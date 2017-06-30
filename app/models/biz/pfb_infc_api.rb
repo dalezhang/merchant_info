@@ -88,13 +88,20 @@ module Biz
     def get_mab(js)
       mab = []
       js.deep_symbolize_keys
-      js.keys.sort_by {|x| x.downcase}.each do |k|
-        mab << "#{k}=#{js[k].to_s}" if k != :mac && k != :sign
+      sign_js = {}
+      js.each do |k, v|
+        if v.present?
+          sign_js[k] = v
+        end
+      end
+      sign_js.keys.sort_by {|x| x.downcase}.each do |k|
+        mab << "#{k}=#{js[k].to_s}" if ![:mac, :sign].include?(k.to_sym)
       end
       mab.join('&')
     end
     def get_mac(js, key)
       Digest::MD5.hexdigest(get_mab(js).to_s + key.to_s).upcase
     end
+
   end
 end
