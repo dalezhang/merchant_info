@@ -3,7 +3,7 @@
 class Biz::ZxMctInfo
   def initialize(merchant)
     raise 'merchant require' unless merchant.class == Merchant
-    puts "===========================initializeiz Biz::ZxMctInfo"
+    Rails.logger.info "===========================initializeiz Biz::ZxMctInfo"
     @merchant = merchant
     @salt = @merchant.id.to_s
     @chnl_id = '10000022' # 商户归属渠道编号 ?
@@ -58,7 +58,7 @@ class Biz::ZxMctInfo
       }
 
     }.each do |key, value|
-      puts "===========================#{key}"
+      Rails.logger.info "===========================#{key}"
       @pay_chnl_encd = value[:pay_chnl_encd]
       @chnl_mercht_id = value[:chnl_mercht_id]
       @opr_cls = value[:opr_cls]
@@ -66,7 +66,7 @@ class Biz::ZxMctInfo
       zx_request[key] = inspect
     end
     @merchant.request_and_response.zx_request = zx_request
-    puts "===========================#{zx_request}"
+    Rails.logger.info "===========================#{zx_request}"
     unless @merchant.save
       raise @merchant.errors.full_messages.join("\n")
     end
