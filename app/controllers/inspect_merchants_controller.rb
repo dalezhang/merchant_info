@@ -154,7 +154,11 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   end
 
-  def object_name
-    'merchant'
+  def load_collection
+    @collection = Merchant.all
+  end
+
+  def load_object
+    @object = Merchant.find(params[:id])
   end
 end
