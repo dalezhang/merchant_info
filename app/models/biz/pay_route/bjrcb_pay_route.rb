@@ -9,7 +9,7 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
     unless @query_result.present?
       raise "@merchant.request_and_response[:pfb_request] is nil"
     end
-    unless ['T1','D0'].include?(channel_type)
+    unless [1,0].include?(channel_type.to_i)
       raise "你传入的是channel_type：#{channel_type}不符合要求，必须是T1或D0."
     end
     @channel_type = channel_type
@@ -22,7 +22,6 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
     query_api_key = @query_result[:wechat_offline_查询][:customer][:apiKey] rescue nil
     response_api_key = @query_result[:wechat_offline_新增][:api_key] rescue nil
     api_key = response_api_key || query_api_key
-    channel_type = @channel_type
     unless customer_num.present?
       raise "can't find customerNum in merchant.request_and_response[:pfb_request]"
     end
@@ -36,16 +35,20 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
       channel_name: 'BJRCB',
       channel_mch_id: customer_num,
 			channel_key: api_key,                   #在通道开户获得的key
-      channel_type: channel_type, # 结算方式
+      channel_type: @channel_type, # 结算方式
       pay_type: ["wechat.scan", "wechat.jsapi", "wechat.micro"], #该通道支持的支付方式,传入值为字符串，以分号分割不同类型
       priority: 1,
     }
     create_route_request(hash)
     data = send_request # @request_js
-    @merchant.request_and_response.pfb_request[:bjrbc_pay_route] ||= {}
-    @merchant.request_and_response.pfb_request[:bjrbc_pay_route][:wechat_offline] = @request_js
-    @merchant.request_and_response.pfb_response[:bjrbc_pay_route] ||= {}
-    @merchant.request_and_response.pfb_response[:bjrbc_pay_route][:wechat_offline] = data
+    log_js = {
+      model: 'Biz::BjrcdPayRoute',
+      method: 'send_wechat_offline',
+      merchant: @merchant.id.to_s,
+      request_hash: hash.to_s,
+      response_hash: data.to_s,
+    }
+    log_es(log_js)
     unless data[:code] == 0
       raise data.to_json
     end
@@ -68,15 +71,20 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
       channel_name: 'BJRCB',
       channel_mch_id: customer_num,
 			channel_key: api_key,                   #在通道开户获得的key
+      channel_type: @channel_type, # 结算方式
       pay_type: ["alipay.scan", "alipay.micro"], #该通道支持的支付方式,传入值为字符串，以分号分割不同类型
       priority: 1,
     }
     create_route_request(hash)
     data = send_request # @request_js
-    @merchant.request_and_response.pfb_request[:bjrbc_pay_route] ||= {}
-    @merchant.request_and_response.pfb_request[:bjrbc_pay_route][:alipay] = @request_js
-    @merchant.request_and_response.pfb_response[:bjrbc_pay_route] ||= {}
-    @merchant.request_and_response.pfb_response[:bjrbc_pay_route][:alipay] = data
+    log_js = {
+      model: 'Biz::BjrcdPayRoute',
+      method: 'send_alipay',
+      merchant: @merchant.id.to_s,
+      request_hash: hash.to_s,
+      response_hash: data.to_s,
+    }
+    log_es(log_js)
     unless data[:code] == 0
       raise data.to_json
     end
