@@ -5,7 +5,9 @@ namespace :import do
     Location.delete_all
     File.open('public/地区码_20170531.csv', 'r') do |file|
 		  csv = CSV.new(file, headers: true, encoding: 'utf-8')
+      arr = []
       while row_hash = csv.shift
+        arr << row_hash['区域名称']
         bbo = Location.new
         bbo.chinese_sort_name = row_hash['中文简称']
         bbo.location_code = row_hash['地区码']
@@ -13,6 +15,7 @@ namespace :import do
         bbo.pub_location_code = row_hash['上级区域编码']
         bbo.save
       end
+      puts arr.count
     end
     puts 'end'
   end
