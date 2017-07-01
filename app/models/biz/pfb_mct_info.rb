@@ -29,7 +29,11 @@ class Biz::PfbMctInfo
         @cityName = urbn.location_code if urbn.present? # 经营市,企业商户必填
         if @cityName.present? && @merchant.zone.present?
           zone = Location.where(pub_location_code: @cityName, location_name: Regexp.new(@merchant.zone.strip) ).first
-          @districtName = zone.location_code if zone.present? # 经营区,企业商户必填
+          if zone.present?
+            @districtName = zone.location_code # 经营区,企业商户必填
+          else
+            @districtName = Location.where(pub_location_code: @cityName ).first
+          end
         end
       end
     end
