@@ -32,7 +32,7 @@ class Biz::PfbMctInfo
           if zone.present?
             @districtName = zone.location_code # 经营区,企业商户必填
           else
-            @districtName = Location.where(pub_location_code: @cityName ).first
+            @districtName = Location.where(pub_location_code: @cityName ).first.try(:location_code)
           end
         end
       end
