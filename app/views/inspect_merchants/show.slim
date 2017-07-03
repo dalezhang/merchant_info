@@ -37,12 +37,23 @@
     br
     .box.box-primary
       .box-body
+        p= "当前状态：#{Merchant::STATUS_DATA[@object.status]}"
         p
           = link_to '进件失败', change_status_inspect_merchant_url(@object.id.to_s, status: '进件失败'), method: :post, class: 'btn btn-lg btn-danger'
           | &nbsp
           = link_to '锁定数据', change_status_inspect_merchant_url(@object.id.to_s, status: '审核中'), method: :post, class: 'btn btn-lg btn-warning'
           | &nbsp
           = link_to '进件成功', change_status_inspect_merchant_url(@object.id.to_s, status: '进件成功'), method: :post, class: 'btn btn-lg btn-success'
+        p
+          - if @object.pay_route_status.t1_status == 0
+            = link_to '开通T1', change_pay_route_status_inspect_merchant_url(@object.id.to_s, status: '已开通', route: 't1_status'), method: :post, class: 'btn btn-lg btn-success'
+          - else
+            = link_to '关闭T1', change_pay_route_status_inspect_merchant_url(@object.id.to_s, status: '未开通', route: 't1_status'), method: :post, class: 'btn btn-lg btn-warning'
+          | &nbsp
+          - if @object.pay_route_status.d0_status == 0
+            = link_to '开通D0', change_pay_route_status_inspect_merchant_url(@object.id.to_s, status: '已开通', route: 'd0_status'), method: :post, class: 'btn btn-lg btn-success'
+          - else
+            = link_to '关闭D0', change_pay_route_status_inspect_merchant_url(@object.id.to_s, status: '未开通', route: 'd0_status'), method: :post, class: 'btn btn-lg btn-warning'
         p
           = link_to '编辑', edit_inspect_merchant_url(@object.id.to_s), class: 'btn btn-lg btn-primary'
           | &nbsp

@@ -12,6 +12,10 @@ namespace :new_role do
 	# 	u.partner_id = 'merchant_info'
 	# 	u.save
 	# end
+		Merchant.all.each do |obj|
+			obj.pay_route_status = {}
+			obj.save
+		end
     puts 'end'
   end
 end

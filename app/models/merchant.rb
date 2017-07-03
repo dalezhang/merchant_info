@@ -62,6 +62,7 @@ class Merchant < ApplicationRecord
   before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
+  PAY_ROUTE_STATUS_DATA = { 0 => '未开通', 1 => '已开通' }.freeze
   def self.attr_writeable
     %i[
       d0_rate t1_rate fixed_fee
@@ -146,8 +147,8 @@ class Merchant < ApplicationRecord
       wechat_channel_type_lv2: wechat_channel_type_lv2, # 微信二级经营类目
       alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
       alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
-      pay_route_status: pay_route_status, 
       mch_deal_type: mch_deal_type,
+      pay_route_status: pay_route_status.inspect, 
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
       company: company.inspect,
@@ -271,13 +272,13 @@ class PayRouteStatus < ApplicationRecord
   embedded_in :merchant
   field :t1_status, type: Integer, default: 0 
   field :d0_status, type: Integer, default: 0 # 状态
-  PAY_ROUTE_STATUS_DATA = { 0 => '未开通', 1 => '已开通' }.freeze
+  
   def inspect
     {
       t1_status: t1_status,
-      t1_status_desc: PAY_ROUTE_STATUS_DATA[t1_status],
+      t1_status_desc: Merchant::PAY_ROUTE_STATUS_DATA[t1_status],
       d0_status: d0_status,
-      d0_status_desc: PAY_ROUTE_STATUS_DATA[d0_status],
+      d0_status_desc: Merchant::PAY_ROUTE_STATUS_DATA[d0_status],
     }
   end
 end
