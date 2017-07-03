@@ -56,7 +56,7 @@ class Merchant < ApplicationRecord
     end
   end
 
-  before_save :generate_keys, :prepare_pfb_rate, :generate_password
+  before_save :generate_keys, :prepare_pfb_rate, :generate_password, :strip_attributes
   before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
@@ -75,6 +75,25 @@ class Merchant < ApplicationRecord
       wechat_sub_appid
       wechat_subscribe_appid
     ]
+  end
+  def strip_attributes
+    self.attributes.each do |key, value|
+      if value.class == String
+        self.send("#{key}=", value.strip)
+      elsif value.class == BSON::Document
+        value.each
+      end
+    end
+  end
+
+  def deep_strip(data)
+    data.each do |key, value|
+      if value.class == String
+        self.send("#{key}=", value.strip)
+      elsif value.class == BSON::Document
+        value.each
+      end
+    end
   end
 
   def generate_keys

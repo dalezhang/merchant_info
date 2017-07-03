@@ -9,7 +9,8 @@ class Api::MerchantsController < ActionController::API
       @merchant = Merchant.new(user: @user)
       keys = @data.keys & Merchant.attr_writeable
       keys.each do |key|
-        @merchant.send("#{key}=", @data[key])
+        value = @data[key].class == String ? @data[key].strip : @data[key]
+        @merchant.send("#{key}=", value)
       end
     when 'merchant.update'
       if @data[:partner_mch_id].present?
@@ -29,7 +30,8 @@ class Api::MerchantsController < ActionController::API
       end
       keys = @data.keys & Merchant.attr_writeable
       keys.each do |key|
-        @merchant.send("#{key}=", @data[key])
+        value = @data[key].class == String ? @data[key].strip : @data[key]
+        @merchant.send("#{key}=", value)
       end
     when 'merchant.query'
       if @data[:partner_mch_id].present?

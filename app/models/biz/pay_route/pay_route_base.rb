@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # 支付网管
 class Biz::PayRoute::PayRouteBase
+  include Logging
   def initialize(mch, channel_type = nil)
     host = Rails.application.secrets.core['host'] rescue nil
     raise 'Rails.application.secrets.core["host"] is not set' unless host.present?
