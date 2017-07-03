@@ -38,6 +38,7 @@ class Merchant < ApplicationRecord
   field :company # 公司信息
   field :request_and_response, type: Hash, default: {} # 发送和返回
   field :channel_data, type: Hash, default: {} # 渠道信息
+  field :pay_route_status # 支付路由状态
   belongs_to :user
   embeds_one :legal_person, autobuild: true
   embeds_one :company, autobuild: true
@@ -45,6 +46,7 @@ class Merchant < ApplicationRecord
   accepts_nested_attributes_for :company, :legal_person, :bank_info
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
+  embeds_one :pay_route_status
 
   validates :partner_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该partner_mch_id已经存在' }
   validate do
@@ -60,6 +62,7 @@ class Merchant < ApplicationRecord
   before_update :check_if_modified_sensitive_values
 
   STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
+  PAY_ROUTE_STATUS_DATA = { 0 => '未开通', 1 => '已开通' }.freeze
   def self.attr_writeable
     %i[
       d0_rate t1_rate fixed_fee
@@ -164,6 +167,7 @@ class Merchant < ApplicationRecord
       alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
       alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
       mch_deal_type: mch_deal_type,
+      pay_route_status: pay_route_status.inspect, 
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
       company: company.inspect,
@@ -279,6 +283,21 @@ class RequestAndResponse < ApplicationRecord
       pfb_response: pfb_response,
       core_account: core_account,
       pay_route: pay_route,
+    }
+  end
+end
+
+class PayRouteStatus < ApplicationRecord
+  embedded_in :merchant
+  field :t1_status, type: Integer, default: 0 
+  field :d0_status, type: Integer, default: 0 # 状态
+  
+  def inspect
+    {
+      t1_status: t1_status,
+      t1_status_desc: Merchant::PAY_ROUTE_STATUS_DATA[t1_status],
+      d0_status: d0_status,
+      d0_status_desc: Merchant::PAY_ROUTE_STATUS_DATA[d0_status],
     }
   end
 end

@@ -27,7 +27,16 @@ class InspectMerchantsController < ResourcesController
     else
       flash[:error] = "未知状态：#{params[:status]}"
     end
-    redirect_to action: :index
+    redirect_to action: :show, id: @object.id
+  end
+  def change_pay_route_status
+    load_object
+    if @object.pay_route_status.update("#{params[:route]}": Merchant::PAY_ROUTE_STATUS_DATA.invert[params[:status]])
+      flash[:success] = '状态修改成功'
+    else
+      flash[:error] = "未知状态：#{params[:status]}"
+    end
+    redirect_to action: :show, id: @object.id
   end
 
   def prepare_request
