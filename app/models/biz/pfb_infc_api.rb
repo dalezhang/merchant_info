@@ -29,9 +29,7 @@ module Biz
       else
         return log_error @merchant, '请求', '未知的请求类型'
       end
-      if sent_request(js, req_typ)
-        return "返回信息已保存在request_and_response.pfb_response.#{@channel}_#{req_typ}"
-      end
+      return sent_request(js, req_typ)
       false
     end
 

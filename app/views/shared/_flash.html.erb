@@ -1,15 +1,17 @@
 <% if flash.any? %>
   <% flash.each do |k,v| %>
-    <div class="box box-solid box-<%= ['error','alert'].include?(k.to_s) ? 'danger' : k.to_s %>">
-      <div class="box-header with-border">
-        <h3 class="box-title"><%= k.to_s.capitalize %></h3>
-        <div class="box-tools pull-right">
-          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div><!-- /.box-tools -->
-      </div><!-- /.box-header -->
-      <div class="box-body">
-        <%== v %>
-      </div><!-- /.box-body -->
-    </div><!-- /.box -->
+    <% if k != 'info' %>
+      <div class="box box-solid box-<%= ['error','alert'].include?(k.to_s) ? 'danger' : k.to_s %>">
+        <div class="box-header with-border">
+          <h3 class="box-title"><%= k.to_s.capitalize %></h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div><!-- /.box-tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <%== v %>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    <% end %>
   <% end %>
 <% end %>
