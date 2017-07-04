@@ -12,6 +12,23 @@ class InspectMerchantsController < ResourcesController
   end
   def add_route
     load_object
+    @hash = {}
+    @zx_response = @merchant.request_and_response.zx_response.deep_symbolize_keys rescue nil
+    @hash[:zx_wechat_channel_mch_id] = @zx_response.deep_symbolize_keys[:wechat_query][:ROOT][:Mercht_Idtfy_Num] rescue nil
+    @hash[:zx_alipay_channel_mch_id] = @zx_response.deep_symbolize_keys[:alipay_query][:ROOT][:Mercht_Idtfy_Num] rescue nil
+    @pfb_response = @merchant.request_and_response.pfb_response.deep_symbolize_keys rescue nil
+    query_customer_num = @pfb_response[:wechat_offline_查询][:customer][:customerNum] rescue nil
+    response_customer_num = @pfb_response[:wechat_offline_新增][:customer_num] rescue nil
+    @hash[:pfb_wechat_offline_channel_mch_id] = response_customer_num || query_customer_num
+    query_api_key = @pfb_response[:wechat_offline_查询][:customer][:apiKey] rescue nil
+    response_api_key = @pfb_response[:wechat_offline_新增][:api_key] rescue nil
+    @hash[:pfb_wechat_offline_api_key] = response_api_key || query_api_key
+    query_customer_num = @pfb_response[:alipay_查询][:customer][:customerNum] rescue nil
+    response_customer_num = @pfb_response[:alipay_新增][:customer_num] rescue nil
+    @hash[:pfb_alipay_channel_mch_id] = response_customer_num || query_customer_num
+    query_api_key = @pfb_response[:alipay_查询][:customer][:apiKey] rescue nil
+    response_api_key = @pfb_response[:alipay_新增][:api_key] rescue nil
+    @hash[:pfb_alipay_api_key] = response_api_key || query_api_key
   end
 
   def update

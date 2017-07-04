@@ -21,8 +21,8 @@ class Biz::PayRoute::ZxAlipayPayRoute < Biz::PayRoute::PayRouteBase
       #通道名称，SWIFT:威富通;BJRCB: 北京农商行;CITIC_ALI:中信直连支付宝;CITIC_WECHAT:中信直连微信;DIANZI:点子
       #channel_mch_id: "cccbbsdsdsdf",            #在通道开户获得的商户号
       #channel_key:"yyyyyyyyy",                   #在通道开户获得的key
-      channel_key: query_channel_key,
-      channel_mch_id: nil,
+      channel_key: nil,
+      channel_mch_id: query_channel_key,
       channel_type: 1, # 结算方式,T1
       pay_type: ["wechat.scan", "wechat.jsapi", "wechat.micro"], #该通道支持的支付方式,传入值为字符串，以分号分割不同类型
       priority: 1,
