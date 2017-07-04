@@ -59,6 +59,7 @@
   		  <!-- Main content -->
   		  <section class="content">
           <%= render :partial => "/shared/flash" %>
+          <%= render :partial => "/shared/edit_dialog" if @result.present? %>
   		    <!-- Your Page Content Here -->
 					<%= yield %>
   		  </section>

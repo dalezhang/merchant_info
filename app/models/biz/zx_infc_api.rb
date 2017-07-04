@@ -40,9 +40,7 @@ module Biz
       else
         return log_error @merchant, '请求', '未知的请求类型'
       end
-      if send_zx_intfc(xml, req_typ)
-        return "返回信息已保存在request_and_response.zx_response.#{@channel}_#{req_typ}"
-      end
+      return send_zx_intfc(xml, req_typ)
       false
     end
 
@@ -125,7 +123,7 @@ module Biz
       else
         return log_error @merchant, '无返回信息'
       end
-      true
+      ret
     end
 
     def prepare_query
@@ -180,7 +178,7 @@ module Biz
           response_hash: resp_hash.to_s,
       }
       log_es(log_js)
-      "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"
+      ret
     end
 
     def post_xml_gbk(_method, url, data)

@@ -20,4 +20,5 @@
 $("#user_roles").select2({
 	placeholder: "请选择",
 	theme: "bootstrap",
-})
+});
+$("#edit_dialog_div").modal('show');

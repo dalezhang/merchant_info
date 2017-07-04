@@ -73,7 +73,7 @@ module Biz
       else
         return log_error @merchant, '无返回信息'
       end
-      true
+      resp_hash
     end
 
     def prepare_query
