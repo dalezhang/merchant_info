@@ -81,8 +81,11 @@
         = link_to '查询', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-success'
         | &nbsp
         = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-primary'
-        = link_to '创建appid', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '创建appid', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-default'
-        = link_to '查询appid', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询appid', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-default'
+        | &nbsp
+        = link_to '提交支付路由', create_pay_route_inspect_merchant_url(@object.id.to_s, route: 'CITIC_WECHAT'), method: :post, class: 'btn btn-lg btn-default'
+        p
+          = link_to '创建appid', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '创建appid', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-default'
+          = link_to '查询appid', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询appid', channel: 'wechat'), method: :post, class: 'btn btn-lg btn-default'
     br
     .box
       .box-header
@@ -95,6 +98,8 @@
         = link_to '查询', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '查询', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-success'
         | &nbsp
         = link_to '变更', zx_infc_inspect_merchant_url(@object.id.to_s, req_typ: '变更', channel: 'alipay'), method: :post, class: 'btn btn-lg btn-primary'
+        | &nbsp
+        = link_to '提交支付路由', create_pay_route_inspect_merchant_url(@object.id.to_s, route: 'CITIC_ALI'), method: :post, class: 'btn btn-lg btn-default'
     br
     .box
       .box-header

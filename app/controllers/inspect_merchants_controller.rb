@@ -150,18 +150,21 @@ class InspectMerchantsController < ResourcesController
 
   def create_pay_route
     load_object
-    @message = nil
     case params[:route]
     when 'bjrcb.wechat_offline'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
       biz.send_wechat_offline
-      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:wechat_offline]"
     when 'bjrcb.alipay'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
       biz.send_alipay
-      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:alipay]"
+    when 'CITIC_WECHAT'
+      biz = Biz::PayRoute::ZxAlipayPayRoute.new @object
+      biz.send_wechat
+    when 'CITIC_ALI'
+      biz = Biz::PayRoute::ZxAlipayPayRoute.new @object
+      biz.send_alipay
     end
-    flash[:success] = @message
+    flash[:success] = "路由创建成功"
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
