@@ -38,7 +38,7 @@ class Merchant < ApplicationRecord
   field :company # 公司信息
   field :request_and_response, type: Hash, default: {} # 发送和返回
   field :channel_data, type: Hash, default: {} # 渠道信息
-  field :pay_route_status # 支付路由状态
+  field :pay_route_status, default: {} # 支付路由状态
   belongs_to :user
   embeds_one :legal_person, autobuild: true
   embeds_one :company, autobuild: true
