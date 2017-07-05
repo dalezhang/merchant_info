@@ -72,7 +72,7 @@ class ApiMd5Test < ActionDispatch::IntegrationTest
     assert_response :success
     data = JSON.parse response.body
     puts data
-    assert_equal '初始', data['status'], data
+    assert_equal 1, data['status'], data
   end
   def clean_database
     User.destroy_all

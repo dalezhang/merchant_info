@@ -4,13 +4,23 @@ class Api::MerchantsController < ActionController::API
   include Logging
   before_action :get_user, :decode_data
   def create
+    # binding.pry
     case @data[:method]
     when 'merchant.create'
       @merchant = Merchant.new(user: @user)
       keys = @data.keys & Merchant.attr_writeable
       keys.each do |key|
         value = @data[key].class == String ? @data[key].strip : @data[key]
-        @merchant.send("#{key}=", value)
+        if @data[key].class == String
+          @merchant.send("#{key}=", @data[key].strip)
+        elsif @data[key].class == Hash
+          abc = @merchant.send(key)
+          @data[key].each do |sub_key, sub_value|
+            if abc.respond_to?("#{sub_key}=")
+              abc.send("#{sub_key}=", @data[key][sub_key])
+            end
+          end
+        end
       end
     when 'merchant.update'
       if @data[:partner_mch_id].present?
