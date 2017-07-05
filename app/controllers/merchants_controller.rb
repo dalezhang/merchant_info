@@ -21,6 +21,16 @@ class MerchantsController < ResourcesController
     end
   end
 
+  def update
+    load_object
+    if [1, 3].include?(@object.status)
+      super
+    else
+      flash[:error] = "数据已经锁定，不能修改。"
+      redirect_to action: :show, id: @object.id.to_s
+    end
+  end
+
   def upload_picture
     @error = nil
     call_stacks = params[:resource_attrname].split('/')

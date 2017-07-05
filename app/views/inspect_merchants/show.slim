@@ -39,11 +39,13 @@
       .box-body
         p= "当前状态：#{Merchant::STATUS_DATA[@object.status]}"
         p
-          = link_to '进件失败', change_status_inspect_merchant_url(@object.id.to_s, status: '进件失败'), method: :post, class: 'btn btn-lg btn-danger'
+          = link_to '审核失败', change_status_inspect_merchant_url(@object.id.to_s, status: '审核失败'), method: :post, class: 'btn btn-lg btn-danger'
           | &nbsp
           = link_to '锁定数据', change_status_inspect_merchant_url(@object.id.to_s, status: '审核中'), method: :post, class: 'btn btn-lg btn-warning'
           | &nbsp
-          = link_to '进件成功', change_status_inspect_merchant_url(@object.id.to_s, status: '进件成功'), method: :post, class: 'btn btn-lg btn-success'
+          = link_to '审核通过', change_status_inspect_merchant_url(@object.id.to_s, status: '审核通过'), method: :post, class: 'btn btn-lg btn-success'
+          | &nbsp
+          = link_to '商户停用', change_status_inspect_merchant_url(@object.id.to_s, status: '商户停用'), method: :post, class: 'btn btn-lg btn-default'
         p
           - if @object.pay_route_status.t1_status == 0
             = link_to '开通T1', change_pay_route_status_inspect_merchant_url(@object.id.to_s, status: '已开通', route: 't1_status'), method: :post, class: 'btn btn-lg btn-success'

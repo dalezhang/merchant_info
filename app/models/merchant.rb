@@ -61,7 +61,7 @@ class Merchant < ApplicationRecord
   before_save :generate_keys, :prepare_pfb_rate, :generate_password
   before_update :check_if_modified_sensitive_values
 
-  STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
+  STATUS_DATA = { 0 => '审核通过', 1 => '入驻申请', 2 => '审核中', 3 => '审核失败', 4 => '商户停用' }.freeze
   PAY_ROUTE_STATUS_DATA = { 0 => '未开通', 1 => '已开通' }.freeze
   def self.attr_writeable
     %i[
@@ -134,6 +134,7 @@ class Merchant < ApplicationRecord
     hash = {
       id: id.to_s,
       merchant_id: merchant_id,
+      partner_id: self.user.partner_id,
 
       partner_mch_id: partner_mch_id,
       private_key: private_key,

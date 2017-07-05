@@ -24,7 +24,7 @@ class Api::MerchantsController < ActionController::API
         render json: { error: '无法根据partner_mch_id，merchant_id，id中的任何一个找到对应的记录。' }.to_json
         return
       end
-      unless @merchant.status <= 5
+      unless [1, 3].include?(@merchant.status)
         render json: { error: "无法修改，该条记录#{Merchant::STATUS_DATA[@merchant.status]}" }.to_json
         return
       end
