@@ -30,7 +30,7 @@ module Biz
       }
       log_es(log_js)
       if response['code'] == 0
-        @merchant.update_attributes(merchant_id: response['data']["_id"])
+        @merchant.update_attributes(merchant_id: response['data']["_id"], share_key: response['data']["share_key"])
         return true
       else
         return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
@@ -51,8 +51,8 @@ module Biz
         @merchant.share_key = @merchant.request_and_response.core_account["share_key"]
         @merchant.save
       else
+        log_error @merchant, '没有内容返回 CoreAccount->merchant_id', response
         raise "没有内容返回"
-        return log_error @merchant, 'CoreAccount->merchant_id', response
       end
     end
 
