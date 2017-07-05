@@ -138,7 +138,8 @@ class InspectMerchantsController < ResourcesController
     bz = Biz::ZxInfcApi.new(@object, params[:channel])
     result = bz.send_intfc(params[:req_typ])
     if result
-       # flash[:info] = result
+      $redis.set("result_#{@object.id}", result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     else
       flash[:error] = bz.error_message
     end
@@ -154,7 +155,8 @@ class InspectMerchantsController < ResourcesController
     bz = Biz::PfbInfcApi.new(@object.id, params[:channel])
     result = bz.send_intfc(params[:req_typ])
     if result
-       # flash[:info] = result
+      $redis.set("result_#{@object.id}", result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     else
       flash[:error] = bz.error_message
     end

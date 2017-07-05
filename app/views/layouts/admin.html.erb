@@ -59,7 +59,7 @@
   		  <!-- Main content -->
   		  <section class="content">
           <%= render :partial => "/shared/flash" %>
-          <%= render :partial => "/shared/edit_dialog" if flash[:info].present? %>
+          <%= render :partial => "/shared/edit_dialog" if @object.present? && $redis.get("result_#{@object.id}").present?   %>
   		    <!-- Your Page Content Here -->
 					<%= yield %>
   		  </section>

@@ -63,3 +63,4 @@ gem 'httparty'
 gem 'therubyracer'
 gem "select2-rails"
 gem 'logstash-logger'
+gem 'redis'
