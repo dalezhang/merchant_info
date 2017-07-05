@@ -51,6 +51,7 @@ module Biz
         @merchant.share_key = @merchant.request_and_response.core_account["share_key"]
         @merchant.save
       else
+        raise "没有内容返回"
         return log_error @merchant, 'CoreAccount->merchant_id', response
       end
     end
