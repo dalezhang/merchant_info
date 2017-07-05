@@ -5,6 +5,6 @@
         button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
         h4.modal-title 交互
       .modal-body
-        == $redis.get("result_#{@object.id}")
+        = text_area_tag 'body', $redis.get("result_#{@object.id}"), style: 'height: 500px;'
       .modal-footer
         a.btn.btn-sm.btn-white data-dismiss="modal" href="javascript:;"  关闭
