@@ -252,7 +252,6 @@ class BankInfo < ApplicationRecord
       urbn: urbn, # 开户市
       zone: zone, # 开户区
       bank_full_name: bank_full_name, # 银行全称
-      is_nt_citic: is_nt_citic, # 是否中信银行
       right_bank_card_key: right_bank_card_key,
     }
   end
