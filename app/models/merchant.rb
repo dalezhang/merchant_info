@@ -10,7 +10,7 @@ class Merchant < ApplicationRecord
   field :share_key, type: String # 商户md5签名key
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String # 代理商自定义的merchant唯一标识
-  field :status, type: Integer, default: 0 # 状态
+  field :status, type: Integer, default: 1 # 状态
   field :full_name, type: String # 商户全名称
   field :name, type: String # 商户简称
   field :memo, type: String # 商户备注

@@ -31,10 +31,8 @@ module Biz
       log_es(log_js)
       if response['code'] == 0
         @merchant.update_attributes(merchant_id: response['data']["_id"], share_key: response['data']["share_key"])
-        return true
-      else
-        return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
       end
+      JSON.pretty_generate response
     end
     def get_backend_account
       response = HTTParty.try('get', "#{@url}/cms/merchants/#{@merchant.partner_mch_id}")
@@ -54,6 +52,7 @@ module Biz
         log_error @merchant, '没有内容返回 CoreAccount->merchant_id', response
         raise "没有内容返回"
       end
+      JSON.pretty_generate response
     end
 
     # def update_backend_account

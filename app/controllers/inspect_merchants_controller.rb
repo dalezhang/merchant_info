@@ -74,20 +74,19 @@ class InspectMerchantsController < ResourcesController
   def get_backend_account
     load_object
     core_account = Biz::CoreAccount.new(@object)
-    pay_route = Biz::PayRoute::PayRouteBase.new @object
-      @message = "路由创建成功，返回内容已保存在request_and_response.pfb_response[:pay_route_query]"
+    # pay_route = Biz::PayRoute::PayRouteBase.new @object
     if @object.merchant_id.present?
-      core_account.get_backend_account
-      pay_route.query
+      flash[:error] = "merchant_id为空"
     else
-      core_account.create_backend_account # 提交创建请求
-      core_account.get_backend_account # 查询创建结果
-      pay_route.query
+      @result = core_account.create_backend_account # 提交创建请求
+      # pay_route.query
     end
+
     if core_account.has_error
-      flash[:success] = '数据获取成功！请到request_and_response=>core_account中查看。'
-    else
       flash[:error] = core_account.error_message
+    else
+      $redis.set("result_#{@object.id}", @result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     end
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
@@ -121,10 +120,10 @@ class InspectMerchantsController < ResourcesController
     core_account = Biz::CoreAccount.new(@object)
     if @object.merchant_id.present?
       flash[:success] = 'merchant_id已经存在！'
-    elsif !core_account.create_backend_account
-      flash[:error] = core_account.error_message
     else
-      flash[:success] = '数据生成成功！'
+      @result = core_account.create_backend_account
+      $redis.set("result_#{@object.id}", @result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     end
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
