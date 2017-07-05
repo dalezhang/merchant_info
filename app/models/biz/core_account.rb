@@ -8,7 +8,7 @@ module Biz
     def initialize(merchant)
       @merchant = merchant
       @error = nil
-      @url = 'http://zt-t.pooulcloud.cn'
+      @url = Rails.application.secrets.core['host'] # 'http://zt-t.pooulcloud.cn'
     end
 
     def create_backend_account
@@ -30,18 +30,18 @@ module Biz
       }
       log_es(log_js)
       if response['code'] == 0
-        @merchant.update_attributes(merchant_id: response['data']["_id"])
+        @merchant.update_attributes(merchant_id: response['data']["_id"], share_key: response['data']["share_key"])
         return true
       else
         return log_error @merchant, 'CoreAccount->merchant_id', response['msg']
       end
     end
     def get_backend_account
-      response = HTTParty.try('get', "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}")
+      response = HTTParty.try('get', "#{@url}/cms/merchants/#{@merchant.partner_mch_id}")
       log_js = {
           model: 'Biz::CoreAccount',
           method: 'get_backend_account',
-          request_hash: "http://zt-t.pooulcloud.cn/cms/merchants/#{@merchant.partner_mch_id}",
+          request_hash: "#{@url}/cms/merchants/#{@merchant.partner_mch_id}",
           response_hash: response.to_s,
       }
       log_es(log_js)
@@ -51,7 +51,8 @@ module Biz
         @merchant.share_key = @merchant.request_and_response.core_account["share_key"]
         @merchant.save
       else
-        return log_error @merchant, 'CoreAccount->merchant_id', response
+        log_error @merchant, '没有内容返回 CoreAccount->merchant_id', response
+        raise "没有内容返回"
       end
     end
 
