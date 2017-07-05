@@ -23,7 +23,7 @@ class Biz::ZxMctInfo
     @dtl_addr = @merchant.address.try(:strip) # 详细地址
     @acct_nm = @merchant.bank_info.owner_name.try(:strip) # 开户人姓名/公司名
     @opn_bnk = @merchant.bank_info.bank_full_name.try(:strip) # 开户行（中文名）
-    @is_nt_citic = @merchant.bank_info.is_nt_citic.try(:strip) # 是否中信银行,是：0，否：1
+    @is_nt_citic = @opn_bnk  =~ /中信银行/ ? 0 : 1 #@merchant.bank_info.is_nt_citic.try(:strip) # 是否中信银行,是：0，否：1
     @acct_typ =  zx_account_type(@merchant.bank_info.account_type.try(:strip)) # 账户类型:1--中信银行对私账户，2--中信银行对公账户 3--中信银行内部账户，4--他行（非中信银行账户）
     @pay_ibank_num = @merchant.bank_info.bank_sub_code.try(:strip) # 支付联行号
     @acct_num = @merchant.bank_info.account_num.try(:strip) # 账号
@@ -33,10 +33,16 @@ class Biz::ZxMctInfo
   end
 
   def zx_account_type(account_type)
-    if account_type =~ /对私/ || account_type =~ /个人/
-      1
-    elsif account_type =~ /对公/ || account_type =~ /企业/
-      2
+    if @is_nt_citic == 1
+      4
+    elsif @is_nt_citic == 0
+      if account_type =~ /对私/ || account_type =~ /个人/
+        1
+      elsif account_type =~ /对公/ || account_type =~ /企业/
+        2
+      end
+    else
+      raise "无法判断是否中信银行"
     end
   end
 

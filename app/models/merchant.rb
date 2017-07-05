@@ -239,7 +239,6 @@ class BankInfo < ApplicationRecord
   field :urbn, type: String # 开户市
   field :zone, type: String # 开户区
   field :bank_full_name, type: String # 银行全称
-  field :is_nt_citic, type: String # 是否中信银行
   field :right_bank_card_key, type: String # 银行卡正面
 
   def inspect
