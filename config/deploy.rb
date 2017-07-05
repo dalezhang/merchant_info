@@ -70,8 +70,8 @@ task :deploy do
 
     on :launch do
       in_path("/home/rb/prgs/merchant_info/current") do
-        invoke :environment
-        command %{ RAILS_ENV=production rails new_role:generate }
+        # invoke :environment
+        # command %{ RAILS_ENV=production rails new_role:generate }
       end
       in_path("/home/rb") do
         invoke :environment
