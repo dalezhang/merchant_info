@@ -71,7 +71,7 @@ module Biz
       else
         return log_error @merchant, '无返回信息'
       end
-      resp_hash
+      JSON.pretty_generate resp_hash
     end
 
     def prepare_query

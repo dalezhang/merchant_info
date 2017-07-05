@@ -36,7 +36,7 @@ class Biz::PayRoute::BjrcbPayRoute < Biz::PayRoute::PayRouteBase
       channel_mch_id: customer_num,
 			channel_key: api_key,                   #在通道开户获得的key
       channel_type: @channel_type, # 结算方式
-      pay_type: ["wechat.scan", "wechat.jsapi", "wechat.micro"], #该通道支持的支付方式,传入值为字符串，以分号分割不同类型
+      pay_type: ["wechat.scan", "wechat.jsapi", "wechat.micro", "wechat.jsurl"], #该通道支持的支付方式,传入值为字符串，以分号分割不同类型
       priority: 1,
     }
     create_route_request(hash)
