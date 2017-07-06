@@ -40,6 +40,7 @@ class Biz::PayRoute::ZxAlipayPayRoute < Biz::PayRoute::PayRouteBase
     unless data[:code] == 0
       raise data.to_json
     end
+    data
   end
 
 
@@ -72,6 +73,7 @@ class Biz::PayRoute::ZxAlipayPayRoute < Biz::PayRoute::PayRouteBase
     unless data[:code] == 0
       raise data.to_json
     end
+    data
 	end
 
 

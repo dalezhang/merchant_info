@@ -171,18 +171,19 @@ class InspectMerchantsController < ResourcesController
     case params[:route]
     when 'bjrcb.wechat_offline'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
-      biz.send_wechat_offline
+      @result = biz.send_wechat_offline
     when 'bjrcb.alipay'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
-      biz.send_alipay
+      @result = biz.send_alipay
     when 'CITIC_WECHAT'
       biz = Biz::PayRoute::ZxAlipayPayRoute.new @object
-      biz.send_wechat
+      @result = biz.send_wechat
     when 'CITIC_ALI'
       biz = Biz::PayRoute::ZxAlipayPayRoute.new @object
-      biz.send_alipay
+      @result = biz.send_alipay
     end
-    flash[:success] = "路由创建成功"
+    $redis.set("result_#{@object.id}", @result)
+    $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
