@@ -39,7 +39,8 @@ class ApiJwtTest < ActionDispatch::IntegrationTest
     assert_response :success
     data = JSON.parse response.body
     puts data
-    assert_equal '初始', data['status'], data
+    assert_equal 1, data['status'], data
+    assert_equal '入驻申请', data['status_desc'], data
   end
   test "update merchant" do
     clean_database

@@ -30,8 +30,8 @@ class Merchant < ApplicationRecord
   #field :wechat_channel_type_lv1, type: String # 微信一级经营类目
   field :wechat_channel_type_lv2, type: String # 微信二级经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
-  field :d0_rate, type: String # D0费率,%
-  field :t1_rate, type: String # T1费率,%
+  field :d0_rate, type: String, default: "0.38" # D0费率,%
+  field :t1_rate, type: String, default: "0.35" # T1费率,%
   field :fixed_fee, type: Integer, default: 0 # 单比加收费用,单位（分）
   field :bank_info, type: Hash, default: {} # 银行信息
   field :legal_person # 法人信息
@@ -78,16 +78,6 @@ class Merchant < ApplicationRecord
       wechat_sub_appid
       wechat_subscribe_appid
     ]
-  end
-
-  def deep_strip(data)
-    data.each do |key, value|
-      if value.class == String
-        self.send("#{key}=", value.strip)
-      elsif value.class == BSON::Document
-        value.each
-      end
-    end
   end
 
   def generate_keys
