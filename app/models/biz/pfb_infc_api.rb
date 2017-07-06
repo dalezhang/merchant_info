@@ -36,14 +36,17 @@ module Biz
     def prepare_request(req_typ)
       @pfb_request["serviceType"] = req_typ
       if req_typ == 'CUSTOMER_UPDATE'
-        customer_num_from_wechat_offline_enter = @merchant.request_and_response.pfb_response["wechat_offline_新增"]["customer_num"] rescue nil
-        customer_num_from_wechat_offline_query = @merchant.request_and_response.pfb_response["wechat_offline_查询"]["customer"]["customerNum"] rescue nil
-        customer_num_from_alipay_enter = @merchant.request_and_response.pfb_response["alipay_新增"]["customer_num"] rescue nil
-        customer_num_from_alipay_query = @merchant.request_and_response.pfb_response["alipay_查询"]["customer"]["customerNum"] rescue nil
-        
-        @pfb_request["customerNum"] = customer_num_from_wechat_offline_enter || customer_num_from_wechat_offline_query || customer_num_from_alipay_enter || customer_num_from_alipay_query || ''
+        @pfb_request["customerNum"] = customer_num
       end
       @pfb_request
+    end
+
+    def customer_num
+      customer_num_from_wechat_offline_enter = @merchant.request_and_response.pfb_response["wechat_offline_新增"]["customer_num"] rescue nil
+      customer_num_from_wechat_offline_query = @merchant.request_and_response.pfb_response["wechat_offline_查询"]["customer"]["customerNum"] rescue nil
+      customer_num_from_alipay_enter = @merchant.request_and_response.pfb_response["alipay_新增"]["customer_num"] rescue nil
+      customer_num_from_alipay_query = @merchant.request_and_response.pfb_response["alipay_查询"]["customer"]["customerNum"] rescue nil
+      customer_num_from_wechat_offline_enter || customer_num_from_wechat_offline_query || customer_num_from_alipay_enter || customer_num_from_alipay_query || ''
     end
 
     def sent_request(js,req_typ)
@@ -76,13 +79,23 @@ module Biz
     end
 
     def prepare_query
-      js = {
-        serviceType: 'CUSTOMER_INFO',
-        agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
-        queryType: '1', # 值为：0/1
-        customerNum: nil, # 查询条件类型为0时必填
-        outMchId: @salt, # 查询条件类型为1时必填
-      }
+      if customer_num.present?
+        {
+          serviceType: 'CUSTOMER_INFO',
+          agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
+          queryType: '0', # 值为：0/1
+          customerNum: customer_num, # 查询条件类型为0时必填
+          outMchId: nil, # 查询条件类型为1时必填
+        }
+      else
+        {
+          serviceType: 'CUSTOMER_INFO',
+          agentNum: Rails.application.secrets.biz['pfb']['agent_num'],
+          queryType: '1', # 值为：0/1
+          customerNum: nil, # 查询条件类型为0时必填
+          outMchId: @salt, # 查询条件类型为1时必填
+        }
+      end
     end
     private
 
