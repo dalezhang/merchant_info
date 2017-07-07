@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-
 class Merchant < ApplicationRecord
+  attr_accessor :force_update
+
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
@@ -96,10 +97,11 @@ class Merchant < ApplicationRecord
 
   def check_if_modified_sensitive_values
     sensitive_values = ['partner_mch_id']
-    if (sensitive_values & self.changes.keys).present?
+    if (sensitive_values & self.changes.keys).present? && @force_update != true
       raise "#{sensitive_values.join(',')}不允许修改"
     end
   end
+
   def prepare_pfb_rate
     unless channel_data.present?
       @t1_rate = @d0_rate = '0'
