@@ -44,7 +44,7 @@
   .col-xs-3
     .box.box-success
       .box-header
-        h4.box-title 农商行开户许可证token
+        h4.box-title （法人）银行开户许可证token
       .box-body
         = text_field_tag 'merchant[company][account_licence_key]', @object.company.account_licence_key
         = image_tag qiniu_or_noimage(@object.user.bucket_url,@object.company.account_licence_key), class: 'image'
