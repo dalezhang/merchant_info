@@ -73,9 +73,10 @@ class InspectMerchantsController < ResourcesController
   end
   def get_backend_account
     load_object
+    binding.pry
     core_account = Biz::CoreAccount.new(@object)
     # pay_route = Biz::PayRoute::PayRouteBase.new @object
-    if @object.merchant_id.present?
+    unless @object.merchant_id.present?
       flash[:error] = "merchant_id为空"
     else
       @result = core_account.create_backend_account # 提交创建请求
