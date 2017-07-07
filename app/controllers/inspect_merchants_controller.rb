@@ -78,7 +78,7 @@ class InspectMerchantsController < ResourcesController
     unless @object.merchant_id.present?
       flash[:error] = "merchant_id为空"
     else
-      @result = core_account.create_backend_account # 提交创建请求
+      @result = core_account.get_backend_account # 提交创建请求
       # pay_route.query
     end
 
