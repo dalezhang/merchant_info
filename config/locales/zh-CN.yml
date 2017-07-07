@@ -1645,7 +1645,12 @@ zh-CN:
       last: "末页"
       previous: "&laquo; 上一页"
       next: "下一页 &raquo;"
+      previous_label: "&laquo; 上一页"
+      next_label: "下一页 &raquo;"
       truncate: "..."
+  will_paginate:
+    previous_label: "&laquo; 上一页"
+    next_label: "下一页 &raquo;"
   active_admin:
     smsstatistics: "短信统计"
     smsrecordreports: "短信使用统计"
