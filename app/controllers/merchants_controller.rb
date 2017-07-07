@@ -56,7 +56,7 @@ class MerchantsController < ResourcesController
   end
 
   def load_collection
-    @collection = current_user.merchants.paginate(page: params[:page], :per_page => 15)
+    @collection = current_user.merchants
   end
 
   def load_object

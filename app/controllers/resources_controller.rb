@@ -14,6 +14,7 @@ class ResourcesController < AdminController
   def index
     return @collection if @collection.present?
     load_collection
+    @collection = @collection.paginate(page: params[:page], :per_page => 15)
   end
 
   def show
@@ -89,7 +90,7 @@ class ResourcesController < AdminController
   protected
 
   def load_collection
-    @collection ||= object_name.camelize.constantize.all.paginate(page: params[:page], :per_page => 10)
+    @collection ||= object_name.camelize.constantize.all
   end
 
   def load_object

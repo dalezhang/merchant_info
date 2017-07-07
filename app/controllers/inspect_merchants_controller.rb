@@ -192,7 +192,7 @@ class InspectMerchantsController < ResourcesController
   end
 
   def load_collection
-    @collection = Merchant.paginate(page: params[:page], :per_page => 15)
+    @collection = Merchant.all
   end
 
   def load_object
