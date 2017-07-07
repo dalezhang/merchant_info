@@ -89,7 +89,7 @@ class ResourcesController < AdminController
   protected
 
   def load_collection
-    @collection ||= object_name.camelize.constantize.all
+    @collection ||= object_name.camelize.constantize.all.paginate(page: params[:page], :per_page => 10)
   end
 
   def load_object

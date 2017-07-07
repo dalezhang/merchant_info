@@ -52,9 +52,9 @@ class UsersController < ResourcesController
 
   def load_collection
     if current_user.roles.pluck(:name).include? 'admin'
-      @collection = object_name.camelize.constantize.all
+      @collection = object_name.camelize.constantize.all.paginate(page: params[:page], :per_page => 10)
     elsif current_user.roles.pluck(:name).include? 'agent'
-      @collection = current_user.children
+      @collection = current_user.children.paginate(page: params[:page], :per_page => 10)
     else
       @collection = []
       flash[:error] = "没有用户信息，请确认你的权限。"
