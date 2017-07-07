@@ -73,7 +73,6 @@ class InspectMerchantsController < ResourcesController
   end
   def get_backend_account
     load_object
-    binding.pry
     core_account = Biz::CoreAccount.new(@object)
     # pay_route = Biz::PayRoute::PayRouteBase.new @object
     unless @object.merchant_id.present?
