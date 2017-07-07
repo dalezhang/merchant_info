@@ -8,3 +8,4 @@
         = text_area_tag 'body', $redis.get("result_#{@object.id}"), style: 'height: 600px;',class: 'form-control'
       .modal-footer
         a.btn.btn-sm.btn-white data-dismiss="modal" href="javascript:;"  关闭
+- $redis.pexpire("result_#{@object.id}", 0)
