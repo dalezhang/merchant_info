@@ -91,4 +91,8 @@ class User < ApplicationRecord
       UserMailer.send(:reset_password_instructions, self.email).deliver_later
     end
   end
+
+  def has_agent_role?
+    return roles.pluck(:name).include?('agent')
+  end
 end
