@@ -192,7 +192,7 @@ class InspectMerchantsController < ResourcesController
   end
 
   def load_collection
-    @collection = Merchant.all
+    @collection = Merchant.all.order('created_at desc')
   end
 
   def load_object

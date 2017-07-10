@@ -56,7 +56,7 @@ class MerchantsController < ResourcesController
   end
 
   def load_collection
-    @collection = current_user.merchants
+    @collection = current_user.merchants.order('created_at desc')
   end
 
   def load_object
