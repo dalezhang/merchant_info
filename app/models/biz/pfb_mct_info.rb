@@ -54,7 +54,7 @@ class Biz::PfbMctInfo
     @city = @merchant.bank_info.urbn.try(:strip) # 开户行城市
     @bankAddress = @merchant.bank_info.bank_full_name.try(:strip) # 开户行支行
     @alliedBankNo = @merchant.bank_info.bank_sub_code.try(:strip) # 联行号,否则会影响结算
-    @appId = @merchant.appid.try(:strip) # 公众号ID
+    # @appId = @merchant.appid.try(:strip) # 公众号ID
     @rightID = "/#{@salt}/#{@merchant.legal_person.identity_card_front_key.try(:strip)}" # 身份证正面
     @reservedID = "/#{@salt}/#{@merchant.legal_person.identity_card_back_key.try(:strip)}" # 身份证反面
     @IDWithHand = "/#{@salt}/#{@merchant.legal_person.id_with_hand_key.try(:strip)}" # 手持身份证
@@ -223,7 +223,7 @@ class Biz::PfbMctInfo
       licenseImage: @licenseImage.try(:strip), # 营业执照
       doorHeadImage: @doorHeadImage.try(:strip), # 门面照
       accountLicence: @accountLicence.try(:strip), # 开户许可证
-      appId: @appId.try(:strip),
+      # appId: @appId.try(:strip),
     }
   end
 end

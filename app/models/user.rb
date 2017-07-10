@@ -86,7 +86,7 @@ class User < ApplicationRecord
     self.reset_token = UUID.new.generate
     self.expired_at = Time.zone.now + 2.days
     if self.save
-      UserMailer.send(:reset_password_instructions, self.email).deliver_later
+      UserMailer.send(:reset_password_instructions, self.email).deliver
     end
   end
 end
