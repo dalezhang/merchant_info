@@ -1,5 +1,6 @@
 zh-CN:
   merchants: '商户进件'
+  agents: 代理商 
   inspect_merchants: '商户进件审核'
   zx_contr_info_lists: '中信渠道费率'
   registrations: 注册信息
@@ -60,6 +61,13 @@ zh-CN:
         name: '用户名'
         company_name: '公司名'
         tel: '联系电话'
+        agent_id: 代理商
+      agent:
+        name: '名字'
+        partner_id: 代理商编号
+        parent_id: 上级代理商
+        d0_add_rate: D0加收费率
+        t1_add_rate: T1加收费率
     placeholders:
       merchant:
         bank_account: '银行账号'

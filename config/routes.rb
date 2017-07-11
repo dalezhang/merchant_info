@@ -36,5 +36,6 @@ Rails.application.routes.draw do
     get  :zx_appid, on: :collection 
     post :wechat_cert, on: :collection
   end
+  resources :agents
 
 end

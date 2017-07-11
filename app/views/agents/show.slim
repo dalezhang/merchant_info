@@ -1,0 +1,43 @@
+.row
+  .col-md-6
+    .form-group
+      = label 'name', '名字'
+      = text_field_tag '', @object.name, readonly: true, class: "form-control"
+    .form-group
+      = label 'partner_id', '代理商编号'
+      = text_field_tag '', @object.partner_id, readonly: true, class: "form-control"
+    .form-group
+      = label :parnet_id, '上级代理商'
+      = text_field_tag '', Agent.find_by(id: @object.parent_id).try(:name) || '无', readonly: true, class: "form-control"
+    .form-group
+      = label :level, '层级'
+      = text_field_tag '', @object.level, readonly: true, class: "form-control"
+    .form-group
+      = label :d0_add_rate, "D0加收费率,当前累计#{@object.current_rate[:d0]}"
+      = text_field_tag '', @object.d0_add_rate, readonly: true, class: "form-control"
+    .form-group
+      = label :t1_add_rate, "T1加收费率,当前累计#{@object.current_rate[:t1]}"
+      = text_field_tag '', @object.t1_add_rate, readonly: true, class: "form-control"
+    .text-right
+      = link_to '编辑', edit_agent_path(@object.id.to_s), class: 'btn btn-lg btn-success'
+
+h4 下级代理商
+table.table
+  tr
+    th 名字
+    th 上级代理商
+    th 层级
+    th partner_id
+    th 操作
+  - (@object.children || []).each do |obj|
+    tr
+      td= obj.name
+      td= Agent.find_by(id: obj.parent_id).try(:name) || '无'
+      th= obj.level
+      td= obj.partner_id
+      td
+        = link_to '查看', obj, class: 'btn btn-sm btn-success'
+        - if can? :new, Agent
+          = link_to '编辑', edit_agent_path(obj.id.to_s), class: 'btn btn-sm btn-default'
+          - if obj.users.count == 0
+            = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: '确认删除？' }

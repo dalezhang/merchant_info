@@ -8,6 +8,8 @@
       = f.input :password_confirmation
       = f.input :roles do
         = f.select :roles, options_for_select([['--无--']] + Role.all.pluck(:chinese_name), selected: f.object.roles.try(:pluck,:chinese_name) ), {}, include_blank: true, multiple: "multiple", style:"width: 300px", class: 'select2'
+      = f.input :agent_id do
+        = f.select :agent_id, options_for_select([['--无--']] + Agent.pluck(:name, :id), selected: f.object.agent_id ), {}, include_blank: true, style:"width: 300px"
       = f.input :bucket_name
       = f.input :bucket_url
 	br

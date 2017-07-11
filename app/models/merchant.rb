@@ -113,10 +113,10 @@ class Merchant < ApplicationRecord
       self.channel_data = {
         "pfb"=> {
           "wechat_offline"=> {
-            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@d0_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
           },
           "alipay"=>{
-            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@d0_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
           },
         }
       }

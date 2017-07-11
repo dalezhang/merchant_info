@@ -1,0 +1,22 @@
+- if can? :new, Agent
+  = link_to '添加代理商', new_agent_path, class: 'btn btn-primary'
+table.table
+  tr
+    th 名字
+    th 上级代理商
+    th 层级
+    th partner_id
+    th 操作
+  - @collection.each do |obj|
+    tr
+      td= obj.name
+      td= Agent.find_by(id: obj.parent_id).try(:name) || '无'
+      th= obj.level
+      td= obj.partner_id
+      td
+        = link_to '查看', obj, class: 'btn btn-sm btn-success'
+        - if can? :new, Agent
+          = link_to '编辑', edit_agent_path(obj.id.to_s), class: 'btn btn-sm btn-default'
+          - if obj.users.count == 0
+            = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: '确认删除？' }
+= will_paginate @collection 

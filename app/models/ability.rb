@@ -35,6 +35,7 @@ class Ability
     can :manage, :inspect_merchants
     can :manage, User
     can :manage, ErrorLog
+    can :manage, Agent
     can :manage, :test
   end
 
