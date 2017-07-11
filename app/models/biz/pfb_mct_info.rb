@@ -16,9 +16,9 @@ class Biz::PfbMctInfo
     @legalId = @merchant.legal_person.identity_card_num.try(:strip) # 法人身份证号
     @legalName = @merchant.legal_person.name.try(:strip) # 法人名称
     @contact = @merchant.company.contact_name.try(:strip) # 联系人
-    @contactPhone = @merchant.company.contact_tel.try(:strip) # 联系人电话
+    @contactPhone = @merchant.company.contact_tel.try(:strip) || @merchant.contact_tel.try(:strip)# 联系人电话
     @contactEmail = @merchant.company.contact_email.try(:strip) # 联系人邮箱
-    @servicePhone = @merchant.company.service_tel.try(:strip) # 客服电话
+    @servicePhone = @merchant.company.service_tel.try(:strip) || @merchant.service_tel.try(:strip)# 客服电话
     @address = [@merchant.province.try(:strip), @merchant.urbn.try(:strip), @merchant.address.try(:strip)].join(',') # 经营地址,企业商户必填
     @businessAddress =  @address  # 商户经营地址
     if @merchant.province.present?

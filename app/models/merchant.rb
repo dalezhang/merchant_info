@@ -23,6 +23,8 @@ class Merchant < ApplicationRecord
   field :jsapi_path, type: String # JSAPI支付授权目录
   field :subscribe_appid, type: String # 户推荐关注公众账号APPID
   field :appid, type: String # 微信公众号
+  field :contact_tel, type: String  # 联系人电话
+  field :service_tel, type: String  # 客服电话
 
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业

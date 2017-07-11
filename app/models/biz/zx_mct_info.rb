@@ -11,7 +11,7 @@ class Biz::ZxMctInfo
     @mercht_belg_chnl_id = '10000022' # 一般为渠道编号，多级渠道情况下为商户直属上级渠道编号
     @mercht_full_nm = @merchant.full_name.try(:strip) # 商户全名称
     @mercht_sht_nm = @merchant.name.try(:strip) # 商户简称
-    @cust_serv_tel = @merchant.company.service_tel.try(:strip) # 客服电话
+    @cust_serv_tel = @merchant.company.service_tel.try(:strip) || @merchant.service_tel.try(:strip)# 客服电话
     @contcr_nm = @merchant.legal_person.name.try(:strip) # 联系人名称
     @contcr_tel = @merchant.legal_person.tel.try(:strip) # 联系人电话
     @contcr_mobl_num = @merchant.legal_person.tel.try(:strip) # 联系人手机

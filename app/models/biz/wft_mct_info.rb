@@ -24,10 +24,10 @@ class Biz::WftMctInfo
     @province = nil # 省份
     @city = nil # 城市
     @address = @merchant.address # 详细地址
-    @tel = @merchant.company.contact_tel # 电话
+    @tel = @merchant.company.contact_tel.try(:strip) || @merchant.contact_tel.try(:strip) # 电话
     @email = @merchant.company.contact_email # 邮箱
     @legalPerson = @merchant.legal_person.name # 企业法人
-    @customerPhone = @merchant.company.service_tel # 客服电话
+    @customerPhone = @merchant.company.service_tel.try(:strip) || @merchant.service_tel.try(:strip) # 客服电话
     @principal = @merchant.legal_person.name # 负责人
     @principalMobile = @merchant.legal_person.tel # 负责人手机号
     @idCode = @merchant.legal_person.identity_card_num # 负责人身份证
@@ -43,7 +43,7 @@ class Biz::WftMctInfo
     @mercht_belg_chnl_id = '10000022' # 一般为渠道编号，多级渠道情况下为商户直属上级渠道编号
     @mercht_full_nm = @merchant.full_namc # 商户全名称
     @mercht_sht_nm = @merchant.name # 商户简称
-    @cust_serv_tel = @merchant.company.service_tel # 客服电话
+    @cust_serv_tel = @merchant.company.service_tel.try(:strip) || @merchant.service_tel.try(:strip) # 客服电话
     @contcr_nm = @merchant.legal_person.name # 联系人名称
     @contcr_tel = @merchant.legal_person.tel # 联系人电话
     @contcr_mobl_num = @merchant.legal_person.tel # 联系人手机
