@@ -3,6 +3,7 @@
 table.table
   tr
     th 登录名
+    th 用户名
     th 代理商编号
     th 图片空间
     th 角色
@@ -10,6 +11,7 @@ table.table
   - @collection.each do |obj|
     tr
       td= obj.email
+      td= obj.name
       td= obj.partner_id
       td= obj.bucket_name
       td= obj.roles.pluck(:chinese_name).join('--')

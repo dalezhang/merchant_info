@@ -5,10 +5,11 @@
       = f.input :name
       = f.input :partner_id, placeholder: "创建时填写，创建成功后不能修改", disabled: true
       = f.input :level, disabled: true
-      = f.input :share_rate
+      = f.input :d0_add_rate
+      = f.input :t1_add_rate
       = f.input :parent_id do
         = f.select :parent_id, options_for_select([['--无--']] + Agent.pluck(:name, :id), selected: f.object.parent_id ), {}, include_blank: true, style:"width: 300px", disabled: true
 	br
 	.row
 	  .col-xs-11.text-right
-	    = f.submit '创建', class: 'btn btn-lg btn-success'
+	    = f.submit '修改', class: 'btn btn-lg btn-success'

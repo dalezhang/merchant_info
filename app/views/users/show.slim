@@ -22,6 +22,9 @@
       = label :roles, '角色'
       = text_field_tag '', @object.roles.pluck(:chinese_name).join('--'), readonly: true, class: "form-control"
     .form-group
+      = label :agent_id, '代理商'
+      = text_field_tag '', @object.agent.try(:name) || '无', readonly: true, class: "form-control"
+    .form-group
       = label :bucket_name, '图片上传空间名'
       = text_field_tag '', @object.bucket_name, readonly: true, class: "form-control"
     .form-group

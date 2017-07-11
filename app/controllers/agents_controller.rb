@@ -19,7 +19,7 @@ class AgentsController < ResourcesController
   private
   def agent_update_params
     params.require(:agent).permit(
-      :share_rate, :name
+      :d0_add_rate, :t1_add_rate, :name
     )
   end
 

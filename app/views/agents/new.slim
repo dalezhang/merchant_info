@@ -4,9 +4,10 @@
       h4 基本信息
       = f.input :name
       = f.input :partner_id, placeholder: "创建时填写，创建成功后不能修改"
-      = f.input :share_rate
+      = f.input :d0_add_rate
+      = f.input :t1_add_rate
       = f.input :parent_id do
-        = f.select :parent_id, options_for_select([['--无--']] + Agent.pluck(:name, :id), selected: f.object.parent_id ), {}, include_blank: true, style:"width: 300px"
+        = f.select :parent_id, options_for_select([['--无--']] + Agent.all.map {|obj| [obj.name_with_level, obj.id.to_s] }, selected: f.object.parent_id ), {}, include_blank: true, style:"width: 300px"
 	br
 	.row
 	  .col-xs-11.text-right

@@ -13,8 +13,11 @@
       = label :level, '层级'
       = text_field_tag '', @object.level, readonly: true, class: "form-control"
     .form-group
-      = label :share_rate, '层级'
-      = text_field_tag '', @object.share_rate, readonly: true, class: "form-control"
+      = label :d0_add_rate, "D0加收费率,当前累计#{@object.current_rate[:d0]}"
+      = text_field_tag '', @object.d0_add_rate, readonly: true, class: "form-control"
+    .form-group
+      = label :t1_add_rate, "T1加收费率,当前累计#{@object.current_rate[:t1]}"
+      = text_field_tag '', @object.t1_add_rate, readonly: true, class: "form-control"
     .text-right
       = link_to '编辑', edit_agent_path(@object.id.to_s), class: 'btn btn-lg btn-success'
 
