@@ -129,10 +129,10 @@ module Biz
     def prepare_query
       case @channel
       when 'wechat'
-        chnl_mercht_id = "zx_wechat_#{@merchant.partner_mch_id}"
+        chnl_mercht_id = "zx_wechat_#{@merchant.id}"
         pay_chnl_encd =  '0002'
       when 'alipay'
-        chnl_mercht_id = "zx_alipay_#{@merchant.partner_mch_id}"
+        chnl_mercht_id = "zx_alipay_#{@merchant.id}"
         pay_chnl_encd =  '0001'
       end
 

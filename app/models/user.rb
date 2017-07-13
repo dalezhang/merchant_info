@@ -30,7 +30,7 @@ class User < ApplicationRecord
   validates :partner_id, presence: true
 
   has_and_belongs_to_many :roles
-  belongs_to :agent
+  #belongs_to :agent
 
   before_save :generate_password, :generate_token
   before_update :check_if_modified_sensitive_values
@@ -42,6 +42,10 @@ class User < ApplicationRecord
     else
       Merchant.where(user_id: self.id.to_s )
     end
+  end
+
+  def agent
+    Agent.find_by(id: agent_id)
   end
 
   def children

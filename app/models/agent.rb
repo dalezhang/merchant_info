@@ -6,13 +6,14 @@ class Agent < ApplicationRecord
   include Logging
   field :name, type: String
   field :level, type: Integer, default: 1
-  field :parent_id
+  field :parent_id, type: String
   field :d0_add_rate, type: Float, default: 0.0
   field :t1_add_rate, type: Float, default: 0.0
   field :partner_id, type: String # 代理商（公司）唯一标识
+  validates :partner_id, presence: true, uniqueness: { case_sensitive: false, message: '该partne_id已经存在' }
   has_many :users
 
-  before_save :find_level, :set_partner_id
+  before_save :find_level
 
   def find_level
     if parent_id.present?
@@ -22,14 +23,18 @@ class Agent < ApplicationRecord
     end
   end
 
-  def set_partner_id # 非顶级代理商继承顶级代理商的partner_id
-    if self.level != 1
-      self.partner_id = Agent.find(parent_id).partner_id
-    end
-  end
-
   def children
     Agent.where(parent_id: self.id.to_s)
+  end
+
+  def children_users
+    agent_ids = children.pluck(:id)
+    agent_ids += [self.id]
+    User.where(agent_id: agent_ids)
+  end
+
+  def parent
+    Agent.find_by(id: self.parent_id)
   end
 
   def current_rate

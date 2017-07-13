@@ -10,7 +10,7 @@ table.table
   - @collection.each do |obj|
     tr
       td= obj.name
-      td= Agent.find_by(id: obj.parent_id).try(:name) || '无'
+      td= obj.parent.try(:name) || '无'
       th= obj.level
       td= obj.partner_id
       td
