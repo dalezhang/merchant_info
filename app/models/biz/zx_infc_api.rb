@@ -117,9 +117,6 @@ module Biz
         resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save
-        unless resp_hash['ROOT']['rtncode'] == '00000000'
-          return log_error @merchant, resp_hash['ROOT']['rtninfo']
-        end
       else
         return log_error @merchant, '无返回信息'
       end
