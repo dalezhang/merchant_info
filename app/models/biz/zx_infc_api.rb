@@ -123,7 +123,7 @@ module Biz
       else
         return log_error @merchant, '无返回信息'
       end
-      ret
+      JSON.pretty_generate resp_hash
     end
 
     def prepare_query
@@ -175,7 +175,7 @@ module Biz
           response_hash: resp_hash.to_s,
       }
       log_es(log_js)
-      ret
+      JSON.pretty_generate resp_hash
     end
 
     def post_xml_gbk(_method, url, data)
