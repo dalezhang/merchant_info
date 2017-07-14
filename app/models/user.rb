@@ -27,10 +27,10 @@ class User < ApplicationRecord
   field :agent_id
   validates :email, format: { with: /^[\d,a-z]([\w\.\-]+)@([a-z0-9\-]+).([a-z\.]+[a-z])$/i, multiline: true, message: '邮箱地址格式不正确' }
   validates :email, presence: true, uniqueness: { case_sensitive: false, message: '该email已经存在' }
-  validates :partner_id, presence: true
+  validates :partner_id, presence: {message: 'partner_id 不能为空'}
 
   has_and_belongs_to_many :roles
-  #belongs_to :agent
+
 
   before_save :generate_password, :generate_token
   before_update :check_if_modified_sensitive_values

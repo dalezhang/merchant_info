@@ -14,12 +14,24 @@ class Agent < ApplicationRecord
   has_many :users
 
   before_save :find_level
+  before_validation :generate_partner_id
 
   def find_level
     if parent_id.present?
       self.level = Agent.find(parent_id).level + 1
     else
       self.level = 1
+    end
+  end
+
+  def generate_partner_id
+    if self.new_record?
+      n =  Agent.count.to_s
+      partner_id = "p#{sprintf('%07d', n)}"
+      while Agent.find_by(partner_id: partner_id).present?
+        n += 1
+      end
+      self.partner_id = "p#{sprintf('%07d', n)}"
     end
   end
 
@@ -30,7 +42,9 @@ class Agent < ApplicationRecord
   def children_users
     agent_ids = children.pluck(:id)
     agent_ids += [self.id]
-    User.where(agent_id: agent_ids)
+    agent_ids = agent_ids.map(&:to_s)
+    User.in(agent_id: agent_ids)
+    #User.where(agent_id: self.id.to_s)
   end
 
   def parent
@@ -63,3 +77,4 @@ class Agent < ApplicationRecord
   end
 
 end
+
