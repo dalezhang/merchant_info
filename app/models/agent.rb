@@ -17,7 +17,7 @@ class Agent < ApplicationRecord
   before_validation :generate_partner_id
 
   def find_level
-    if parent_id.present?
+    if parent_id.present? && Agent.find_by(id: parent_id)
       self.level = Agent.find(parent_id).level + 1
     else
       self.level = 1
