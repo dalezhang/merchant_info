@@ -25,7 +25,7 @@ class Agent < ApplicationRecord
   end
 
   def generate_partner_id
-    if self.new_record?
+    if self.new_record? && !self.partner_id.present?
       n =  Agent.count.to_s
       partner_id = "p#{sprintf('%07d', n)}"
       while Agent.find_by(partner_id: partner_id).present?
