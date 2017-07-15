@@ -89,7 +89,7 @@ task :deploy do
   # run(:local){ say 'done' }
 end
 task :clean_shared_files do
-  command %{rm config/database.yml config/puma.rb config/secrets.yml}
+  command %{rm config/database.yml config/puma.rb }
 end
 task :eye do
   command %{ pwd }
