@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-
 class Merchant < ApplicationRecord
+  attr_accessor :force_update
+
   include Mongoid::Timestamps
   field :user_id
   field :merchant_id, type: String # 商户编号
@@ -10,7 +11,7 @@ class Merchant < ApplicationRecord
   field :share_key, type: String # 商户md5签名key
   field :private_key, type: String # 商户私钥
   field :out_merchant_id, type: String # 代理商自定义的merchant唯一标识
-  field :status, type: Integer, default: 0 # 状态
+  field :status, type: Integer, default: 1 # 状态
   field :full_name, type: String # 商户全名称
   field :name, type: String # 商户简称
   field :memo, type: String # 商户备注
@@ -22,6 +23,8 @@ class Merchant < ApplicationRecord
   field :jsapi_path, type: String # JSAPI支付授权目录
   field :subscribe_appid, type: String # 户推荐关注公众账号APPID
   field :appid, type: String # 微信公众号
+  field :contact_tel, type: String  # 联系人电话
+  field :service_tel, type: String  # 客服电话
 
   field :mch_type, type: String # 商户类型(个体，企业)
   field :industry, type: String # 经营行业
@@ -30,14 +33,15 @@ class Merchant < ApplicationRecord
   #field :wechat_channel_type_lv1, type: String # 微信一级经营类目
   field :wechat_channel_type_lv2, type: String # 微信二级经营类目
   field :mch_deal_type, type: String # 商户经营类型: 实体/虚拟
-  field :d0_rate, type: String # D0费率,%
-  field :t1_rate, type: String # T1费率,%
+  field :d0_rate, type: String, default: "0.38" # D0费率,%
+  field :t1_rate, type: String, default: "0.35" # T1费率,%
   field :fixed_fee, type: Integer, default: 0 # 单比加收费用,单位（分）
   field :bank_info, type: Hash, default: {} # 银行信息
   field :legal_person # 法人信息
   field :company # 公司信息
   field :request_and_response, type: Hash, default: {} # 发送和返回
   field :channel_data, type: Hash, default: {} # 渠道信息
+  field :pay_route_status, default: {} # 支付路由状态
   belongs_to :user
   embeds_one :legal_person, autobuild: true
   embeds_one :company, autobuild: true
@@ -45,6 +49,7 @@ class Merchant < ApplicationRecord
   accepts_nested_attributes_for :company, :legal_person, :bank_info
   embeds_one :request_and_response
   embeds_many :zx_contr_info_lists # 签约信息列表，要求根据支付宝或微信支持的所有支付类型，一次性提交所有支付类型的签约费率，此标签内会有多条签约信息
+  embeds_one :pay_route_status
 
   validates :partner_mch_id, presence: true, uniqueness: { case_sensitive: false, message: '该partner_mch_id已经存在' }
   validate do
@@ -59,7 +64,8 @@ class Merchant < ApplicationRecord
   before_save :generate_keys, :prepare_pfb_rate, :generate_password
   before_update :check_if_modified_sensitive_values
 
-  STATUS_DATA = { 0 => '初始', 1 => '进件失败', 6 => '审核中', 7 => '关闭', 8 => '进件成功' }.freeze
+  STATUS_DATA = { 0 => '审核通过', 1 => '入驻申请', 2 => '审核中', 3 => '审核失败', 4 => '商户停用' }.freeze
+  PAY_ROUTE_STATUS_DATA = { 0 => '未开通', 1 => '已开通' }.freeze
   def self.attr_writeable
     %i[
       d0_rate t1_rate fixed_fee
@@ -93,10 +99,11 @@ class Merchant < ApplicationRecord
 
   def check_if_modified_sensitive_values
     sensitive_values = ['partner_mch_id']
-    if (sensitive_values & self.changes.keys).present?
+    if (sensitive_values & self.changes.keys).present? && @force_update != true
       raise "#{sensitive_values.join(',')}不允许修改"
     end
   end
+
   def prepare_pfb_rate
     unless channel_data.present?
       @t1_rate = @d0_rate = '0'
@@ -106,10 +113,10 @@ class Merchant < ApplicationRecord
       self.channel_data = {
         "pfb"=> {
           "wechat_offline"=> {
-            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@d0_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
           },
           "alipay"=>{
-            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@t1_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
+            "rate"=> @t1_rate, "t0Status"=>"Y", "settleRate"=>@d0_rate, "fixedFee"=> @fixed_fee, "isCapped"=>"N", "upperFee"=>"0", "settleMode"=>"T0_HANDING"
           },
         }
       }
@@ -121,6 +128,7 @@ class Merchant < ApplicationRecord
     hash = {
       id: id.to_s,
       merchant_id: merchant_id,
+      partner_id: self.user.partner_id,
 
       partner_mch_id: partner_mch_id,
       private_key: private_key,
@@ -145,6 +153,7 @@ class Merchant < ApplicationRecord
       alipay_channel_type_lv1: alipay_channel_type_lv1, # 支付宝一级经营类目
       alipay_channel_type_lv2: alipay_channel_type_lv2, # 支付宝二级经营类目
       mch_deal_type: mch_deal_type,
+      pay_route_status: pay_route_status.inspect, 
       bank_info: bank_info.inspect,
       legal_person: legal_person.inspect,
       company: company.inspect,
@@ -224,7 +233,6 @@ class BankInfo < ApplicationRecord
   field :urbn, type: String # 开户市
   field :zone, type: String # 开户区
   field :bank_full_name, type: String # 银行全称
-  field :is_nt_citic, type: String # 是否中信银行
   field :right_bank_card_key, type: String # 银行卡正面
 
   def inspect
@@ -238,7 +246,6 @@ class BankInfo < ApplicationRecord
       urbn: urbn, # 开户市
       zone: zone, # 开户区
       bank_full_name: bank_full_name, # 银行全称
-      is_nt_citic: is_nt_citic, # 是否中信银行
       right_bank_card_key: right_bank_card_key,
     }
   end
@@ -260,6 +267,21 @@ class RequestAndResponse < ApplicationRecord
       pfb_response: pfb_response,
       core_account: core_account,
       pay_route: pay_route,
+    }
+  end
+end
+
+class PayRouteStatus < ApplicationRecord
+  embedded_in :merchant
+  field :t1_status, type: Integer, default: 0 
+  field :d0_status, type: Integer, default: 0 # 状态
+  
+  def inspect
+    {
+      t1_status: t1_status,
+      t1_status_desc: Merchant::PAY_ROUTE_STATUS_DATA[t1_status],
+      d0_status: d0_status,
+      d0_status_desc: Merchant::PAY_ROUTE_STATUS_DATA[d0_status],
     }
   end
 end

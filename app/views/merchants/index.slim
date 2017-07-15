@@ -18,7 +18,8 @@ table.table
       td= Merchant::STATUS_DATA[obj.status]
       td
         = link_to '查看', obj, class: 'btn btn-sm btn-success'
-        - if obj.status <= 5
+        - if [1, 3].include?(obj.status)
           = link_to '编辑', edit_merchant_path(obj.id.to_s), class: 'btn btn-sm btn-default'
           - unless obj.merchant_id.present?
             = link_to '删除', url_for(controller: :merchants, action: :destroy, id: obj.id.to_s), method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: '确认删除？' }
+= will_paginate @collection 

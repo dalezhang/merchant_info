@@ -24,11 +24,13 @@ class User < ApplicationRecord
   field :company_name, type: String
   field :tel, type: String
   field :partner_id, type: String # 代理商（公司）唯一标识
+  field :agent_id
   validates :email, format: { with: /^[\d,a-z]([\w\.\-]+)@([a-z0-9\-]+).([a-z\.]+[a-z])$/i, multiline: true, message: '邮箱地址格式不正确' }
   validates :email, presence: true, uniqueness: { case_sensitive: false, message: '该email已经存在' }
-  validates :partner_id, presence: true
+  validates :partner_id, presence: {message: 'partner_id 不能为空'}
 
   has_and_belongs_to_many :roles
+
 
   before_save :generate_password, :generate_token
   before_update :check_if_modified_sensitive_values
@@ -40,6 +42,10 @@ class User < ApplicationRecord
     else
       Merchant.where(user_id: self.id.to_s )
     end
+  end
+
+  def agent
+    Agent.find_by(id: agent_id)
   end
 
   def children
@@ -86,7 +92,11 @@ class User < ApplicationRecord
     self.reset_token = UUID.new.generate
     self.expired_at = Time.zone.now + 2.days
     if self.save
-      UserMailer.send(:reset_password_instructions, self.email).deliver_later
+      UserMailer.send(:reset_password_instructions, self.email).deliver
     end
+  end
+
+  def has_agent_role?
+    return roles.pluck(:name).include?('agent')
   end
 end

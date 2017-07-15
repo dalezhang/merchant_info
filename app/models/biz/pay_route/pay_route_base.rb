@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # 支付网管
 class Biz::PayRoute::PayRouteBase
+  include Logging
   def initialize(mch, channel_type = nil)
     host = Rails.application.secrets.core['host'] rescue nil
     raise 'Rails.application.secrets.core["host"] is not set' unless host.present?
@@ -43,32 +44,4 @@ class Biz::PayRoute::PayRouteBase
     data = JSON.parse response.body
     data.deep_symbolize_keys
   end
-  #def create_backend_account(data)
-    #response = backend_account 'post',  data.to_json
-    #response.body
-  #end
-  #def get_backend_account(merchant_id)
-    #host =  "http://120.77.180.208:3001/cms/merchants/"
-    #response = HTTParty.try('get', "#{host}#{merchant_id}")
-    #response.body
-  #end
-  #def get_routes(merchant_id)
-    #host = "http://120.77.180.208:3001/cms/routes?merchant_id="
-    #response = HTTParty.try('get', "#{host}#{merchant_id}")
-    #response.body
-    #js = JSON.parse response.body
-    #js["data"].each {|c| puts c["_id"]}
-    #js.to_json
-  #end
-  #def put_routes(route_id, js)
-    #host = "http://120.77.180.208:3001/cms/routes/#{route_id}"
-    #response = HTTParty.try('put', "#{host}", body: js.to_json)
-    #response.body
-  #end
-
-  #def create_routes(data)
-    #host = "http://120.77.180.208:3001/cms/routes"
-    #response = HTTParty.try('post', "#{host}", body: data.to_json)
-    #response.body
-  #end
 end

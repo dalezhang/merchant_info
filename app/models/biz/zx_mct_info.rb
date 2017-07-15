@@ -9,34 +9,40 @@ class Biz::ZxMctInfo
     @chnl_mercht_id = nil # 商户编号
     @pay_chnl_encd = nil # 支付宝：0001；微信支付：0002。注：商户开通多种支付渠道需分别提交进件申请
     @mercht_belg_chnl_id = '10000022' # 一般为渠道编号，多级渠道情况下为商户直属上级渠道编号
-    @mercht_full_nm = @merchant.full_name # 商户全名称
-    @mercht_sht_nm = @merchant.name # 商户简称
-    @cust_serv_tel = @merchant.company.service_tel # 客服电话
-    @contcr_nm = @merchant.legal_person.name # 联系人名称
-    @contcr_tel = @merchant.legal_person.tel # 联系人电话
-    @contcr_mobl_num = @merchant.legal_person.tel # 联系人手机
-    @contcr_eml = @merchant.legal_person.email # 联系人邮箱
+    @mercht_full_nm = @merchant.full_name.try(:strip) # 商户全名称
+    @mercht_sht_nm = @merchant.name.try(:strip) # 商户简称
+    @cust_serv_tel = @merchant.company.service_tel.try(:strip) || @merchant.service_tel.try(:strip)# 客服电话
+    @contcr_nm = @merchant.legal_person.name.try(:strip) # 联系人名称
+    @contcr_tel = @merchant.legal_person.tel.try(:strip) # 联系人电话
+    @contcr_mobl_num = @merchant.legal_person.tel.try(:strip) # 联系人手机
+    @contcr_eml = @merchant.legal_person.email.try(:strip) # 联系人邮箱
     @opr_cls = nil # 根据不同支付渠道要求，填写相应经营类目。详细见附件《经营类目》中的经营类目明细编码
-    @mercht_memo = @merchant.memo # 商户备注
-    @prov = @merchant.province # 省份（字典
-    @urbn = @merchant.urbn # 城市（汉字标示
-    @dtl_addr = @merchant.address # 详细地址
-    @acct_nm = @merchant.bank_info.owner_name # 开户人姓名/公司名
-    @opn_bnk = @merchant.bank_info.bank_full_name # 开户行（中文名）
-    @is_nt_citic = @merchant.bank_info.is_nt_citic # 是否中信银行,是：0，否：1
-    @acct_typ =  zx_account_type(@merchant.bank_info.account_type) # 账户类型:1--中信银行对私账户，2--中信银行对公账户 3--中信银行内部账户，4--他行（非中信银行账户）
-    @pay_ibank_num = @merchant.bank_info.bank_sub_code # 支付联行号
-    @acct_num = @merchant.bank_info.account_num # 账号
+    @mercht_memo = @merchant.memo.try(:strip) # 商户备注
+    @prov = @merchant.province.try(:strip) # 省份（字典
+    @urbn = @merchant.urbn.try(:strip) # 城市（汉字标示
+    @dtl_addr = @merchant.address.try(:strip) # 详细地址
+    @acct_nm = @merchant.bank_info.owner_name.try(:strip) # 开户人姓名/公司名
+    @opn_bnk = @merchant.bank_info.bank_full_name.try(:strip) # 开户行（中文名）
+    @is_nt_citic = @opn_bnk  =~ /中信银行/ ? 0 : 1 #@merchant.bank_info.is_nt_citic.try(:strip) # 是否中信银行,是：0，否：1
+    @acct_typ =  zx_account_type(@merchant.bank_info.account_type.try(:strip)) # 账户类型:1--中信银行对私账户，2--中信银行对公账户 3--中信银行内部账户，4--他行（非中信银行账户）
+    @pay_ibank_num = @merchant.bank_info.bank_sub_code.try(:strip) # 支付联行号
+    @acct_num = @merchant.bank_info.account_num.try(:strip) # 账号
     @is_nt_two_line = 0 # 是否支持收支两条线,否：0，是：1
-    @lics_file_url = "#{@merchant.user.bucket_url}/#{@merchant.company.license_key}"
+    @lics_file_url = "#{@merchant.user.bucket_url}/#{@merchant.company.license_key.try(:strip)}"
     @zx_contr_info_lists = @merchant.zx_contr_info_lists.collect(&:inspect)
   end
 
   def zx_account_type(account_type)
-    if account_type =~ /对私/ || account_type =~ /个人/
-      1
-    elsif account_type =~ /对公/ || account_type =~ /企业/
-      2
+    if @is_nt_citic == 1
+      4
+    elsif @is_nt_citic == 0
+      if account_type =~ /对私/ || account_type =~ /个人/
+        1
+      elsif account_type =~ /对公/ || account_type =~ /企业/
+        2
+      end
+    else
+      raise "无法判断是否中信银行"
     end
   end
 

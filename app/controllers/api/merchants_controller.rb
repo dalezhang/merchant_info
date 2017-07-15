@@ -4,12 +4,23 @@ class Api::MerchantsController < ActionController::API
   include Logging
   before_action :get_user, :decode_data
   def create
+    # binding.pry
     case @data[:method]
     when 'merchant.create'
       @merchant = Merchant.new(user: @user)
       keys = @data.keys & Merchant.attr_writeable
       keys.each do |key|
-        @merchant.send("#{key}=", @data[key])
+        value = @data[key].class == String ? @data[key].strip : @data[key]
+        if @data[key].class == String
+          @merchant.send("#{key}=", @data[key].strip)
+        elsif @data[key].class == Hash
+          abc = @merchant.send(key)
+          @data[key].each do |sub_key, sub_value|
+            if abc.respond_to?("#{sub_key}=")
+              abc.send("#{sub_key}=", @data[key][sub_key])
+            end
+          end
+        end
       end
     when 'merchant.update'
       if @data[:partner_mch_id].present?
@@ -23,13 +34,14 @@ class Api::MerchantsController < ActionController::API
         render json: { error: '无法根据partner_mch_id，merchant_id，id中的任何一个找到对应的记录。' }.to_json
         return
       end
-      unless @merchant.status <= 5
+      unless [1, 3].include?(@merchant.status)
         render json: { error: "无法修改，该条记录#{Merchant::STATUS_DATA[@merchant.status]}" }.to_json
         return
       end
       keys = @data.keys & Merchant.attr_writeable
       keys.each do |key|
-        @merchant.send("#{key}=", @data[key])
+        value = @data[key].class == String ? @data[key].strip : @data[key]
+        @merchant.send("#{key}=", value)
       end
     when 'merchant.query'
       if @data[:partner_mch_id].present?

@@ -2,4 +2,5 @@
 
 class ApplicationRecord
   include Mongoid::Document
+  include Logging
 end

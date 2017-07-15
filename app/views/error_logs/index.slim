@@ -10,3 +10,4 @@ table.table
       td
         = link_to '查看', obj, class: 'btn btn-sm btn-success'
         = link_to '删除', obj, method: :delete, class: 'btn btn-sm btn-danger'
+= will_paginate @collection 

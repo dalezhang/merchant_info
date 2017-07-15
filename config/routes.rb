@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     post :upload_picture, on: :member
   end
   resources :inspect_merchants do
-    post :change_status, :prepare_request,
+    post :change_status, :change_pay_route_status, :prepare_request,
           :update_backend_account, 
           :zx_infc, :pfb_infc, :create_pay_route, on: :member
     get :get_merchant_id, :get_backend_account, :routes, :add_route, on: :member
@@ -36,5 +36,6 @@ Rails.application.routes.draw do
     get  :zx_appid, on: :collection 
     post :wechat_cert, on: :collection
   end
+  resources :agents
 
 end

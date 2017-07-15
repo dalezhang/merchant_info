@@ -40,9 +40,7 @@ module Biz
       else
         return log_error @merchant, '请求', '未知的请求类型'
       end
-      if send_zx_intfc(xml, req_typ)
-        return "返回信息已保存在request_and_response.zx_response.#{@channel}_#{req_typ}"
-      end
+      return send_zx_intfc(xml, req_typ)
       false
     end
 
@@ -119,22 +117,19 @@ module Biz
         resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_#{req_typ}"] = resp_hash
         @merchant.save
-        unless resp_hash['ROOT']['rtncode'] == '00000000'
-          return log_error @merchant, resp_hash['ROOT']['rtninfo']
-        end
       else
         return log_error @merchant, '无返回信息'
       end
-      true
+      JSON.pretty_generate resp_hash
     end
 
     def prepare_query
       case @channel
       when 'wechat'
-        chnl_mercht_id = "zx_wechat_#{@merchant.partner_mch_id}"
+        chnl_mercht_id = "zx_wechat_#{@merchant.id}"
         pay_chnl_encd =  '0002'
       when 'alipay'
-        chnl_mercht_id = "zx_alipay_#{@merchant.partner_mch_id}"
+        chnl_mercht_id = "zx_alipay_#{@merchant.id}"
         pay_chnl_encd =  '0001'
       end
 
@@ -166,9 +161,6 @@ module Biz
         resp_hash['ROOT']['Msg_Sign'] = '**'
         @merchant.request_and_response.zx_response["#{@channel}_query"] = resp_hash
         @merchant.save
-        unless resp_hash['ROOT']['Chnl_Id'] == '10000022'
-          return log_error @merchant, resp_hash['ROOT']['rtninfo']
-        end
       else
         return log_error @merchant, '查询', '无返回信息'
       end
@@ -180,7 +172,7 @@ module Biz
           response_hash: resp_hash.to_s,
       }
       log_es(log_js)
-      "返回信息已保存在request_and_response -> zx_response -> #{@channel}_query"
+      JSON.pretty_generate resp_hash
     end
 
     def post_xml_gbk(_method, url, data)

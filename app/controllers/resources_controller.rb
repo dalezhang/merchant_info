@@ -14,6 +14,7 @@ class ResourcesController < AdminController
   def index
     return @collection if @collection.present?
     load_collection
+    @collection = @collection.paginate(page: params[:page], :per_page => 15)
   end
 
   def show
@@ -36,14 +37,13 @@ class ResourcesController < AdminController
   def update
     load_object
     params.permit!
-        # binding.pry
     @object.attributes = params[object_name.singularize.parameterize('_')]
     if @object.changed_for_autosave?(@object)
       # @changes = @object.all_changes
-      if @object.save
+      if @object.valid?
+        @object.save
       else
         flash[:error] = @object.errors.full_messages.to_sentence
-        @no_log = 1
       end
     end
     respond_to do |format|
@@ -64,11 +64,10 @@ class ResourcesController < AdminController
   def create
     params.permit!
     @object = object_name.classify.constantize.new(params[object_name.singularize.parameterize('_')])
-    @object.employee = current_employee if @object.attributes.key? 'employee_id'
-    @object.creator = current_employee if @object.attributes.key? 'creator_id'
-    unless @object.save
+    if @object.valid?
+      @object.save
+    else
       flash[:error] = @object.errors.full_messages.to_sentence
-      @no_log = 1
     end
     respond_to do |format|
       format.html { redirect_to @object }

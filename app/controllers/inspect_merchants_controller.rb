@@ -12,6 +12,23 @@ class InspectMerchantsController < ResourcesController
   end
   def add_route
     load_object
+    @hash = {}
+    @zx_response = @object.request_and_response.zx_response.deep_symbolize_keys rescue nil
+    @hash[:zx_wechat_channel_mch_id] = @zx_response.deep_symbolize_keys[:wechat_query][:ROOT][:Mercht_Idtfy_Num] rescue nil
+    @hash[:zx_alipay_channel_mch_id] = @zx_response.deep_symbolize_keys[:alipay_query][:ROOT][:Mercht_Idtfy_Num] rescue nil
+    @pfb_response = @object.request_and_response.pfb_response.deep_symbolize_keys rescue nil
+    query_customer_num = @pfb_response[:wechat_offline_查询][:customer][:customerNum] rescue nil
+    response_customer_num = @pfb_response[:wechat_offline_新增][:customer_num] rescue nil
+    @hash[:pfb_wechat_offline_channel_mch_id] = response_customer_num || query_customer_num
+    query_api_key = @pfb_response[:wechat_offline_查询][:customer][:apiKey] rescue nil
+    response_api_key = @pfb_response[:wechat_offline_新增][:api_key] rescue nil
+    @hash[:pfb_wechat_offline_api_key] = response_api_key || query_api_key
+    query_customer_num = @pfb_response[:alipay_查询][:customer][:customerNum] rescue nil
+    response_customer_num = @pfb_response[:alipay_新增][:customer_num] rescue nil
+    @hash[:pfb_alipay_channel_mch_id] = response_customer_num || query_customer_num
+    query_api_key = @pfb_response[:alipay_查询][:customer][:apiKey] rescue nil
+    response_api_key = @pfb_response[:alipay_新增][:api_key] rescue nil
+    @hash[:pfb_alipay_api_key] = response_api_key || query_api_key
   end
 
   def update
@@ -27,7 +44,16 @@ class InspectMerchantsController < ResourcesController
     else
       flash[:error] = "未知状态：#{params[:status]}"
     end
-    redirect_to action: :index
+    redirect_to action: :show, id: @object.id
+  end
+  def change_pay_route_status
+    load_object
+    if @object.pay_route_status.update("#{params[:route]}": Merchant::PAY_ROUTE_STATUS_DATA.invert[params[:status]])
+      flash[:success] = '状态修改成功'
+    else
+      flash[:error] = "未知状态：#{params[:status]}"
+    end
+    redirect_to action: :show, id: @object.id
   end
 
   def prepare_request
@@ -48,20 +74,19 @@ class InspectMerchantsController < ResourcesController
   def get_backend_account
     load_object
     core_account = Biz::CoreAccount.new(@object)
-    pay_route = Biz::PayRoute::PayRouteBase.new @object
-      @message = "路由创建成功，返回内容已保存在request_and_response.pfb_response[:pay_route_query]"
-    if @object.merchant_id.present?
-      core_account.get_backend_account
-      pay_route.query
+    # pay_route = Biz::PayRoute::PayRouteBase.new @object
+    unless @object.merchant_id.present?
+      flash[:error] = "merchant_id为空"
     else
-      core_account.create_backend_account # 提交创建请求
-      core_account.get_backend_account # 查询创建结果
-      pay_route.query
+      @result = core_account.get_backend_account # 提交创建请求
+      # pay_route.query
     end
+
     if core_account.has_error
-      flash[:success] = '数据获取成功！请到request_and_response=>core_account中查看。'
-    else
       flash[:error] = core_account.error_message
+    else
+      $redis.set("result_#{@object.id}", @result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     end
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
@@ -95,10 +120,10 @@ class InspectMerchantsController < ResourcesController
     core_account = Biz::CoreAccount.new(@object)
     if @object.merchant_id.present?
       flash[:success] = 'merchant_id已经存在！'
-    elsif !core_account.create_backend_account
-      flash[:error] = core_account.error_message
     else
-      flash[:success] = '数据生成成功！'
+      @result = core_account.create_backend_account
+      $redis.set("result_#{@object.id}", @result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     end
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
@@ -112,7 +137,8 @@ class InspectMerchantsController < ResourcesController
     bz = Biz::ZxInfcApi.new(@object, params[:channel])
     result = bz.send_intfc(params[:req_typ])
     if result
-      flash[:success] = result
+      $redis.set("result_#{@object.id}", result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     else
       flash[:error] = bz.error_message
     end
@@ -128,7 +154,8 @@ class InspectMerchantsController < ResourcesController
     bz = Biz::PfbInfcApi.new(@object.id, params[:channel])
     result = bz.send_intfc(params[:req_typ])
     if result
-      flash[:success] = result
+      $redis.set("result_#{@object.id}", result)
+      $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     else
       flash[:error] = bz.error_message
     end
@@ -141,18 +168,22 @@ class InspectMerchantsController < ResourcesController
 
   def create_pay_route
     load_object
-    @message = nil
     case params[:route]
     when 'bjrcb.wechat_offline'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
-      biz.send_wechat_offline
-      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:wechat_offline]"
+      @result = biz.send_wechat_offline
     when 'bjrcb.alipay'
       biz = Biz::PayRoute::BjrcbPayRoute.new @object, params[:channel_type]
-      biz.send_alipay
-      @message = "路由创建成功，返回内容已保存在request_and_response[:pfb_response][:bjrbc_pay_route][:alipay]"
+      @result = biz.send_alipay
+    when 'CITIC_WECHAT'
+      biz = Biz::PayRoute::ZxAlipayPayRoute.new @object
+      @result = biz.send_wechat
+    when 'CITIC_ALI'
+      biz = Biz::PayRoute::ZxAlipayPayRoute.new @object
+      @result = biz.send_alipay
     end
-    flash[:success] = @message
+    $redis.set("result_#{@object.id}", @result)
+    $redis.pexpire("result_#{@object.id}", 60 * 1000 )
     redirect_to action: :show, id: @object.id.to_s
   rescue Exception => e
     flash[:error] = e.message
@@ -161,7 +192,7 @@ class InspectMerchantsController < ResourcesController
   end
 
   def load_collection
-    @collection = Merchant.all
+    @collection = Merchant.all.order('created_at desc')
   end
 
   def load_object
