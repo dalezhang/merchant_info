@@ -21,4 +21,5 @@
 .byebug_history
 .DS_Store
 public/assets/*
-/config/secrets.yml
+config/secrets.yml
+config/mongoid.yml
