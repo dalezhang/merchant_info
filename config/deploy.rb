@@ -46,7 +46,7 @@ task :setup do
   # command %{rbenv install 2.3.0}
   in_path './prgs' do
     command %{pwd}
-    command %{cp -R shared/config #{fetch(:deploy_to)}/config}
+    command %{cp -R shared/config #{fetch(:deploy_to)}/shared}
     command %{sed -i 's/SECRET/#{SecureRandom.hex(64)}/g' #{fetch(:deploy_to)}/shared/config/secrets.yml}
     command %{sed -i '1s/APP_NAME/#{app_name}/1' #{fetch(:deploy_to)}/shared/config/puma.rb}
   end
@@ -89,7 +89,7 @@ task :deploy do
   # run(:local){ say 'done' }
 end
 task :clean_shared_files do
-  command %{rm config/database.yml config/puma.rb }
+  command %{rm config/database.yml config/puma.rb mongoid.yml secrets.yml}
 end
 task :eye do
   command %{ pwd }
