@@ -46,7 +46,7 @@ task :setup do
   # command %{rbenv install 2.3.0}
   in_path './prgs' do
     command %{pwd}
-    command %{cp -R shared/config #{fetch(:deploy_to)}/shared}
+    command %{cp -R shared/config #{fetch(:deploy_to)}/config}
     command %{sed -i 's/SECRET/#{SecureRandom.hex(64)}/g' #{fetch(:deploy_to)}/shared/config/secrets.yml}
     command %{sed -i '1s/APP_NAME/#{app_name}/1' #{fetch(:deploy_to)}/shared/config/puma.rb}
   end
