@@ -5,7 +5,7 @@ class User < ApplicationRecord
   include Mongoid::Timestamps::Created
   include Logging
 
-  attr_accessor :password, :password_confirmation, :current_email
+  attr_accessor :password, :password_confirmation, :current_email, :force_update
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -59,10 +59,10 @@ class User < ApplicationRecord
   end
 
   def check_if_modified_sensitive_values
-    # sensitive_values = ['partner_id']
-    # if (sensitive_values & self.changes.keys).present?
-    #   raise "#{sensitive_values.join(',')}不允许修改"
-    # end
+    sensitive_values = ['partner_id']
+    if (sensitive_values & self.changes.keys).present? && @force_update != true
+      raise "#{sensitive_values.join(',')}不允许修改"
+    end
   end
 
   def verify!(password)

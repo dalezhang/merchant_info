@@ -41,7 +41,6 @@ class Agent < ApplicationRecord
 
   def children_users
     agent_ids = children.pluck(:id)
-    agent_ids += [self.id]
     agent_ids = agent_ids.map(&:to_s)
     User.in(agent_id: agent_ids)
     #User.where(agent_id: self.id.to_s)
