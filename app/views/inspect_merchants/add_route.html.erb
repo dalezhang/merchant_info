@@ -19,12 +19,13 @@
                 <label for="" class="col-xs-3 control-label">渠道名称</label>
                 <div class="col-xs-2">
                     <select name="" class="form-control input-sm " id="channel-name">
-                            <option value="SWIFT">威富通</option>
-                            <option value="BJRCB">北京农商行</option>
-                            <option value="CITIC_ALI">中信直连支付宝</option>
-                            <option value="CITIC_WECHAT">中信直连微信</option>
-                            <option value="DIANZI">点子</option>
-                            <option value="TFB">天付宝</option>
+                            <option class ="paytype" value="SWIFT">威富通</option>
+                            <option class ="paytype" value="BJRCB">北京农商行</option>
+                            <option class ="paytype" value="CITIC_ALI">中信直连支付宝</option>
+                            <option class ="paytype" value="CITIC_WECHAT">中信直连微信</option>
+                            <option class ="paytype" value="DIANZI">点子</option>
+                            <option class ="paytype" value="TFB">天付宝</option>
+                            <option class ="paytype" value="SOFTBANKC">大连软银</option>
                     </select>
                 </div>
             </div>
@@ -54,43 +55,72 @@
             </div>
             <label for="" class="col-xs-3 control-label">支付方式</label>
             <div class="col-xs-3 pay-type" id="pay-type">
-                <label class="checkbox-inline">
-                   <input type="checkbox" value="wechat.scan" name="pay"> wechat.scan
+                <label class="checkbox-inline ">
+                   <input type="checkbox" value="wechat.scan" name="pay" checked="checked" class="SWIFT BJRCB CITIC_WECHAT"> wechat.scan
                 </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="alipay.scan" name="pay"> alipay.scan
+                <label class="checkbox-inline ">
+                    <input type="checkbox" value="alipay.scan" name="pay" checked="checked" class="SWIFT BJRCB CITIC_ALI"> alipay.scan
                  </label>
                 <label class="checkbox-inline">
-                      <input type="checkbox"value="qq.scan" name="pay"> qq.scan
+                      <input type="checkbox"value="qq.scan" name="pay" checked="checked" class="SWIFT"> qq.scan
                 </label>
                 <br/>
                 <label class="checkbox-inline">
-                      <input type="checkbox" value="wechat.jsapi" name="pay"> wechat.jsapi
+                      <input type="checkbox" value="wechat.jsapi" name="pay" checked="checked" class="SWIFT CITIC_WECHAT"> wechat.jsapi
                 </label>
                 <label class="checkbox-inline">
-                      <input type="checkbox"  value="alipay.jsapi" name="pay"> alipay.jsapi
+                      <input type="checkbox"  value="alipay.jsapi" name="pay" checked="checked" class="SWIFT CITIC_ALI"> alipay.jsapi
                 </label>
                 <label class="checkbox-inline">
-                    <input type="checkbox" value="qq.jsapi" name="pay"> qq.jsapi
-                </label>
-                <br/>
-                <label class="checkbox-inline">
-                    <input type="checkbox"  value="wechat.micro" name="pay"> wechat.micro
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="alipay.micro" name="pay"> alipay.micro
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" value="qq.micro" name="pay"> qq.micro
+                    <input type="checkbox" value="qq.jsapi" name="pay" checked="checked" class="SWIFT"> qq.jsapi
                 </label>
                 <br/>
                 <label class="checkbox-inline">
-                     <input type="checkbox" value="wechat.jsurl" name="pay"> wechat.jsurl
+                    <input type="checkbox"  value="wechat.micro" name="pay" checked="checked" class="SWIFT BJRCB CITIC_WECHAT"> wechat.micro
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="alipay.micro" name="pay" checked="checked"  class="SWIFT BJRCB CITIC_ALI"> alipay.micro
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="qq.micro" name="pay" checked="checked" class="SWIFT"> qq.micro
+                </label>
+                <br/>
+                <label class="checkbox-inline">
+                     <input type="checkbox" value="wechat.jsurl" name="pay" class="BJRCB"> wechat.jsurl
                  </label>
-
             </div>
 
-
+            <div class="hide" id="city">
+                <h3 class="title"></h3>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label" value="">服务商appid</label>
+                    <div class="col-xs-4" id="CITIC_appid">
+                        <input type="text" class="form-control input-sm">
+                    </div>
+                </div>
+                <div class="hide" id="cityWeChat">
+                    <div class="form-group">
+                        <label for="" class="col-xs-3 control-label" value="">服务商秘钥</label>
+                        <div class="col-xs-4" id="CITIC_wekey">
+                            <input type="text" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-3 control-label" value="">服务商商户号</label>
+                        <div class="col-xs-4" id="CITIC_wenum">
+                            <input type="text" class="form-control input-sm">
+                        </div>
+                    </div>
+                </div>
+                <div id="cityali" class="hide">
+                    <div class="form-group">
+                        <label for="" class="col-xs-3 control-label" value="">支付宝token</label>
+                        <div class="col-xs-4" id="CITIC_ali">
+                            <input type="text" class="form-control input-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xs-12 text-center">
                     <a class="btn btn-primary btn-lg addbtn"> 添 加 </a>
@@ -99,6 +129,5 @@
             </div>
         </form>
     </div>
-
 </div>
 

@@ -11,7 +11,6 @@ class Agent < ApplicationRecord
   field :t1_add_rate, type: Float, default: 0.0
   field :partner_id, type: String # 代理商（公司）唯一标识
   validates :partner_id, presence: true, uniqueness: { case_sensitive: false, message: '该partne_id已经存在' }
-  has_many :users
 
   before_save :find_level
   before_validation :generate_partner_id
@@ -48,6 +47,10 @@ class Agent < ApplicationRecord
 
   def parent
     Agent.find_by(id: self.parent_id)
+  end
+
+  def users
+    User.where(agent_id: self.id.to_s)
   end
 
   def current_rate

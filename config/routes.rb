@@ -28,7 +28,9 @@ Rails.application.routes.draw do
   end
   resources :users
   resources :upload_img, only: [:index]
-  resources :error_logs
+  resources :error_logs do
+    delete :destroy_all, on: :collection
+  end
   namespace :api do
     resources :merchants
   end
