@@ -1,5 +1,6 @@
 - if can? :new, User
   = link_to '添加用户', new_user_path, class: 'btn btn-primary'
+= render 'filter'
 table.table
   tr
     th 登录名

@@ -191,9 +191,6 @@ class InspectMerchantsController < ResourcesController
     redirect_to action: :show, id: @object.id.to_s
   end
 
-  def load_collection
-    @collection = Merchant.all.order('created_at desc')
-  end
 
   def load_object
     @object = Merchant.find(params[:id])

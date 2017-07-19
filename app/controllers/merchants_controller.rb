@@ -56,7 +56,12 @@ class MerchantsController < ResourcesController
   end
 
   def load_collection
-    @collection = current_user.merchants.order('created_at desc')
+    params[:q] ||= {}
+    query = {}
+    params[:q].each do |k,v|
+      query[k] = Regexp.new(v) if v.present?
+    end
+    @collection = current_user.merchants.where(query).order('created_at desc')
   end
 
   def load_object

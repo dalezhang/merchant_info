@@ -51,23 +51,23 @@ class Agent < ApplicationRecord
   end
 
   def current_rate
-    d0_init = Rails.application.secrets.pooul['d0_init_rate'].to_f
-    t1_init = Rails.application.secrets.pooul['t1_init_rate'].to_f
-    parent_d0_rate = d0_init + self.d0_add_rate
-    parent_t1_rate = t1_init + self.t1_add_rate
+    d0_init = Rails.application.secrets.pooul['d0_init_rate'].to_f || 0
+    t1_init = Rails.application.secrets.pooul['t1_init_rate'].to_f || 0
+    parent_d0_rate = BigDecimal.new(d0_init.to_s) + BigDecimal.new(self.d0_add_rate.to_s || 0)
+    parent_t1_rate = BigDecimal.new(t1_init.to_s) + BigDecimal.new(self.t1_add_rate.to_s || 0) 
     parent = self.parent_id.present? ? Agent.find_by(id: self.parent_id) : nil
     loop do
       if parent.present?
-        parent_d0_rate += parent.d0_add_rate
-        parent_t1_rate += parent.t1_add_rate
+        parent_d0_rate += BigDecimal.new(parent.d0_add_rate.to_s)
+        parent_t1_rate += BigDecimal.new(parent.t1_add_rate.to_s)
       else
         break
       end
       parent = parent.parent_id.present? ? Agent.find_by(id: parent.parent_id) : nil
     end
     {
-      d0: parent_d0_rate,
-      t1: parent_t1_rate
+      d0: parent_d0_rate.to_f,
+      t1: parent_t1_rate.to_f
     }
   end
 
@@ -76,4 +76,3 @@ class Agent < ApplicationRecord
   end
 
 end
-

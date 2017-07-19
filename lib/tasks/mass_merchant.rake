@@ -9,6 +9,7 @@ namespace :mass_meachant do
     merchants.each do |obj|
     	if !obj.request_and_response.pfb_request.present?
 		    abc(obj)
+		    sleep(10)
     	end
 
 	end
@@ -21,7 +22,6 @@ namespace :mass_meachant do
 	    bz = Biz::PfbInfcApi.new(obj.id, 'alipay')
 		result = bz.send_intfc('变更')
 		obj.update(status: 5)
-		ids << obj.id.to_s
 	rescue Exception => e
 		puts "fail at #{obj.id}"
 	end

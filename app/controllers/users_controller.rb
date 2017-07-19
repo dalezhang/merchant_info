@@ -51,6 +51,11 @@ class UsersController < ResourcesController
   end
 
   def load_collection
+    params[:q] ||= {}
+    query = {}
+    params[:q].each do |k,v|
+      query[k] = Regexp.new(v) if v.present?
+    end
     if current_user.roles.pluck(:name).include? 'admin'
       @collection = object_name.camelize.constantize.all
     elsif current_user.roles.pluck(:name).include? 'agent'
@@ -59,6 +64,7 @@ class UsersController < ResourcesController
       @collection = []
       flash[:error] = "没有用户信息，请确认你的权限。"
     end
+    @collection = @collection.where(query).order('created_at desc')
   end
 
   def user_params

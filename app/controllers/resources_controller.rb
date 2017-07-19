@@ -88,7 +88,12 @@ class ResourcesController < AdminController
   protected
 
   def load_collection
-    @collection ||= object_name.camelize.constantize.all
+    params[:q] ||= {}
+    query = {}
+    params[:q].each do |k,v|
+      query[k] = Regexp.new(v) if v.present?
+    end
+    @collection = object_name.camelize.constantize.where(query).order('created_at desc')
   end
 
   def load_object

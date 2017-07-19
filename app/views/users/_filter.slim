@@ -1,0 +1,14 @@
+.filter-wrap.collapsed
+  = form_for(:q, html: {class: 'search-filter form-inline', method: 'get'}) do |f|
+    .form-group.m-r-10
+      = text_field_tag 'q[name]', params[:q][:name], placeholder: '用户名', class: 'form-control'
+
+    .form-group.m-r-10
+      = text_field_tag 'q[email]', params[:q][:email], placeholder: 'email', class: 'form-control'
+
+    .form-group.m-r-10
+      = text_field_tag 'q[partner_id]', params[:q][:partner_id], placeholder: '代理商编号', class: 'form-control'
+
+    .form-group.m-r-10
+      = submit_tag '查找', class: 'btn btn-sm btn-primary m-r-5'
+
