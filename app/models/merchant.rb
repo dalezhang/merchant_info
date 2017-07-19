@@ -64,7 +64,7 @@ class Merchant < ApplicationRecord
   before_save :generate_keys, :prepare_pfb_rate, :generate_password
   before_update :check_if_modified_sensitive_values
 
-  STATUS_DATA = { 0 => '审核通过', 1 => '入驻申请', 2 => '审核中', 3 => '审核失败', 4 => '商户停用', 5 => '批量进件成功' }.freeze
+  STATUS_DATA = { 0 => '审核通过', 1 => '入驻申请', 2 => '审核中', 3 => '审核失败', 4 => '商户停用', 5 => '批量进件成功', 6 => '批量添加路由成功' }.freeze
   PAY_ROUTE_STATUS_DATA = { 0 => '未开通', 1 => '已开通' }.freeze
   def self.attr_writeable
     %i[
